@@ -79,6 +79,17 @@
     <Compile Include="Account.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Converters\PartnerTypesConverter.cs" />
+    <Compile Include="Converters\RowIndexConverter.cs" />
+    <Compile Include="Converters\StatusColorConverter.cs" />
+    <Compile Include="Converters\StatusConverter.cs" />
+    <Compile Include="Pages\ManageInventoriesScreen.xaml.cs">
+      <DependentUpon>ManageInventoriesScreen.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ManageSchedulesScreen.xaml.cs">
+      <DependentUpon>ManageSchedulesScreen.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\BaseHttpService.cs" />
     <Compile Include="DataTransfers\CardDataTransfer.cs" />
     <Compile Include="DataTransfers\GoodDataTransfer.cs" />
     <Compile Include="DataTransfers\SystemConfigDataTransfer.cs" />
@@ -112,6 +123,11 @@
     <Compile Include="InventoryDetail.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Pagination.cs" />
+    <Compile Include="Models\QueryParams.cs" />
+    <Compile Include="Pages\ManagePartnersScreen.xaml.cs">
+      <DependentUpon>ManagePartnersScreen.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ProcessingPage.xaml.cs">
       <DependentUpon>ProcessingPage.xaml</DependentUpon>
     </Compile>
@@ -128,6 +144,11 @@
     <Compile Include="Schedule.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Services\InventoryHttpService.cs" />
+    <Compile Include="Services\PartnerHttpService.cs" />
+    <Compile Include="Services\RelayCommand.cs" />
+    <Compile Include="Services\ScheduleHttpService.cs" />
+    <Compile Include="Services\SystemConfigHttpService.cs" />
     <Compile Include="sysdiagram.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
     </Compile>
@@ -146,6 +167,9 @@
     <Compile Include="DataTransfers\TransactionDataTransfer.cs" />
     <Compile Include="Utils\BaseNotifyPropertyChanged.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\ManageInventoryModel.cs" />
+    <Compile Include="ViewModels\ManagePartnersModel.cs" />
+    <Compile Include="ViewModels\ManageSchedulesModel.cs" />
     <Compile Include="ViewModels\ProcessingViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -159,6 +183,18 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pages\ManageInventoriesScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ManagePartnersScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ManageSchedulesScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\ProcessingPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

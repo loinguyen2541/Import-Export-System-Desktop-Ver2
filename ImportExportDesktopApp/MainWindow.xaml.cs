@@ -22,6 +22,9 @@ namespace ImportExportDesktopApp
     public partial class MainWindow : Window
     {
         private Frame _mainFrame;
+        private ManageInventoriesScreen manageInventoriesScreen;
+        private ManagePartnersScreen manPartnersScreen;
+        private ManageSchedulesScreen manScheduleScreen;
         public MainWindow()
         {
             InitializeComponent();
@@ -30,7 +33,51 @@ namespace ImportExportDesktopApp
             //{
             //    processingScreen = new ProcessingScreen();
             //}
-            _mainFrame.Navigate(new ProcessingPage());
+            _mainFrame.Navigate(new ManageInventoriesScreen());
+        }
+
+        public void Navigate(string value)
+        {
+            switch (value)
+            {
+                case "ChartDonut":
+                    if (manPartnersScreen == null)
+                    {
+                        manPartnersScreen = new ManagePartnersScreen();
+                    }
+                    _mainFrame.Navigate(manPartnersScreen);
+                    break;
+                case "AccountMultiple":
+                    if (manPartnersScreen == null)
+                    {
+                        manPartnersScreen = new ManagePartnersScreen();
+                    }
+                    _mainFrame.Navigate(manPartnersScreen);
+                    break;
+                case "schedule":
+                    if (manScheduleScreen == null)
+                    {
+                        manScheduleScreen = new ManageSchedulesScreen();
+                    }
+                    _mainFrame.Navigate(manScheduleScreen);
+                    break;
+                case "PackageVariantClosed":
+                    if (manageInventoriesScreen == null)
+                    {
+                        manageInventoriesScreen = new ManageInventoriesScreen();
+                    }
+                    _mainFrame.Navigate(manageInventoriesScreen);
+                    break;
+                case "Gift":
+                    if (manPartnersScreen == null)
+                    {
+                        manPartnersScreen = new ManagePartnersScreen();
+                    }
+                    _mainFrame.Navigate(manPartnersScreen);
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void page_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -25,7 +25,7 @@ namespace ImportExportDesktopApp.DataTransfers
         {
             Partner partner = ie.IdentityCards
                 .Where(c => c.IdentityCardId.Equals(identificationCode) && c.IdentityCardStatus == 0)
-                .Where(c => c.Partner.PartnerStatus == 0).Select(c => c.Partner)
+                .Where(c => c.Partner.PartnerStatus == "Block").Select(c => c.Partner)
                 .SingleOrDefault();
             return partner;
         }
