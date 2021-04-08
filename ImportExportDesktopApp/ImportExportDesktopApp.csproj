@@ -84,6 +84,7 @@
     <Compile Include="DataTransfers\GoodDataTransfer.cs" />
     <Compile Include="DataTransfers\InventoryDataTransfer.cs" />
     <Compile Include="DataTransfers\InventoryDetailDataTransfer.cs" />
+    <Compile Include="DataTransfers\ScheduleDataTransfer.cs" />
     <Compile Include="DataTransfers\SystemConfigDataTransfer.cs" />
     <Compile Include="Enums\EDeviceType.cs" />
     <Compile Include="Enums\EGate.cs" />

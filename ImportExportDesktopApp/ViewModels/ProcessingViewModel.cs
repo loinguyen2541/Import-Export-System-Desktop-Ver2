@@ -26,6 +26,7 @@ namespace ImportExportDesktopApp.ViewModels
         private GoodDataTransfer _goodDataTransfer;
         private InventoryDataTransfer _inventoryDataTransfer;
         private InventoryDetailDataTransfer _inventoryDetailDataTransfer;
+        private ScheduleDataTransfer _scheduleDataTransfer;
         private ObservableCollection<Transaction> _processingTransaction;
         private ObservableCollection<Transaction> _successTransaction;
         private int _storageCapacity = 0;
@@ -38,7 +39,7 @@ namespace ImportExportDesktopApp.ViewModels
             _goodDataTransfer = new GoodDataTransfer();
             _inventoryDataTransfer = new InventoryDataTransfer();
             _inventoryDetailDataTransfer = new InventoryDetailDataTransfer();
-
+            _scheduleDataTransfer = new ScheduleDataTransfer();
             _storageCapacity = _systemCongifDataTransfer.GetStorageCappacity();
             ProcessingTransaction = _transactionDataTransfer.GetProcessingTransaction();
             SuccessTransaction = _transactionDataTransfer.GetSuccessTransaction();
@@ -47,7 +48,7 @@ namespace ImportExportDesktopApp.ViewModels
 
         public bool CheckCard(TransactionScale transactionScale)
         {
-            Partner partner = _cardDataTransfer.CheckCard(transactionScale.Indentify);
+            Partner partner = _cardDataTransfer.CheckCard(transactionScale);
             if (partner != null)
             {
                 Transaction transaction = _transactionDataTransfer.IsProcessing(transactionScale.Indentify);
