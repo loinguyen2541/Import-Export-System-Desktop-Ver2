@@ -1,0 +1,21 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:ImportExportDesktopApp.Resources"
+    xmlns:viewmodel="clr-namespace:ImportExportDesktopApp.ViewModels">
+    <viewmodel:MainViewModel x:Key="MainVM" />
+    <viewmodel:ProcessingViewModel x:Key="ProcessingVM" />
+    <!--  Colors  -->
+    <Brush x:Key="Red">#F44336</Brush>
+    <Brush x:Key="Blue">#2196F3</Brush>
+    <Brush x:Key="Pink">#E91E63</Brush>
+    <Brush x:Key="Green">#4CAF50</Brush>
+    <Brush x:Key="Purple">#9C27B0</Brush>
+    <Brush x:Key="Teal">#009688</Brush>
+    <Brush x:Key="Dingo">#3F51B5</Brush>
+    <Brush x:Key="Amber">#FFC107</Brush>
+    <Brush x:Key="Cyan">#00BCD4</Brush>
+    <Brush x:Key="Lime">#CDDC39</Brush>
+    <Brush x:Key="Orange">#FF9800</Brush>
+
+</ResourceDictionary>
