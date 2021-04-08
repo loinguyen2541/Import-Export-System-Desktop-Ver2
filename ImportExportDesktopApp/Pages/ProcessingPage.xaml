@@ -101,6 +101,23 @@
                             FontWeight="Bold"
                             Foreground="White"
                             Text="Gate 2" />
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock
+                                Margin="0,8,0,16"
+                                HorizontalAlignment="Left"
+                                Foreground="White"
+                                Text="Partner: Thanh Tan" />
+                            <TextBlock
+                                Margin="0,8,0,16"
+                                HorizontalAlignment="Left"
+                                Foreground="White"
+                                Text="Type: Provider" />
+                            <TextBlock
+                                Margin="0,8,0,16"
+                                HorizontalAlignment="Left"
+                                Foreground="White"
+                                Text="Weight: 245 kg" />
+                        </StackPanel>
                     </StackPanel>
                 </materialDesign:Card>
                 <materialDesign:Card

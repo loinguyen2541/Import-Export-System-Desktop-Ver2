@@ -44,8 +44,8 @@ namespace ImportExportDesktopApp.Pages
             processingViewModel = DataContext as ProcessingViewModel;
             thread1 = new Thread(ReadSerial);
             thread1.Start();
-            thread2 = new Thread(ReadSerial2);
-            thread2.Start();
+            //thread2 = new Thread(ReadSerial2);
+            //thread2.Start();
         }
 
         public void ReadSerial2()

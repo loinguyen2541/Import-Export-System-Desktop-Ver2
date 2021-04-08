@@ -24,6 +24,8 @@ namespace ImportExportDesktopApp.ViewModels
         private CardDataTransfer _cardDataTransfer;
         private SystemConfigDataTransfer _systemCongifDataTransfer;
         private GoodDataTransfer _goodDataTransfer;
+        private InventoryDataTransfer _inventoryDataTransfer;
+        private InventoryDetailDataTransfer _inventoryDetailDataTransfer;
         private ObservableCollection<Transaction> _processingTransaction;
         private ObservableCollection<Transaction> _successTransaction;
         private int _storageCapacity = 0;
@@ -34,8 +36,10 @@ namespace ImportExportDesktopApp.ViewModels
             _cardDataTransfer = new CardDataTransfer();
             _systemCongifDataTransfer = new SystemConfigDataTransfer();
             _goodDataTransfer = new GoodDataTransfer();
-            _storageCapacity = _systemCongifDataTransfer.GetStorageCappacity();
+            _inventoryDataTransfer = new InventoryDataTransfer();
+            _inventoryDetailDataTransfer = new InventoryDetailDataTransfer();
 
+            _storageCapacity = _systemCongifDataTransfer.GetStorageCappacity();
             ProcessingTransaction = _transactionDataTransfer.GetProcessingTransaction();
             SuccessTransaction = _transactionDataTransfer.GetSuccessTransaction();
 
@@ -105,29 +109,8 @@ namespace ImportExportDesktopApp.ViewModels
 
         public Transaction UpdateTransaction(Transaction transaction, TransactionScale transactionScale, Partner partner)
         {
-            if (partner.PartnerTypeId == 1)
-            {
-                if (transaction.WeightIn > transactionScale.Weight)
-                {
-                    return null;
-                }
-                else if ((transaction.WeightOut - transaction.WeightIn) > _goodDataTransfer.getInventory())
-                {
-                    return null;
-                }
-            }
-            else if (partner.PartnerTypeId == 2)
-            {
-                if (transaction.WeightIn < transactionScale.Weight)
-                {
-                    return null;
-                }
-                else if ((transaction.WeightIn - transaction.WeightOut) > (_storageCapacity - _goodDataTransfer.getInventory()))
-                {
-                    return null;
-                }
-            }
-            else
+            float goodInventory = _goodDataTransfer.getInventory();
+            if (!CheckWeight(partner.PartnerTypeId, transaction.WeightIn, transactionScale.Weight, goodInventory))
             {
                 return null;
             }
@@ -135,10 +118,87 @@ namespace ImportExportDesktopApp.ViewModels
             transaction.TimeOut = DateTime.Now;
             transaction.TransactionStatus = 1;
             transaction.Gate = transactionScale.Gate.ToString();
-            transaction = _transactionDataTransfer.UpdateTransaction(transaction);
+            Inventory inventory = _inventoryDataTransfer.CheckExist();
+            if (inventory == null)
+            {
+                inventory = _inventoryDataTransfer.CreateInventoryToday(goodInventory);
+            }
+            transaction = _transactionDataTransfer.UpdateTransactionNotSaveChanges(transaction);
+            float totalWeight = getTotalWeight(partner.PartnerTypeId, transaction.WeightIn, transaction.WeightOut);
+            _inventoryDetailDataTransfer.InsertInventoryDetailNotSaveChanges(1, partner.PartnerId, partner.PartnerTypeId, totalWeight, inventory.InventoryId);
+            _transactionDataTransfer.Save();
             return transaction;
         }
 
+
+
+        /// <summary>
+        ///   Check the total weight is valid or not!!!
+        /// </summary>
+        /// <param name="partnerTypeId"></param>
+        /// <param name="weightIn"></param>
+        /// <param name="weightOut"></param>
+        /// <param name="goodInventory"></param>
+        /// <returns>
+        /// return false if <br/>
+        ///     customer: <br/>
+        ///         -- WeightIn > WeighOut <br/>
+        ///         -- TotalWeight > Inventory <br/>
+        ///     provider: <br/>
+        ///         -- WeightIn < WeightOut <br/>
+        ///         -- TotalWeight > Current Capacity <br/>
+        ///  else 
+        ///     return true
+        /// </returns>
+        public bool CheckWeight(int partnerTypeId, float weightIn, float weightOut, float goodInventory)
+        {
+            // Export
+            if (partnerTypeId == 1)
+            {
+                if (weightIn > weightOut)
+                {
+                    return false;
+                }
+                else if ((weightOut - weightIn) > goodInventory)
+                {
+                    return false;
+                }
+            }
+
+            //Import
+            else if (partnerTypeId == 2)
+            {
+                if (weightIn < weightOut)
+                {
+                    return false;
+                }
+                else if ((weightIn - weightOut) > (_storageCapacity - goodInventory))
+                {
+                    return false;
+                }
+            }
+
+            // Other
+            else
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public float getTotalWeight(int partnerTypeId, float weightIn, float weightOut)
+        {
+            if (partnerTypeId == 1)
+            {
+                return weightOut - weightIn;
+            }
+            else if (partnerTypeId == 2)
+            {
+                return weightIn - weightOut;
+            }
+            else return 0;
+        }
         public void UpdateTable()
         {
             ProcessingTransaction = _transactionDataTransfer.GetProcessingTransaction();

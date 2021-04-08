@@ -19,6 +19,7 @@ namespace ImportExportDesktopApp.ScaleModels
         public EDeviceType Device { get; set; }
         public EGate Gate { get; set; }
         public String Indentify { get; set; }
+        public int PartnerId { get; set; }
         public float Weight { get; set; }
     }
 }

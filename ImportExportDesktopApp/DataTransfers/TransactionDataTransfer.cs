@@ -22,7 +22,7 @@ namespace ImportExportDesktopApp.DataTransfers
         IEEntities ie;
         public TransactionDataTransfer()
         {
-            ie = new IEEntities();
+            ie = DataContext.GetInstance().DB;
         }
 
         public ObservableCollection<Transaction> GetProcessingTransaction()
@@ -41,10 +41,9 @@ namespace ImportExportDesktopApp.DataTransfers
             ie.SaveChanges();
             return newTransaction;
         }
-        public Transaction UpdateTransaction(Transaction transaction)
+        public Transaction UpdateTransactionNotSaveChanges(Transaction transaction)
         {
             ie.Entry(transaction).State = EntityState.Modified;
-            ie.SaveChanges();
             return transaction;
         }
 
@@ -54,6 +53,11 @@ namespace ImportExportDesktopApp.DataTransfers
             Transaction transaction = ie.Transactions
                 .Where(t => t.IdentificationCode.Contains(identify) && t.TransactionStatus == 0).SingleOrDefault();
             return transaction;
+        }
+
+        public void Save()
+        {
+            ie.SaveChanges();
         }
     }
 }

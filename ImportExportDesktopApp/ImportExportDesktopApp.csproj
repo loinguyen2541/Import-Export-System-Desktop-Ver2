@@ -80,7 +80,10 @@
       <DependentUpon>IEModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DataTransfers\CardDataTransfer.cs" />
+    <Compile Include="DataTransfers\DataContext.cs" />
     <Compile Include="DataTransfers\GoodDataTransfer.cs" />
+    <Compile Include="DataTransfers\InventoryDataTransfer.cs" />
+    <Compile Include="DataTransfers\InventoryDetailDataTransfer.cs" />
     <Compile Include="DataTransfers\SystemConfigDataTransfer.cs" />
     <Compile Include="Enums\EDeviceType.cs" />
     <Compile Include="Enums\EGate.cs" />

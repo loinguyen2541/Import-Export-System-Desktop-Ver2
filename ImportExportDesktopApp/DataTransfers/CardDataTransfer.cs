@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ImportExportDesktopApp.Enums;
+using ImportExportDesktopApp.ScaleModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,13 +23,22 @@ namespace ImportExportDesktopApp.DataTransfers
             ie = new IEEntities();
         }
 
-        public Partner CheckCard(string identificationCode)
+        public Partner CheckCard(TransactionScale transactionScale)
         {
-            Partner partner = ie.IdentityCards
-                .Where(c => c.IdentityCardId.Equals(identificationCode) && c.IdentityCardStatus == 0)
-                .Where(c => c.Partner.PartnerStatus == 0).Select(c => c.Partner)
-                .SingleOrDefault();
-            return partner;
+            if (transactionScale.Device == EDeviceType.Card)
+            {
+                Partner partner = ie.IdentityCards
+                    .Where(c => c.IdentityCardId.Equals(transactionScale.Indentify) && c.IdentityCardStatus == 0)
+                    .Where(c => c.Partner.PartnerStatus == 0).Select(c => c.Partner)
+                    .SingleOrDefault();
+                return partner;
+            }
+            else if (transactionScale.Device == EDeviceType.Android)
+            {
+                Partner partner = ie.Partners.Where(c => c.PartnerId == transactionScale.PartnerId && c.PartnerStatus == 0).SingleOrDefault();
+                return partner;
+            }
+            return null;
         }
     }
 }
