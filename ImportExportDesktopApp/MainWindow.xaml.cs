@@ -34,7 +34,7 @@ namespace ImportExportDesktopApp
             //{
             //    processingScreen = new ProcessingScreen();
             //}
-            _mainFrame.Navigate(new ManageTransactionsScreen());
+            _mainFrame.Navigate(new ManageGoodsScreen());
         }
 
         public void Navigate(string value)

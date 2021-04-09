@@ -9,6 +9,7 @@
     <viewmodel:ManageSchedulesModel x:Key="ManSchedule"/>
     <viewmodel:ProcessingViewModel x:Key="ProcessingVM" />
     <viewmodel:ManageTransactionModel x:Key="ManTrans"/>
+    <viewmodel:ManageGoodsModel x:Key="ManGoods"/>
     <viewmodel:DetailInventoryModel x:Key="InventoryDetailVM"/>
     <!--  Colors  -->
     <Brush x:Key="Red">#F44336</Brush>

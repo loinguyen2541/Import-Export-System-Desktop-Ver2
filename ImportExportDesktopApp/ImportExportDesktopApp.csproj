@@ -120,6 +120,9 @@
     <Compile Include="Pages\InventoryDetailWindow.xaml.cs">
       <DependentUpon>InventoryDetailWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\ManageGoodsScreen.xaml.cs">
+      <DependentUpon>ManageGoodsScreen.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ManageInventoriesScreen.xaml.cs">
       <DependentUpon>ManageInventoriesScreen.xaml</DependentUpon>
     </Compile>
@@ -212,6 +215,7 @@
     <Compile Include="Utils\BaseNotifyPropertyChanged.cs" />
     <Compile Include="ViewModels\DetailInventoryModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\ManageGoodsModel.cs" />
     <Compile Include="ViewModels\ManageInventoryModel.cs" />
     <Compile Include="ViewModels\ManagePartnersModel.cs" />
     <Compile Include="ViewModels\ManageSchedulesModel.cs" />
@@ -234,6 +238,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\InventoryDetailWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ManageGoodsScreen.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
