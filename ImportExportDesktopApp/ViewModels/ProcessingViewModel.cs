@@ -51,10 +51,11 @@ namespace ImportExportDesktopApp.ViewModels
             Partner partner = _cardDataTransfer.CheckCard(transactionScale);
             if (partner != null)
             {
+                Schedule schedule = _scheduleDataTransfer.CheckSchedule(partner.PartnerId);
                 Transaction transaction = _transactionDataTransfer.IsProcessing(transactionScale.Indentify);
                 if (transaction == null)
                 {
-                    CreateTransaction(transactionScale, partner);
+                    CreateTransaction(transactionScale, partner, schedule);
                     return true;
                 }
                 else
@@ -64,7 +65,7 @@ namespace ImportExportDesktopApp.ViewModels
                         return false;
                     }
 
-                    Transaction newTransaction = UpdateTransaction(transaction, transactionScale, partner);
+                    Transaction newTransaction = UpdateTransaction(transaction, transactionScale, partner, schedule);
                     if (newTransaction == null)
                     {
                         return false;
@@ -91,11 +92,20 @@ namespace ImportExportDesktopApp.ViewModels
             return false;
         }
 
-        public void CreateTransaction(TransactionScale transactionScale, Partner partner)
+        public void CreateTransaction(TransactionScale transactionScale, Partner partner, Schedule schedule)
         {
             Transaction transaction = new Transaction();
             transaction.PartnerId = partner.PartnerId;
-            transaction.IsScheduled = false;
+
+            if (schedule != null)
+            {
+                transaction.IsScheduled = true;
+            }
+            else
+            {
+                transaction.IsScheduled = false;
+            }
+
             transaction.CreatedDate = DateTime.Now;
             transaction.GoodsId = 1;
             transaction.TimeIn = DateTime.Now;
@@ -108,7 +118,7 @@ namespace ImportExportDesktopApp.ViewModels
             _transactionDataTransfer.InsertTransaction(transaction);
         }
 
-        public Transaction UpdateTransaction(Transaction transaction, TransactionScale transactionScale, Partner partner)
+        public Transaction UpdateTransaction(Transaction transaction, TransactionScale transactionScale, Partner partner, Schedule schedule)
         {
             float goodInventory = _goodDataTransfer.getInventory();
             if (!CheckWeight(partner.PartnerTypeId, transaction.WeightIn, transactionScale.Weight, goodInventory))
@@ -127,6 +137,12 @@ namespace ImportExportDesktopApp.ViewModels
             transaction = _transactionDataTransfer.UpdateTransactionNotSaveChanges(transaction);
             float totalWeight = getTotalWeight(partner.PartnerTypeId, transaction.WeightIn, transaction.WeightOut);
             _inventoryDetailDataTransfer.InsertInventoryDetailNotSaveChanges(1, partner.PartnerId, partner.PartnerTypeId, totalWeight, inventory.InventoryId);
+            if (schedule != null)
+            {
+                schedule.ActualWeight = totalWeight;
+                schedule.ScheduleStatus = 1;
+                _scheduleDataTransfer.UpdateSchedule(schedule);
+            }
             _transactionDataTransfer.Save();
             return transaction;
         }
