@@ -50,6 +50,9 @@
     <Reference Include="MaterialDesignThemes.Wpf, Version=4.0.0.2422, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignThemes.4.0.0\lib\net452\MaterialDesignThemes.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.5.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -57,10 +60,38 @@
       <HintPath>..\packages\Notifications.Wpf.0.1.1\lib\net461\Notifications.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Json, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Net.Http.Json.5.0.0\lib\net461\System.Net.Http.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.5.0.0\lib\net45\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Text.Encodings.Web, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encodings.Web.5.0.0\lib\net461\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Json, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Json.5.0.0\lib\net461\System.Text.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -82,6 +113,29 @@
     <Compile Include="Account.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Converters\PartnerTypesConverter.cs" />
+    <Compile Include="Converters\RowIndexConverter.cs" />
+    <Compile Include="Converters\StatusColorConverter.cs" />
+    <Compile Include="Converters\StatusConverter.cs" />
+    <Compile Include="Pages\CreateTransaction.xaml.cs">
+      <DependentUpon>CreateTransaction.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\InventoryDetailWindow.xaml.cs">
+      <DependentUpon>InventoryDetailWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ManageGoodsScreen.xaml.cs">
+      <DependentUpon>ManageGoodsScreen.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ManageInventoriesScreen.xaml.cs">
+      <DependentUpon>ManageInventoriesScreen.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ManageSchedulesScreen.xaml.cs">
+      <DependentUpon>ManageSchedulesScreen.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ManageTransactionsScreen.xaml.cs">
+      <DependentUpon>ManageTransactionsScreen.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\BaseHttpService.cs" />
     <Compile Include="Converters\RowIndexConverter.cs" />
     <Compile Include="Converters\TransactionStatusConverter.cs" />
     <Compile Include="DataTransfers\CardDataTransfer.cs" />
@@ -123,6 +177,11 @@
     <Compile Include="InventoryDetail.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Pagination.cs" />
+    <Compile Include="Models\QueryParams.cs" />
+    <Compile Include="Pages\ManagePartnersScreen.xaml.cs">
+      <DependentUpon>ManagePartnersScreen.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ProcessingPage.xaml.cs">
       <DependentUpon>ProcessingPage.xaml</DependentUpon>
     </Compile>
@@ -139,6 +198,15 @@
     <Compile Include="Schedule.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Services\GoodsHttpService.cs" />
+    <Compile Include="Services\InventoryDetailHttpService.cs" />
+    <Compile Include="Services\InventoryHttpService.cs" />
+    <Compile Include="Services\PartnerDetailHttpService.cs" />
+    <Compile Include="Services\PartnerHttpService.cs" />
+    <Compile Include="Services\RelayCommand.cs" />
+    <Compile Include="Services\ScheduleHttpService.cs" />
+    <Compile Include="Services\SystemConfigHttpService.cs" />
+    <Compile Include="Services\TransactionHttpService.cs" />
     <Compile Include="sysdiagram.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
     </Compile>
@@ -156,7 +224,13 @@
     </Compile>
     <Compile Include="DataTransfers\TransactionDataTransfer.cs" />
     <Compile Include="Utils\BaseNotifyPropertyChanged.cs" />
+    <Compile Include="ViewModels\DetailInventoryModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\ManageGoodsModel.cs" />
+    <Compile Include="ViewModels\ManageInventoryModel.cs" />
+    <Compile Include="ViewModels\ManagePartnersModel.cs" />
+    <Compile Include="ViewModels\ManageSchedulesModel.cs" />
+    <Compile Include="ViewModels\ManageTransactionModel.cs" />
     <Compile Include="ViewModels\ProcessingViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -170,6 +244,34 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pages\CreateTransaction.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\InventoryDetailWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ManageGoodsScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ManageInventoriesScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ManagePartnersScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ManageSchedulesScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ManageTransactionsScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\ProcessingPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

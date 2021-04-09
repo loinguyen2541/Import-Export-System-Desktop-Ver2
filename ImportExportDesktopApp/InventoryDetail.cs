@@ -16,7 +16,7 @@ namespace ImportExportDesktopApp
     {
         public int InventoryDetailId { get; set; }
         public float Weight { get; set; }
-        public Nullable<int> Type { get; set; }
+        public string Type { get; set; }
         public int InventoryId { get; set; }
         public int GoodsId { get; set; }
         public int PartnerId { get; set; }
