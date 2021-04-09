@@ -21,25 +21,27 @@ namespace ImportExportDesktopApp.DataTransfers
             ie = DataContext.GetInstance().DB;
         }
 
-        public void updateTimetemplateItemWeight(int id, float weight, int partnerTypeId)
+        public void updateTimetemplateItemWeight(DateTime TimeOut, float weight, int partnerTypeId)
         {
-            TimeTemplateItem timeTemplateItem = ie.TimeTemplateItems.Find(id);
-            if (partnerTypeId == 1)
+            TimeSpan timeOut = TimeSpan.Parse(TimeOut.ToString("HH:mm"));
+            List<TimeTemplateItem> timeTemplateItems = ie.TimeTemplateItems.Where(i => i.ScheduleTime > TimeOut.TimeOfDay).ToList();
+            foreach (var item in timeTemplateItems)
             {
-                timeTemplateItem.Inventory -= weight;
-            }
-            else if (partnerTypeId == 2)
-            {
-                timeTemplateItem.Inventory += weight;
-            }
+                if (partnerTypeId == 1)
+                {
+                    item.Inventory -= weight;
+                }
+                else if (partnerTypeId == 2)
+                {
+                    item.Inventory += weight;
+                }
 
-            if (timeTemplateItem.Inventory < 0)
-            {
-                timeTemplateItem.Inventory = 0;
+                if (item.Inventory < 0)
+                {
+                    item.Inventory = 0;
+                }
+                ie.Entry(item).State = System.Data.Entity.EntityState.Modified;
             }
-
-            ie.Entry(timeTemplateItem).State = System.Data.Entity.EntityState.Modified;
-
         }
     }
 }

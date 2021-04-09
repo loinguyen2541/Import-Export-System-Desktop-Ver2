@@ -23,7 +23,7 @@ namespace ImportExportDesktopApp.DataTransfers
 
         public Schedule CheckSchedule(int partnerId)
         {
-            Schedule schedule = ie.Schedules.Where(s => s.PartnerId == partnerId).First();
+            Schedule schedule = ie.Schedules.Where(s => s.PartnerId == partnerId).FirstOrDefault();
             return schedule;
         }
         public void UpdateSchedule(Schedule schedule)

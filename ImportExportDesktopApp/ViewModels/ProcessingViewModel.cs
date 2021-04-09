@@ -2,6 +2,7 @@
 using ImportExportDesktopApp.Enums;
 using ImportExportDesktopApp.ScaleModels;
 using ImportExportDesktopApp.Utils;
+using Notifications.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -27,9 +28,18 @@ namespace ImportExportDesktopApp.ViewModels
         private InventoryDataTransfer _inventoryDataTransfer;
         private InventoryDetailDataTransfer _inventoryDetailDataTransfer;
         private ScheduleDataTransfer _scheduleDataTransfer;
+        private TimeTemplateItemDataTransfer _timeTemplateItemDataTransfer;
         private ObservableCollection<Transaction> _processingTransaction;
         private ObservableCollection<Transaction> _successTransaction;
         private int _storageCapacity = 0;
+
+        //gate field
+        private String _partnerNameGate1;
+        private String _partnerTypeNameGate1;
+        private String _partnerNameGate2;
+        private String _partnerTypeNameGate2;
+        private String _weightGate1;
+        private String _weightGate2;
 
         public ProcessingViewModel()
         {
@@ -40,6 +50,8 @@ namespace ImportExportDesktopApp.ViewModels
             _inventoryDataTransfer = new InventoryDataTransfer();
             _inventoryDetailDataTransfer = new InventoryDetailDataTransfer();
             _scheduleDataTransfer = new ScheduleDataTransfer();
+            _timeTemplateItemDataTransfer = new TimeTemplateItemDataTransfer();
+
             _storageCapacity = _systemCongifDataTransfer.GetStorageCappacity();
             ProcessingTransaction = _transactionDataTransfer.GetProcessingTransaction();
             SuccessTransaction = _transactionDataTransfer.GetSuccessTransaction();
@@ -49,6 +61,8 @@ namespace ImportExportDesktopApp.ViewModels
         public bool CheckCard(TransactionScale transactionScale)
         {
             Partner partner = _cardDataTransfer.CheckCard(transactionScale);
+            UpdateGatePanel(partner, transactionScale);
+
             if (partner != null)
             {
                 Schedule schedule = _scheduleDataTransfer.CheckSchedule(partner.PartnerId);
@@ -71,15 +85,42 @@ namespace ImportExportDesktopApp.ViewModels
                         return false;
                     }
 
+                    // Notify 
+                    HttpServices.NotifyHubService.Notify();
+
                     if (partner.PartnerTypeId == 1)
                     {
                         float weight = newTransaction.WeightOut - newTransaction.WeightIn;
-                        _goodDataTransfer.UpdateInventory(partner.PartnerTypeId, weight, _storageCapacity);
+                        Good good = _goodDataTransfer.UpdateInventory(partner.PartnerTypeId, weight, _storageCapacity);
+                        double storageCapacity20 = _storageCapacity * 0.2;
+                        if (_storageCapacity - good.QuantityOfInventory <= storageCapacity20)
+                        {
+                            var notificationManager = new NotificationManager();
+
+                            notificationManager.Show(new NotificationContent
+                            {
+                                Title = "Warning",
+                                Message = "Storge capacity is almost full!!!!",
+                                Type = NotificationType.Warning
+                            }, expirationTime: TimeSpan.FromSeconds(30));
+                        }
                     }
                     else if (partner.PartnerTypeId == 2)
                     {
                         float weight = newTransaction.WeightIn - newTransaction.WeightOut;
-                        _goodDataTransfer.UpdateInventory(partner.PartnerTypeId, weight, _storageCapacity);
+                        Good good = _goodDataTransfer.UpdateInventory(partner.PartnerTypeId, weight, _storageCapacity);
+                        double storageCapacity20 = _storageCapacity * 0.2;
+                        if (_storageCapacity - good.QuantityOfInventory <= storageCapacity20)
+                        {
+                            var notificationManager = new NotificationManager();
+
+                            notificationManager.Show(new NotificationContent
+                            {
+                                Title = "Warning",
+                                Message = "Storge capacity is almost full!!!!",
+                                Type = NotificationType.Warning
+                            });
+                        }
                     }
                     else
                     {
@@ -143,8 +184,34 @@ namespace ImportExportDesktopApp.ViewModels
                 schedule.ScheduleStatus = 1;
                 _scheduleDataTransfer.UpdateSchedule(schedule);
             }
+            else
+            {
+                _timeTemplateItemDataTransfer.updateTimetemplateItemWeight(transaction.TimeOut, totalWeight, partner.PartnerTypeId);
+            }
             _transactionDataTransfer.Save();
             return transaction;
+        }
+
+        private void UpdateGatePanel(Partner partner, TransactionScale transactionScale)
+        {
+            if (transactionScale.Gate == EGate.Gate1)
+            {
+                if (partner != null)
+                {
+                    PartnerNameGate1 = partner.DisplayName;
+                    PartnerTypeNameGate1 = "Type: " + partner.PartnerType.PartnerTypeName;
+                }
+                WeightGate1 = transactionScale.Weight + " kg";
+            }
+            else
+            {
+                if (partner != null)
+                {
+                    PartnerNameGate2 = partner.DisplayName;
+                    PartnerTypeNameGate2 = "Type:" + partner.PartnerType.PartnerTypeName;
+                }
+                WeightGate2 = transactionScale.Weight + " kg";
+            }
         }
 
 
@@ -241,5 +308,63 @@ namespace ImportExportDesktopApp.ViewModels
                 NotifyPropertyChanged();
             }
         }
+
+        public String PartnerNameGate1
+        {
+            get { return _partnerNameGate1; }
+            set
+            {
+                _partnerNameGate1 = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public String PartnerNameGate2
+        {
+            get { return _partnerNameGate2; }
+            set
+            {
+                _partnerNameGate2 = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public String WeightGate1
+        {
+            get { return _weightGate1; }
+            set
+            {
+                _weightGate1 = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public String WeightGate2
+        {
+            get { return _weightGate2; }
+            set
+            {
+                _weightGate2 = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public String PartnerTypeNameGate1
+        {
+            get { return _partnerTypeNameGate1; }
+            set
+            {
+                _partnerTypeNameGate1 = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public String PartnerTypeNameGate2
+        {
+            get { return _partnerTypeNameGate2; }
+            set
+            {
+                _partnerTypeNameGate2 = value;
+                NotifyPropertyChanged();
+            }
+        }
+
     }
 }

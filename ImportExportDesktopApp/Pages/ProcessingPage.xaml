@@ -2,6 +2,7 @@
     x:Class="ImportExportDesktopApp.Pages.ProcessingPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converter="clr-namespace:ImportExportDesktopApp.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ImportExportDesktopApp.Pages"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -16,6 +17,10 @@
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     mc:Ignorable="d">
+    <Page.Resources>
+        <converter:TransactionStatusConverter x:Key="TransactionTypeConverter" />
+        <converter:RowIndexConverter x:Key="RowIndexConverter" />
+    </Page.Resources>
     <Border Padding="16">
         <Grid>
             <Grid.RowDefinitions>
@@ -37,9 +42,30 @@
                     <StackPanel Orientation="Vertical">
                         <TextBlock
                             Margin="0,8,0,16"
+                            FontSize="17"
                             FontWeight="Bold"
                             Foreground="White"
                             Text="Gate 1" />
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock
+                                Margin="0,8,0,16"
+                                HorizontalAlignment="Left"
+                                FontWeight="Bold"
+                                Foreground="White"
+                                Text="{Binding PartnerNameGate1, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock
+                                Margin="0,8,0,16"
+                                HorizontalAlignment="Left"
+                                Foreground="White"
+                                Text="{Binding PartnerTypeNameGate1, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock
+                                Margin="0,8,0,16"
+                                HorizontalAlignment="Center"
+                                FontSize="25"
+                                FontWeight="Bold"
+                                Foreground="White"
+                                Text="{Binding WeightGate1, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
                     </StackPanel>
                 </materialDesign:Card>
                 <materialDesign:Card
@@ -51,33 +77,36 @@
                     <StackPanel Orientation="Vertical">
                         <TextBlock
                             Margin="0,8,0,16"
+                            FontSize="17"
                             FontWeight="Bold"
                             Text="Processing" />
                         <DataGrid
                             Height="auto"
                             materialDesign:DataGridAssist.CellPadding="16 16 16 16"
                             materialDesign:DataGridAssist.ColumnHeaderPadding="16 16 16 16"
+                            AlternationCount="{Binding ProcessingTransaction.Count}"
                             AutoGenerateColumns="False"
                             Background="White"
                             CanUserAddRows="False"
                             CanUserSortColumns="True"
-                            ColumnWidth="*"
                             FontSize="15"
+                            HorizontalScrollBarVisibility="Auto"
                             IsHitTestVisible="False"
                             IsReadOnly="True"
                             ItemsSource="{Binding ProcessingTransaction}"
-                            VerticalScrollBarVisibility="Hidden">
+                            VerticalScrollBarVisibility="Auto">
                             <DataGrid.Columns>
                                 <DataGridTextColumn
                                     Width="60"
-                                    Binding="{Binding TransactionId}"
+                                    Binding="{Binding Path=AlternationIndex, RelativeSource={RelativeSource AncestorType=DataGridRow}, Converter={StaticResource RowIndexConverter}}"
                                     Header="No." />
                                 <DataGridTextColumn Binding="{Binding Partner.DisplayName}" Header="Partner" />
                                 <DataGridTextColumn
                                     Width="100"
                                     Binding="{Binding WeightIn}"
                                     Header="Weight in" />
-                                <DataGridTextColumn Binding="{Binding TimeOut}" Header="Time in" />
+                                <DataGridTextColumn Binding="{Binding TimeIn}" Header="Time in" />
+                                <DataGridTextColumn Binding="{Binding TransactionType, Converter={StaticResource TransactionTypeConverter}}" Header="Type" />
                             </DataGrid.Columns>
                         </DataGrid>
                     </StackPanel>
@@ -98,6 +127,7 @@
                     <StackPanel Orientation="Vertical">
                         <TextBlock
                             Margin="0,8,0,16"
+                            FontSize="17"
                             FontWeight="Bold"
                             Foreground="White"
                             Text="Gate 2" />
@@ -105,18 +135,21 @@
                             <TextBlock
                                 Margin="0,8,0,16"
                                 HorizontalAlignment="Left"
+                                FontWeight="Bold"
                                 Foreground="White"
-                                Text="Partner: Thanh Tan" />
+                                Text="{Binding PartnerNameGate2, UpdateSourceTrigger=PropertyChanged}" />
                             <TextBlock
                                 Margin="0,8,0,16"
                                 HorizontalAlignment="Left"
                                 Foreground="White"
-                                Text="Type: Provider" />
+                                Text="{Binding PartnerTypeNameGate2, UpdateSourceTrigger=PropertyChanged}" />
                             <TextBlock
                                 Margin="0,8,0,16"
-                                HorizontalAlignment="Left"
+                                HorizontalAlignment="Center"
+                                FontSize="25"
+                                FontWeight="Bold"
                                 Foreground="White"
-                                Text="Weight: 245 kg" />
+                                Text="{Binding WeightGate2, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                     </StackPanel>
                 </materialDesign:Card>
@@ -129,31 +162,34 @@
                     <StackPanel Orientation="Vertical">
                         <TextBlock
                             Margin="0,8,0,16"
+                            FontSize="17"
                             FontWeight="Bold"
                             Text="Success" />
                         <DataGrid
                             Height="auto"
                             materialDesign:DataGridAssist.CellPadding="16 16 16 16"
                             materialDesign:DataGridAssist.ColumnHeaderPadding="16 16 16 16"
+                            AlternationCount="{Binding SuccessTransaction.Count}"
                             AutoGenerateColumns="False"
                             Background="White"
                             CanUserAddRows="False"
                             CanUserSortColumns="True"
-                            ColumnWidth="*"
                             FontSize="15"
+                            HorizontalScrollBarVisibility="Auto"
                             IsHitTestVisible="False"
                             IsReadOnly="True"
                             ItemsSource="{Binding SuccessTransaction}"
-                            VerticalScrollBarVisibility="Hidden">
+                            VerticalScrollBarVisibility="Auto">
                             <DataGrid.Columns>
                                 <DataGridTextColumn
                                     Width="60"
-                                    Binding="{Binding TransactionId}"
+                                    Binding="{Binding Path=AlternationIndex, RelativeSource={RelativeSource AncestorType=DataGridRow}, Converter={StaticResource RowIndexConverter}}"
                                     Header="No." />
                                 <DataGridTextColumn Binding="{Binding Partner.DisplayName}" Header="Partner" />
                                 <DataGridTextColumn Binding="{Binding WeightIn}" Header="Weight in" />
                                 <DataGridTextColumn Binding="{Binding WeightOut}" Header="Weight out" />
-                                <DataGridTextColumn Binding="{Binding TransactionId}" Header="Total" />
+                                <DataGridTextColumn Binding="{Binding Total}" Header="Total" />
+                                <DataGridTextColumn Binding="{Binding TransactionType, Converter={StaticResource TransactionTypeConverter}}" Header="Type" />
                             </DataGrid.Columns>
                         </DataGrid>
                     </StackPanel>
