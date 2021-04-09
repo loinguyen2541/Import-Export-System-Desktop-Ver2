@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ImportExportDesktopApp.Pages;
+using ImportExportDesktopApp.ViewModels;
 
 namespace ImportExportDesktopApp
 {
@@ -33,7 +34,7 @@ namespace ImportExportDesktopApp
             //{
             //    processingScreen = new ProcessingScreen();
             //}
-            _mainFrame.Navigate(new ManageInventoriesScreen());
+            _mainFrame.Navigate(new ManageTransactionsScreen());
         }
 
         public void Navigate(string value)
@@ -84,7 +85,12 @@ namespace ImportExportDesktopApp
         {
 
         }
-
+        private void ListBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            String value;
+            value = (DataContext as MainViewModel).SelectedItem.Value;
+            Navigate(value);
+        }
         private void page_MouseUp(object sender, MouseButtonEventArgs e)
         {
 

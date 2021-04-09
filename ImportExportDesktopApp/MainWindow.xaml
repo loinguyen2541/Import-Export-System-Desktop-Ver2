@@ -57,7 +57,7 @@
                 FontSize="15"
                 Foreground="White"
                 ItemsSource="{Binding PageNameList, Mode=TwoWay}"
-                MouseUp="page_MouseUp"
+                MouseUp="ListBox_PreviewMouseDown"
                 SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}"
                 SelectionChanged="page_SelectionChanged">
                 <ListBox.ItemTemplate>

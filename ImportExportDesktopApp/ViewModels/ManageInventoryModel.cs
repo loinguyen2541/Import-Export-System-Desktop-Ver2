@@ -1,4 +1,5 @@
 ﻿using ImportExportDesktopApp.Models;
+using ImportExportDesktopApp.Pages;
 using ImportExportDesktopApp.Services;
 using ImportExportDesktopApp.Utils;
 using System;
@@ -86,8 +87,8 @@ namespace ImportExportDesktopApp.ViewModels
         }
         public void SearchInventoryDetailByInventory(Inventory inventory)
         {
-            //InventoryDetailWindow detailTransactinoWindow = new InventoryDetailWindow(inventory: inventory);
-            //detailTransactinoWindow.ShowDialog();
+            InventoryDetailWindow detailTransactinoWindow = new InventoryDetailWindow(inventory: inventory);
+            detailTransactinoWindow.ShowDialog();
         }
 
         public void SearchInventory()

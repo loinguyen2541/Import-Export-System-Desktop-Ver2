@@ -8,6 +8,8 @@
     <viewmodel:ManagePartnersModel x:Key="ManPartner"/>
     <viewmodel:ManageSchedulesModel x:Key="ManSchedule"/>
     <viewmodel:ProcessingViewModel x:Key="ProcessingVM" />
+    <viewmodel:ManageTransactionModel x:Key="ManTrans"/>
+    <viewmodel:DetailInventoryModel x:Key="InventoryDetailVM"/>
     <!--  Colors  -->
     <Brush x:Key="Red">#F44336</Brush>
     <Brush x:Key="Blue">#2196F3</Brush>
