@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace ImportExportDesktopApp.Utils
 {
-    public class BaseNotifyPropertyChanged : INotifyPropertyChanged
+    class BaseNotifyPropertyChanged : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

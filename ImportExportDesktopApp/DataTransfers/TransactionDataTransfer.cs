@@ -27,12 +27,12 @@ namespace ImportExportDesktopApp.DataTransfers
 
         public ObservableCollection<Transaction> GetProcessingTransaction()
         {
-            return new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == "Processing").OrderByDescending(t => t.TimeIn).Take(5));
+            return new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == 0).OrderByDescending(t => t.TimeIn).Take(5));
         }
 
         public ObservableCollection<Transaction> GetSuccessTransaction()
         {
-            return new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == "Success").OrderByDescending(t => t.TimeOut).Take(5));
+            return new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == 1).OrderByDescending(t => t.TimeOut).Take(5));
         }
 
         public Transaction InsertTransaction(Transaction transaction)
@@ -51,7 +51,7 @@ namespace ImportExportDesktopApp.DataTransfers
         public Transaction IsProcessing(String identify)
         {
             Transaction transaction = ie.Transactions
-                .Where(t => t.IdentificationCode.Contains(identify) && t.TransactionStatus == "Processing").SingleOrDefault();
+                .Where(t => t.IdentificationCode.Contains(identify) && t.TransactionStatus == 0).SingleOrDefault();
             return transaction;
         }
 

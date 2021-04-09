@@ -25,7 +25,7 @@ namespace ImportExportDesktopApp
         public int GoodsId { get; set; }
         public string GoodName { get; set; }
         public float QuantityOfInventory { get; set; }
-        public string GoodsStatus { get; set; }
+        public int GoodsStatus { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<InventoryDetail> InventoryDetails { get; set; }

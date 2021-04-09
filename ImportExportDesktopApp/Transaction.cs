@@ -22,8 +22,8 @@ namespace ImportExportDesktopApp
         public string Description { get; set; }
         public float WeightOut { get; set; }
         public bool IsScheduled { get; set; }
-        public string TransactionType { get; set; }
-        public string TransactionStatus { get; set; }
+        public int TransactionType { get; set; }
+        public int TransactionStatus { get; set; }
         public int PartnerId { get; set; }
         public string IdentificationCode { get; set; }
         public int GoodsId { get; set; }

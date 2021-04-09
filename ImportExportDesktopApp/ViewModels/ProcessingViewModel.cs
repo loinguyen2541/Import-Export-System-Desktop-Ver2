@@ -153,8 +153,8 @@ namespace ImportExportDesktopApp.ViewModels
             transaction.WeightIn = transactionScale.Weight;
             transaction.WeightOut = 0;
             transaction.IdentificationCode = transactionScale.Indentify;
-            transaction.TransactionStatus = "Success";
-            transaction.TransactionType = partner.PartnerTypeId == 1 ? "Export" : "Import";
+            transaction.TransactionStatus = 0;
+            transaction.TransactionType = partner.PartnerTypeId == 1 ? 1 : 0;
             transaction.Gate = transactionScale.Gate.ToString();
             _transactionDataTransfer.InsertTransaction(transaction);
         }
@@ -267,6 +267,7 @@ namespace ImportExportDesktopApp.ViewModels
             {
                 return false;
             }
+
             return true;
         }
 

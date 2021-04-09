@@ -13,7 +13,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ImportExportDesktopApp.Pages;
-using ImportExportDesktopApp.ViewModels;
 
 namespace ImportExportDesktopApp
 {
@@ -23,9 +22,6 @@ namespace ImportExportDesktopApp
     public partial class MainWindow : Window
     {
         private Frame _mainFrame;
-        private ManageInventoriesScreen manageInventoriesScreen;
-        private ManagePartnersScreen manPartnersScreen;
-        private ManageSchedulesScreen manScheduleScreen;
         public MainWindow()
         {
             InitializeComponent();
@@ -34,63 +30,14 @@ namespace ImportExportDesktopApp
             //{
             //    processingScreen = new ProcessingScreen();
             //}
-            _mainFrame.Navigate(new ManageGoodsScreen());
-        }
-
-        public void Navigate(string value)
-        {
-            switch (value)
-            {
-                case "ChartDonut":
-                    if (manPartnersScreen == null)
-                    {
-                        manPartnersScreen = new ManagePartnersScreen();
-                    }
-                    _mainFrame.Navigate(manPartnersScreen);
-                    break;
-                case "AccountMultiple":
-                    if (manPartnersScreen == null)
-                    {
-                        manPartnersScreen = new ManagePartnersScreen();
-                    }
-                    _mainFrame.Navigate(manPartnersScreen);
-                    break;
-                case "schedule":
-                    if (manScheduleScreen == null)
-                    {
-                        manScheduleScreen = new ManageSchedulesScreen();
-                    }
-                    _mainFrame.Navigate(manScheduleScreen);
-                    break;
-                case "PackageVariantClosed":
-                    if (manageInventoriesScreen == null)
-                    {
-                        manageInventoriesScreen = new ManageInventoriesScreen();
-                    }
-                    _mainFrame.Navigate(manageInventoriesScreen);
-                    break;
-                case "Gift":
-                    if (manPartnersScreen == null)
-                    {
-                        manPartnersScreen = new ManagePartnersScreen();
-                    }
-                    _mainFrame.Navigate(manPartnersScreen);
-                    break;
-                default:
-                    break;
-            }
+            _mainFrame.Navigate(new ProcessingPage());
         }
 
         private void page_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
-        private void ListBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            String value;
-            value = (DataContext as MainViewModel).SelectedItem.Value;
-            Navigate(value);
-        }
+
         private void page_MouseUp(object sender, MouseButtonEventArgs e)
         {
 

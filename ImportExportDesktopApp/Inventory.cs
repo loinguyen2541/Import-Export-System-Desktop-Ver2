@@ -22,8 +22,6 @@ namespace ImportExportDesktopApp
     
         public int InventoryId { get; set; }
         public float OpeningStock { get; set; }
-        public float TotalImport { get; set; }
-        public float TotalExport { get; set; }
         public System.DateTime RecordedDate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

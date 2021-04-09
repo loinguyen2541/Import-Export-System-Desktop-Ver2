@@ -19,8 +19,8 @@ namespace ImportExportDesktopApp
         public float RegisteredWeight { get; set; }
         public Nullable<float> ActualWeight { get; set; }
         public System.DateTime CreatedDate { get; set; }
-        public string TransactionType { get; set; }
-        public string ScheduleStatus { get; set; }
+        public int TransactionType { get; set; }
+        public int ScheduleStatus { get; set; }
         public string UpdatedBy { get; set; }
         public int PartnerId { get; set; }
         public int GoodsId { get; set; }
