@@ -25,12 +25,12 @@ namespace ImportExportDesktopApp.DataTransfers
 
         public float getInventory()
         {
-            return ie.Goods.Where(p => p.GoodsStatus == "Available").First().QuantityOfInventory;
+            return ie.Goods.Where(p => p.GoodsStatus == 0).FirstOrDefault().QuantityOfInventory;
         }
 
-        public void UpdateInventory(int partnerTypeId, float weight, int capacity)
+        public Good UpdateInventory(int partnerTypeId, float weight, int capacity)
         {
-            Good good = ie.Goods.Where(p => p.GoodsStatus == "Available").First();
+            Good good = ie.Goods.Where(p => p.GoodsStatus == 0).FirstOrDefault();
             if (partnerTypeId == 1)
             {
                 good.QuantityOfInventory -= weight;
@@ -41,6 +41,7 @@ namespace ImportExportDesktopApp.DataTransfers
             }
             ie.Entry(good).State = System.Data.Entity.EntityState.Modified;
             ie.SaveChanges();
+            return good;
         }
     }
 }

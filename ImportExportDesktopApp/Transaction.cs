@@ -11,7 +11,7 @@ namespace ImportExportDesktopApp
 {
     using System;
     using System.Collections.Generic;
-    
+
     public partial class Transaction
     {
         public int TransactionId { get; set; }
@@ -28,8 +28,21 @@ namespace ImportExportDesktopApp
         public string IdentificationCode { get; set; }
         public int GoodsId { get; set; }
         public string Gate { get; set; }
-    
+
         public virtual Good Good { get; set; }
         public virtual Partner Partner { get; set; }
+
+        public float Total
+        {
+            get
+            {
+                float total = WeightIn - WeightOut;
+                if (total < 0)
+                {
+                    total = total * -1;
+                }
+                return total;
+            }
+        }
     }
 }

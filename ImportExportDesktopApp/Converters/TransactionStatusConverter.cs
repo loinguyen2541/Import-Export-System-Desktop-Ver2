@@ -9,17 +9,24 @@ using System.Windows.Data;
 /**
 * @author Loi Nguyen
 *
-* @date - 4/9/2021 10:07:19 AM 
+* @date - 4/9/2021 8:03:00 AM 
 */
+
 namespace ImportExportDesktopApp.Converters
 {
-    class RowIndexConverter : IValueConverter
+    class TransactionStatusConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            int index;
-            index = System.Convert.ToInt32(value);
-            return index + 1;
+            int type = (int)value;
+            if (type == 0)
+            {
+                return "Import";
+            }
+            else
+            {
+                return "Export";
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

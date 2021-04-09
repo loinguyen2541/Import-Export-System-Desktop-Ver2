@@ -56,6 +56,9 @@
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Notifications.Wpf, Version=0.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Notifications.Wpf.0.1.1\lib\net461\Notifications.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
@@ -133,15 +136,23 @@
       <DependentUpon>ManageTransactionsScreen.xaml</DependentUpon>
     </Compile>
     <Compile Include="Services\BaseHttpService.cs" />
+    <Compile Include="Converters\RowIndexConverter.cs" />
+    <Compile Include="Converters\TransactionStatusConverter.cs" />
     <Compile Include="DataTransfers\CardDataTransfer.cs" />
+    <Compile Include="DataTransfers\DataContext.cs" />
     <Compile Include="DataTransfers\GoodDataTransfer.cs" />
+    <Compile Include="DataTransfers\InventoryDataTransfer.cs" />
+    <Compile Include="DataTransfers\InventoryDetailDataTransfer.cs" />
+    <Compile Include="DataTransfers\ScheduleDataTransfer.cs" />
     <Compile Include="DataTransfers\SystemConfigDataTransfer.cs" />
+    <Compile Include="DataTransfers\TimeTemplateItemDataTransfer.cs" />
     <Compile Include="Enums\EDeviceType.cs" />
     <Compile Include="Enums\EGate.cs" />
     <Compile Include="Enums\EPartnerType.cs" />
     <Compile Include="Good.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="HttpServices\NotifyHubService.cs" />
     <Compile Include="IdentityCard.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
     </Compile>

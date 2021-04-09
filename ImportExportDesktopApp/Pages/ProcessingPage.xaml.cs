@@ -66,7 +66,7 @@ namespace ImportExportDesktopApp.Pages
             port1.DataReceived += new SerialDataReceivedEventHandler(DataRecive1);
             if (!port1.IsOpen)
             {
-                port1.PortName = "COM6";
+                port1.PortName = "COM7";
                 port1.BaudRate = BaudRate;
                 port1.Open();
             }
@@ -96,6 +96,8 @@ namespace ImportExportDesktopApp.Pages
                         {
                             port1.WriteLine("@response|Fail");
                         }
+                        //processingViewModel.PartnerNameGate1 = null;
+                        //processingViewModel.WeightGate1 = null;
                     }
                     else
                     {
@@ -130,6 +132,8 @@ namespace ImportExportDesktopApp.Pages
                         {
                             port2.WriteLine("@response|Fail");
                         }
+                        //processingViewModel.PartnerNameGate2 = null;
+                        //processingViewModel.WeightGate2 = null;
                     }
                 }
             }));

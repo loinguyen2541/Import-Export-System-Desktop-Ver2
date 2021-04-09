@@ -1,5 +1,8 @@
-﻿using System;
+﻿using ImportExportDesktopApp.Enums;
+using ImportExportDesktopApp.ScaleModels;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,16 +21,25 @@ namespace ImportExportDesktopApp.DataTransfers
         private readonly IEEntities ie;
         public CardDataTransfer()
         {
-            ie = new IEEntities();
+            ie = DataContext.GetInstance().DB;
         }
 
-        public Partner CheckCard(string identificationCode)
+        public Partner CheckCard(TransactionScale transactionScale)
         {
-            Partner partner = ie.IdentityCards
-                .Where(c => c.IdentityCardId.Equals(identificationCode) && c.IdentityCardStatus == 0)
-                .Where(c => c.Partner.PartnerStatus == "Block").Select(c => c.Partner)
-                .SingleOrDefault();
-            return partner;
+            if (transactionScale.Device == EDeviceType.Card)
+            {
+                Partner partner = ie.IdentityCards.Include(i => i.Partner.PartnerType)
+                    .Where(c => c.IdentityCardId.Equals(transactionScale.Indentify) && c.IdentityCardStatus == 0)
+                    .Where(c => c.Partner.PartnerStatus == 0).Select(c => c.Partner)
+                    .SingleOrDefault();
+                return partner;
+            }
+            else if (transactionScale.Device == EDeviceType.Android)
+            {
+                Partner partner = ie.Partners.Include(p => p.PartnerType).Where(c => c.PartnerId == transactionScale.PartnerId && c.PartnerStatus == 0).SingleOrDefault();
+                return partner;
+            }
+            return null;
         }
     }
 }
