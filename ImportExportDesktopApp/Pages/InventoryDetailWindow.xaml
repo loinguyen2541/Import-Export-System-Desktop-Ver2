@@ -167,7 +167,6 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn
                                 Width="70"
-                                Binding="{Binding InventoryDetailId}"
                                 Header="No" />
                             <DataGridTextColumn Binding="{Binding Partner.DisplayName}" Header="Partner Name" />
                             <DataGridTextColumn Binding="{Binding Goods.GoodName}" Header="Goods" />
