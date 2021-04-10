@@ -12,9 +12,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using ImportExportDesktopApp.Events;
 using ImportExportDesktopApp.Pages;
 using ImportExportDesktopApp.ViewModels;
+using ImportExportDesktopApp.Windows;
 
 namespace ImportExportDesktopApp
 {
@@ -23,6 +25,8 @@ namespace ImportExportDesktopApp
     /// </summary>
     public partial class MainWindow : Window
     {
+        private String PROCESSING_PAGE_NAME = "Processing_Page";
+
         private Frame _mainFrame;
         private ManageInventoriesScreen manageInventoriesScreen;
         private ManagePartnersScreen manPartnersScreen;
@@ -46,9 +50,20 @@ namespace ImportExportDesktopApp
 
         private void HandleScaleEvent(String value)
         {
-            MainWindow main = new MainWindow();
-            main.Show();
-            MessageBox.Show("hihi");
+            if (!(_mainFrame.Content as Page).Name.Equals(PROCESSING_PAGE_NAME))
+            {
+                //if (proccessingPage == null)
+                //{
+                //    proccessingPage = new ProcessingPage();
+                //}
+                //_mainFrame.Navigate(proccessingPage);
+                App.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
+                {
+                    var notify = new ScaleExceptionWindow();
+                    notify.Show();
+                    notify.Topmost = true;
+                }));
+            }
         }
 
         public void Navigate(string value)
