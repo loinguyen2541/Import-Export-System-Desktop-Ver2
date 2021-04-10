@@ -41,6 +41,7 @@ namespace ImportExportDesktopApp.Pages
         public ProcessingPage()
         {
             InitializeComponent();
+            this.DataContext = new ProcessingViewModel(AppService.Instance.EventAggregator);
             processingViewModel = DataContext as ProcessingViewModel;
             thread1 = new Thread(ReadSerial);
             thread1.Start();
@@ -54,9 +55,16 @@ namespace ImportExportDesktopApp.Pages
             port2.DataReceived += new SerialDataReceivedEventHandler(DataRecive2);
             if (!port2.IsOpen)
             {
-                port2.PortName = "COM5";
-                port2.BaudRate = BaudRate;
-                port2.Open();
+                try
+                {
+                    port2.PortName = "COM5";
+                    port2.BaudRate = BaudRate;
+                    port2.Open();
+                }
+                catch
+                {
+
+                }
             }
         }
 
@@ -66,9 +74,16 @@ namespace ImportExportDesktopApp.Pages
             port1.DataReceived += new SerialDataReceivedEventHandler(DataRecive1);
             if (!port1.IsOpen)
             {
-                port1.PortName = "COM7";
-                port1.BaudRate = BaudRate;
-                port1.Open();
+                try
+                {
+                    port1.PortName = "COM7";
+                    port1.BaudRate = BaudRate;
+                    port1.Open();
+                }
+                catch
+                {
+
+                }
             }
         }
 
@@ -79,9 +94,6 @@ namespace ImportExportDesktopApp.Pages
                 String value = port1.ReadLine();
                 if (value != String.Empty)
                 {
-
-                    Console.WriteLine(value);
-
                     if (value.Trim().StartsWith("@request"))
                     {
                         String[] values = value.Split('|');
@@ -96,8 +108,13 @@ namespace ImportExportDesktopApp.Pages
                         {
                             port1.WriteLine("@response|Fail");
                         }
-                        //processingViewModel.PartnerNameGate1 = null;
-                        //processingViewModel.WeightGate1 = null;
+
+                    }
+                    else if (value.Trim().StartsWith("@getOffScale"))
+                    {
+                        processingViewModel.PartnerNameGate1 = null;
+                        processingViewModel.PartnerTypeNameGate1 = null;
+                        processingViewModel.WeightGate1 = "...";
                     }
                     else
                     {
@@ -115,9 +132,6 @@ namespace ImportExportDesktopApp.Pages
                 String value = port2.ReadLine();
                 if (value != String.Empty)
                 {
-
-                    Console.WriteLine(value);
-
                     if (value.Trim().StartsWith("@request"))
                     {
                         String[] values = value.Split('|');
@@ -132,10 +146,19 @@ namespace ImportExportDesktopApp.Pages
                         {
                             port2.WriteLine("@response|Fail");
                         }
-                        //processingViewModel.PartnerNameGate2 = null;
-                        //processingViewModel.WeightGate2 = null;
+                    }
+                    else if (value.Trim().StartsWith("@getOffScale"))
+                    {
+                        processingViewModel.PartnerNameGate2 = null;
+                        processingViewModel.PartnerTypeNameGate2 = null;
+                        processingViewModel.WeightGate2 = "...";
+                    }
+                    else
+                    {
+                        Console.WriteLine(value);
                     }
                 }
+
             }));
         }
 

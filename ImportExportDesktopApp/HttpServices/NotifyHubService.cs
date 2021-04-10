@@ -28,7 +28,6 @@ namespace ImportExportDesktopApp.HttpServices
         public static void Notify()
         {
             Client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-            HttpResponseMessage response = Client.GetAsync("https://iesystem-api.azurewebsites.net/api/transactions/notifyhub").Result;
         }
     }
 }

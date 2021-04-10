@@ -41,7 +41,7 @@ namespace ImportExportDesktopApp
                 {
                     total = total * -1;
                 }
-                return total;
+                return (float)Math.Round(total,2);
             }
         }
     }

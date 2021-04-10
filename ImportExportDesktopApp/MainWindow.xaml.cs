@@ -31,12 +31,57 @@ namespace ImportExportDesktopApp
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = new MainViewModel(AppService.Instance.EventAggregator);
             _mainFrame = (Frame)this.FindName("MainFrame");
-            //if (processingScreen == null)
-            //{
-            //    processingScreen = new ProcessingScreen();
-            //}
-            _mainFrame.Navigate(new ProcessingPage());
+            if (processingPage == null)
+            {
+                processingPage = new ProcessingPage();
+            }
+            _mainFrame.Navigate(processingPage);
+        }
+
+        public void Navigate(string value)
+        {
+            switch (value)
+            {
+                case "ChartDonut":
+                    if (processingPage == null)
+                    {
+                        processingPage = new ProcessingPage();
+                    }
+                    _mainFrame.Navigate(processingPage);
+                    break;
+                //case "AccountMultiple":
+                //    if (partnerList == null)
+                //    {
+                //        partnerList = new PartnerList();
+                //    }
+                //    mainFrame.Navigate(partnerList);
+                //    break;
+                //case "schedule":
+                //    if (scheduleDetail == null)
+                //    {
+                //        scheduleDetail = new ScheduleDetail();
+                //    }
+                //    mainFrame.Navigate(scheduleDetail);
+                //    break;
+                //case "PackageVariantClosed":
+                //    if (inventoriesScreen == null)
+                //    {
+                //        inventoriesScreen = new ManInventoriesScreen();
+                //    }
+                //    mainFrame.Navigate(inventoriesScreen);
+                //    break;
+                //case "Gift":
+                //    if (manGoodsScreen == null)
+                //    {
+                //        manGoodsScreen = new ManGoodsScreen();
+                //    }
+                //    mainFrame.Navigate(manGoodsScreen);
+                //    break;
+                default:
+                    break;
+            }
         }
 
         public void Navigate(string value)

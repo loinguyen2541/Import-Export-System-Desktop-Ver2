@@ -25,7 +25,7 @@ namespace ImportExportDesktopApp.DataTransfers
         public Inventory CheckExist()
         {
             DateTime Today = DateTime.Now;
-            Inventory inventory = ie.Inventories.Where(i => DbFunctions.TruncateTime(i.RecordedDate) == Today.Date).SingleOrDefault();
+            Inventory inventory = ie.Inventories.Where(i => DbFunctions.TruncateTime(i.RecordedDate) == Today.Date).FirstOrDefault();
             return inventory;
         }
 
