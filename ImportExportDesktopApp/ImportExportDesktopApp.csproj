@@ -123,8 +123,14 @@
     <Compile Include="InventoryDetail.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Pages\CreateTransactionPage.xaml.cs">
+      <DependentUpon>CreateTransactionPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ProcessingPage.xaml.cs">
       <DependentUpon>ProcessingPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\TransactionListPage.xaml.cs">
+      <DependentUpon>TransactionListPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Partner.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
@@ -170,7 +176,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pages\CreateTransactionPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\ProcessingPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\TransactionListPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

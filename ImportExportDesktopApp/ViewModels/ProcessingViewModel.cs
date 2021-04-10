@@ -85,9 +85,6 @@ namespace ImportExportDesktopApp.ViewModels
                         return false;
                     }
 
-                    // Notify 
-                    HttpServices.NotifyHubService.Notify();
-
                     if (partner.PartnerTypeId == 1)
                     {
                         float weight = newTransaction.WeightOut - newTransaction.WeightIn;
@@ -198,8 +195,12 @@ namespace ImportExportDesktopApp.ViewModels
             {
                 if (partner != null)
                 {
-                    PartnerNameGate1 = partner.DisplayName;
+                    PartnerNameGate1 = "Partner: " + partner.DisplayName;
                     PartnerTypeNameGate1 = "Type: " + partner.PartnerType.PartnerTypeName;
+                }
+                else
+                {
+                    PartnerNameGate1 = "No partner found!!";
                 }
                 WeightGate1 = transactionScale.Weight + " kg";
             }
@@ -207,8 +208,12 @@ namespace ImportExportDesktopApp.ViewModels
             {
                 if (partner != null)
                 {
-                    PartnerNameGate2 = partner.DisplayName;
+                    PartnerNameGate2 = "Partner: " + partner.DisplayName;
                     PartnerTypeNameGate2 = "Type:" + partner.PartnerType.PartnerTypeName;
+                }
+                else
+                {
+                    PartnerNameGate2 = "No partner found!!";
                 }
                 WeightGate2 = transactionScale.Weight + " kg";
             }

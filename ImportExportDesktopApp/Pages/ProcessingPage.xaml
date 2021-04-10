@@ -24,8 +24,8 @@
     <Border Padding="16">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
+                <RowDefinition Height="5*" />
+                <RowDefinition Height="5*" />
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
@@ -42,7 +42,7 @@
                     <StackPanel Orientation="Vertical">
                         <TextBlock
                             Margin="0,8,0,16"
-                            FontSize="17"
+                            FontSize="18"
                             FontWeight="Bold"
                             Foreground="White"
                             Text="Gate 1" />
@@ -50,7 +50,6 @@
                             <TextBlock
                                 Margin="0,8,0,16"
                                 HorizontalAlignment="Left"
-                                FontWeight="Bold"
                                 Foreground="White"
                                 Text="{Binding PartnerNameGate1, UpdateSourceTrigger=PropertyChanged}" />
                             <TextBlock
@@ -74,42 +73,64 @@
                     Padding="16,10,16,16"
                     materialDesign:ShadowAssist.ShadowDepth="Depth2"
                     UniformCornerRadius="10">
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock
-                            Margin="0,8,0,16"
-                            FontSize="17"
-                            FontWeight="Bold"
-                            Text="Processing" />
-                        <DataGrid
-                            Height="auto"
-                            materialDesign:DataGridAssist.CellPadding="16 16 16 16"
-                            materialDesign:DataGridAssist.ColumnHeaderPadding="16 16 16 16"
-                            AlternationCount="{Binding ProcessingTransaction.Count}"
-                            AutoGenerateColumns="False"
-                            Background="White"
-                            CanUserAddRows="False"
-                            CanUserSortColumns="True"
-                            FontSize="15"
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="45" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                Grid.Column="0"
+                                Margin="0,8,0,16"
+                                FontSize="18"
+                                FontWeight="Bold"
+                                Text="Processing" />
+                            <Button
+                                Grid.Column="1"
+                                Height="25"
+                                Margin="0,0,0,5"
+                                HorizontalAlignment="Right"
+                                Content="View more"
+                                FontSize="10" />
+                        </Grid>
+                        <ScrollViewer
+                            Grid.Row="1"
                             HorizontalScrollBarVisibility="Auto"
-                            IsHitTestVisible="False"
-                            IsReadOnly="True"
-                            ItemsSource="{Binding ProcessingTransaction}"
                             VerticalScrollBarVisibility="Auto">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn
-                                    Width="60"
-                                    Binding="{Binding Path=AlternationIndex, RelativeSource={RelativeSource AncestorType=DataGridRow}, Converter={StaticResource RowIndexConverter}}"
-                                    Header="No." />
-                                <DataGridTextColumn Binding="{Binding Partner.DisplayName}" Header="Partner" />
-                                <DataGridTextColumn
-                                    Width="100"
-                                    Binding="{Binding WeightIn}"
-                                    Header="Weight in" />
-                                <DataGridTextColumn Binding="{Binding TimeIn}" Header="Time in" />
-                                <DataGridTextColumn Binding="{Binding TransactionType, Converter={StaticResource TransactionTypeConverter}}" Header="Type" />
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </StackPanel>
+                            <DataGrid
+                                Width="auto"
+                                Height="auto"
+                                materialDesign:DataGridAssist.CellPadding="16 16 16 16"
+                                materialDesign:DataGridAssist.ColumnHeaderPadding="16 16 16 16"
+                                AlternationCount="{Binding ProcessingTransaction.Count}"
+                                AutoGenerateColumns="False"
+                                Background="White"
+                                CanUserAddRows="False"
+                                CanUserSortColumns="True"
+                                FontSize="15"
+                                IsHitTestVisible="False"
+                                IsReadOnly="True"
+                                ItemsSource="{Binding ProcessingTransaction}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn
+                                        Width="60"
+                                        Binding="{Binding Path=AlternationIndex, RelativeSource={RelativeSource AncestorType=DataGridRow}, Converter={StaticResource RowIndexConverter}}"
+                                        Header="No." />
+                                    <DataGridTextColumn Binding="{Binding Partner.DisplayName}" Header="Partner" />
+                                    <DataGridTextColumn
+                                        Width="100"
+                                        Binding="{Binding WeightIn}"
+                                        Header="Weight in" />
+                                    <DataGridTextColumn Binding="{Binding TimeIn}" Header="Time in" />
+                                    <DataGridTextColumn Binding="{Binding TransactionType, Converter={StaticResource TransactionTypeConverter}}" Header="Type" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+                    </Grid>
                 </materialDesign:Card>
             </Grid>
             <Grid Grid.Row="1">
@@ -127,7 +148,7 @@
                     <StackPanel Orientation="Vertical">
                         <TextBlock
                             Margin="0,8,0,16"
-                            FontSize="17"
+                            FontSize="18"
                             FontWeight="Bold"
                             Foreground="White"
                             Text="Gate 2" />
@@ -135,7 +156,6 @@
                             <TextBlock
                                 Margin="0,8,0,16"
                                 HorizontalAlignment="Left"
-                                FontWeight="Bold"
                                 Foreground="White"
                                 Text="{Binding PartnerNameGate2, UpdateSourceTrigger=PropertyChanged}" />
                             <TextBlock
@@ -159,40 +179,62 @@
                     Padding="16,10,16,16"
                     materialDesign:ShadowAssist.ShadowDepth="Depth2"
                     UniformCornerRadius="10">
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock
-                            Margin="0,8,0,16"
-                            FontSize="17"
-                            FontWeight="Bold"
-                            Text="Success" />
-                        <DataGrid
-                            Height="auto"
-                            materialDesign:DataGridAssist.CellPadding="16 16 16 16"
-                            materialDesign:DataGridAssist.ColumnHeaderPadding="16 16 16 16"
-                            AlternationCount="{Binding SuccessTransaction.Count}"
-                            AutoGenerateColumns="False"
-                            Background="White"
-                            CanUserAddRows="False"
-                            CanUserSortColumns="True"
-                            FontSize="15"
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="45" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                Grid.Column="0"
+                                Margin="0,8,0,16"
+                                FontSize="18"
+                                FontWeight="Bold"
+                                Text="Success" />
+                            <Button
+                                Grid.Column="1"
+                                Height="25"
+                                Margin="0,0,0,5"
+                                HorizontalAlignment="Right"
+                                Content="View more"
+                                FontSize="10" />
+                        </Grid>
+                        <ScrollViewer
+                            Grid.Row="1"
                             HorizontalScrollBarVisibility="Auto"
-                            IsHitTestVisible="False"
-                            IsReadOnly="True"
-                            ItemsSource="{Binding SuccessTransaction}"
                             VerticalScrollBarVisibility="Auto">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn
-                                    Width="60"
-                                    Binding="{Binding Path=AlternationIndex, RelativeSource={RelativeSource AncestorType=DataGridRow}, Converter={StaticResource RowIndexConverter}}"
-                                    Header="No." />
-                                <DataGridTextColumn Binding="{Binding Partner.DisplayName}" Header="Partner" />
-                                <DataGridTextColumn Binding="{Binding WeightIn}" Header="Weight in" />
-                                <DataGridTextColumn Binding="{Binding WeightOut}" Header="Weight out" />
-                                <DataGridTextColumn Binding="{Binding Total}" Header="Total" />
-                                <DataGridTextColumn Binding="{Binding TransactionType, Converter={StaticResource TransactionTypeConverter}}" Header="Type" />
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </StackPanel>
+                            <DataGrid
+                                Width="auto"
+                                Height="auto"
+                                materialDesign:DataGridAssist.CellPadding="16 16 16 16"
+                                materialDesign:DataGridAssist.ColumnHeaderPadding="16 16 16 16"
+                                AlternationCount="{Binding SuccessTransaction.Count}"
+                                AutoGenerateColumns="False"
+                                Background="White"
+                                CanUserAddRows="False"
+                                CanUserSortColumns="True"
+                                FontSize="15"
+                                IsHitTestVisible="False"
+                                IsReadOnly="True"
+                                ItemsSource="{Binding SuccessTransaction}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn
+                                        Width="60"
+                                        Binding="{Binding Path=AlternationIndex, RelativeSource={RelativeSource AncestorType=DataGridRow}, Converter={StaticResource RowIndexConverter}}"
+                                        Header="No." />
+                                    <DataGridTextColumn Binding="{Binding Partner.DisplayName}" Header="Partner" />
+                                    <DataGridTextColumn Binding="{Binding WeightIn}" Header="Weight in" />
+                                    <DataGridTextColumn Binding="{Binding WeightOut}" Header="Weight out" />
+                                    <DataGridTextColumn Binding="{Binding Total}" Header="Total" />
+                                    <DataGridTextColumn Binding="{Binding TransactionType, Converter={StaticResource TransactionTypeConverter}}" Header="Type" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+                    </Grid>
                 </materialDesign:Card>
             </Grid>
         </Grid>
