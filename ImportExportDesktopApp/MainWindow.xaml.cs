@@ -37,7 +37,7 @@ namespace ImportExportDesktopApp
             {
                 proccessingPage = new ProcessingPage();
             }
-            _mainFrame.Navigate(proccessingPage);
+            _mainFrame.Navigate(new ManageInventoriesScreen());
         }
 
         public void Navigate(string value)

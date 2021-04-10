@@ -7,7 +7,7 @@
       mc:Ignorable="d" 
       DataContext="{StaticResource ManInventory}"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-              xmlns:converter="clr-namespace:ImportExportDesktopApp.Converters"
+      xmlns:converter="clr-namespace:ImportExportDesktopApp.Converters"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ManageInventoriesScreen">
 

@@ -59,5 +59,10 @@ namespace ImportExportDesktopApp.Pages
         {
 
         }
+
+        private void PartnerGrid_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
