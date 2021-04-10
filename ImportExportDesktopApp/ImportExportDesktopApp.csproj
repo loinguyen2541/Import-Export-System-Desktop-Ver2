@@ -28,7 +28,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>3</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -121,6 +121,7 @@
       <DependentUpon>IEModel.tt</DependentUpon>
     </Compile>
     <Compile Include="AppServices.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Converters\PartnerTypesConverter.cs" />
     <Compile Include="Converters\RowIndexConverter.cs" />
     <Compile Include="Converters\StatusColor.cs" />
@@ -139,6 +140,7 @@
     <Compile Include="Enums\EDeviceType.cs" />
     <Compile Include="Enums\EGate.cs" />
     <Compile Include="Enums\EPartnerType.cs" />
+    <Compile Include="Events\ScaleExceptionEvent.cs" />
     <Compile Include="Events\UpdateInventoryEvent.cs" />
     <Compile Include="Good.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
@@ -171,7 +173,7 @@
     </Compile>
     <Compile Include="Pages\CreateTransactionPage.xaml.cs">
       <DependentUpon>CreateTransactionPage.xaml</DependentUpon>
-      </Compile>
+    </Compile>
     <Compile Include="Pages\InventoryDetailWindow.xaml.cs">
       <DependentUpon>InventoryDetailWindow.xaml</DependentUpon>
     </Compile>
@@ -244,7 +246,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Pages\CreateTransactionPage.xaml">
-    <SubType>Designer</SubType>
+      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\InventoryDetailWindow.xaml">

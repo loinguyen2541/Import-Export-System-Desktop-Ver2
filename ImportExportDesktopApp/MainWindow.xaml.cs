@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ImportExportDesktopApp.Events;
 using ImportExportDesktopApp.Pages;
 using ImportExportDesktopApp.ViewModels;
 
@@ -38,6 +39,16 @@ namespace ImportExportDesktopApp
                 proccessingPage = new ProcessingPage();
             }
             _mainFrame.Navigate(proccessingPage);
+            AppService.Instance.EventAggregator.GetEvent<ScaleExceptionEvent>().Subscribe(HandleScaleEvent);
+        }
+
+
+
+        private void HandleScaleEvent(String value)
+        {
+            MainWindow main = new MainWindow();
+            main.Show();
+            MessageBox.Show("hihi");
         }
 
         public void Navigate(string value)

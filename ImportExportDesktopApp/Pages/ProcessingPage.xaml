@@ -93,8 +93,9 @@
                                 Height="25"
                                 Margin="0,0,0,5"
                                 HorizontalAlignment="Right"
+                                Click="Button_Click"
                                 Content="View more"
-                                FontSize="10" Click="Button_Click" />
+                                FontSize="10" />
                         </Grid>
                         <ScrollViewer
                             Grid.Row="1"
@@ -199,6 +200,7 @@
                                 Height="25"
                                 Margin="0,0,0,5"
                                 HorizontalAlignment="Right"
+                                Click="Button_Click"
                                 Content="View more"
                                 FontSize="10" />
                         </Grid>

@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Windows;
 
 /**
 * @author Loi Nguyen
@@ -67,6 +67,7 @@ namespace ImportExportDesktopApp.ViewModels
 
         public bool CheckCard(TransactionScale transactionScale)
         {
+            _eventAggregator.GetEvent<ScaleExceptionEvent>().Publish("Check");
             if (transactionScale.Weight < 10)
             {
                 return false;

@@ -108,7 +108,6 @@ namespace ImportExportDesktopApp.Pages
                         {
                             port1.WriteLine("@response|Fail");
                         }
-
                     }
                     else if (value.Trim().StartsWith("@getOffScale"))
                     {

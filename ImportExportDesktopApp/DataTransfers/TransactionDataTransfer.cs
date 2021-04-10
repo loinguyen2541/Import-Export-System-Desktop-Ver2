@@ -65,11 +65,11 @@ namespace ImportExportDesktopApp.DataTransfers
         {
             if (type == -1)
             {
-                return new ObservableCollection<Transaction>(ie.Transactions.OrderByDescending(t => t.CreatedDate).Take(10));
+                return new ObservableCollection<Transaction>(ie.Transactions.OrderByDescending(t => t.CreatedDate).Take(10).Skip((page - 1) * 10));
             }
             else
             {
-                return new ObservableCollection<Transaction>(ie.Transactions.OrderByDescending(t => t.CreatedDate).Where(t => t.TransactionType == type).Take(10));
+                return new ObservableCollection<Transaction>(ie.Transactions.OrderByDescending(t => t.CreatedDate).Where(t => t.TransactionType == type).Take(10).Skip((page - 1) * 10));
             }
         }
 

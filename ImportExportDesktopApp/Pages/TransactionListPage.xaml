@@ -41,7 +41,9 @@
                         Width="34"
                         Height="34"
                         Margin="0,0,16,0"
-                        Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" RenderTransformOrigin="0.5,0.506" Click="btnBack_Click">
+                        Click="btnBack_Click"
+                        RenderTransformOrigin="0.5,0.506"
+                        Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}">
                         <materialDesign:PackIcon
                             Width="20"
                             Height="20"
@@ -180,6 +182,7 @@
                             <DataGridTextColumn Binding="{Binding TransactionType, Converter={StaticResource TransactionTypeConverter}}" Header="Type" />
                             <DataGridTextColumn Binding="{Binding WeightIn}" Header="Weigth In" />
                             <DataGridTextColumn Binding="{Binding WeightOut}" Header="Weight Out" />
+                            <DataGridTextColumn Binding="{Binding Total}" Header="Total" />
                             <DataGridTextColumn Binding="{Binding CreatedDate}" Header="Date Create" />
                             <DataGridTextColumn Binding="{Binding TransactionStatus}" Header="Status" />
                         </DataGrid.Columns>
@@ -202,15 +205,14 @@
                                 Margin="16"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Center"
-                                Text="{Binding TxtPageInfo, UpdateSourceTrigger=PropertyChanged}" />
+                                Text="{Binding PagingInfo, UpdateSourceTrigger=PropertyChanged}" />
                         </Grid>
 
                         <Grid Grid.Column="1" HorizontalAlignment="Right">
                             <Button
                                 x:Name="BtnBefore"
                                 HorizontalAlignment="Left"
-                                Command="{Binding GetBeforePageCommand}"
-                                CommandParameter="{Binding Paging}"
+                                Command="{Binding BeforePageCommand}"
                                 ToolTip="MaterialDesignFloatingActionMiniButton">
                                 <materialDesign:PackIcon
                                     Width="24"
@@ -235,8 +237,7 @@
                             <Button
                                 x:Name="BtnNext"
                                 HorizontalAlignment="Left"
-                                Command="{Binding GetNextPageCommand}"
-                                CommandParameter="{Binding Paging}"
+                                Command="{Binding NextPageCommand}"
                                 ToolTip="MaterialDesignFloatingActionMiniButton">
                                 <materialDesign:PackIcon
                                     Width="24"
