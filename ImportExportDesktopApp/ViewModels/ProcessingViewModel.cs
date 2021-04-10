@@ -67,6 +67,10 @@ namespace ImportExportDesktopApp.ViewModels
 
         public bool CheckCard(TransactionScale transactionScale)
         {
+            if (transactionScale.Weight < 10)
+            {
+                return false;
+            }
             Partner partner = _cardDataTransfer.CheckCard(transactionScale);
             UpdateGatePanel(partner, transactionScale);
 

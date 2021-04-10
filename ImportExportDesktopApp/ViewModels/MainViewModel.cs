@@ -48,7 +48,26 @@ namespace ImportExportDesktopApp.ViewModels
         }
         private void HandleEvent(String value)
         {
-            GetInventory();
+            float inventory = float.Parse(value.Trim());
+            if (inventory < (_capacity * 0.2))
+            {
+                InventoryWarn = "Hidden";
+            }
+            else
+            {
+                InventoryWarn = "Visible";
+            }
+            float available = _capacity - inventory;
+            if (available < (_capacity * 0.2))
+            {
+                AvailableWarn = "Hidden";
+            }
+            else
+            {
+                AvailableWarn = "Visible";
+            }
+            Inventory = Math.Round(inventory, 1) + " kg";
+            Available = Math.Round(available, 1) + " kg";
         }
         public void GetInventory()
         {
