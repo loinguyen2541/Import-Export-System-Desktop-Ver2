@@ -14,7 +14,7 @@ namespace ImportExportDesktopApp.ViewModels
     class ManInventoriesViewModel : BaseNotifyPropertyChanged
     {
         private Transaction _trans;
-        private Inventory _selectedInventory;
+        private InventoryDisplay _selectedInventory;
         public List<InventoryDisplay> ListInventory { get; set; }
 
         private bool _isSearch;
@@ -59,9 +59,11 @@ namespace ImportExportDesktopApp.ViewModels
             //{
             //    SearchInventory();
             //});
-            DoubleClickCommand = new RelayCommand<Inventory>((p) => { return true; }, p =>
+            _selectedInventory = new InventoryDisplay();
+            DoubleClickCommand = new RelayCommand<InventoryDisplay>((p) => { return true; }, p =>
             {
-                SearchInventoryDetailByInventory(p);
+                if (p != null)
+                    SearchInventoryDetailByInventory(p);
             });
             //GetNextPageCommand = new RelayCommand<QueryParams>((p) => { return true; }, GetNextPage);
 
@@ -85,7 +87,7 @@ namespace ImportExportDesktopApp.ViewModels
             {
                 foreach (var item in inventory)
                 {
-                    
+
                     ListInventory.Add(GetDisplayInventory(item));
                 }
             }
@@ -112,6 +114,13 @@ namespace ImportExportDesktopApp.ViewModels
                 }
                 temp.TotalExport = totalExport;
                 temp.TotalImport = totalImport;
+                temp.ClosingStock = (float)Math.Round(temp.OpeningStock + temp.TotalImport - temp.TotalExport, 2);
+            }
+            else
+            {
+                temp.TotalExport = 0;
+                temp.TotalImport = 0;
+                temp.ClosingStock = (float)Math.Round(temp.OpeningStock, 2);
             }
             return temp;
         }
@@ -124,7 +133,7 @@ namespace ImportExportDesktopApp.ViewModels
                 NotifyPropertyChanged();
             }
         }
-        public void SearchInventoryDetailByInventory(Inventory inventory)
+        public void SearchInventoryDetailByInventory(InventoryDisplay inventory)
         {
             InventoryDetailWindow detailTransactinoWindow = new InventoryDetailWindow(inventory: inventory);
             detailTransactinoWindow.ShowDialog();
@@ -293,7 +302,7 @@ namespace ImportExportDesktopApp.ViewModels
             }
         }
 
-        public Inventory SelectedInventory
+        public InventoryDisplay SelectedInventory
         {
             get { return _selectedInventory; }
             set

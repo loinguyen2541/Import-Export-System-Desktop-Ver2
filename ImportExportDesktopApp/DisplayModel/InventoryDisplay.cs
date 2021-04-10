@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace ImportExportDesktopApp.DisplayModel
 {
-    class InventoryDisplay
+   public class InventoryDisplay
     {
         public int InventoryId { get; set; }
         public float OpeningStock { get; set; }
         public System.DateTime RecordedDate { get; set; }
         public float TotalImport { get; set; }
         public float TotalExport { get; set; }
+        public float ClosingStock { get; set; }
     }
 }

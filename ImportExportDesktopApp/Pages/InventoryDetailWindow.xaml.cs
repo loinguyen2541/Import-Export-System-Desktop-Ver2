@@ -23,11 +23,11 @@ namespace ImportExportDesktopApp.Pages
     {
         InventoryDetailViewModel model;
 
-        public InventoryDetailWindow(Inventory inventory)
+        public InventoryDetailWindow(InventoryDisplay inventory)
         {
             InitializeComponent();
             model = (this.DataContext as InventoryDetailViewModel);
-            model.Init(GetDisplay(inventory));
+            model.Init(inventory);
         }
 
         private InventoryDisplay GetDisplay(Inventory item)

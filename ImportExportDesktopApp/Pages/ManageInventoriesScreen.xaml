@@ -147,7 +147,7 @@
                         HorizontalScrollBarVisibility="Hidden"
                         IsReadOnly="True"
                         ItemsSource="{Binding ListInventory}"
-                        SelectedItem="{Binding Path=SelectedInventory}">
+                        SelectedItem="{Binding SelectedInventory}">
                         <DataGrid.Columns>
                             <DataGridTextColumn
                                 MaxWidth="60"

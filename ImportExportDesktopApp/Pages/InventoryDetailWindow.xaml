@@ -75,7 +75,7 @@
                         Grid.Column="0"
                         FontWeight="Bold"
                         Text="Opening Stock: " />
-                    <TextBlock Grid.Column="0" Text="{Binding InventoryDisplay.InventoryId}" />
+                    <TextBlock Grid.Column="0" Text="{Binding InventoryDisplay.ClosingStock}" />
                     <TextBlock Grid.Column="0" Text=" kg" />
                 </StackPanel>
                 <!--<Grid Grid.Column="0">
