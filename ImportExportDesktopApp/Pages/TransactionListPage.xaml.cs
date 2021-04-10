@@ -36,5 +36,10 @@ namespace ImportExportDesktopApp.Pages
             CreateTransactionPage createTransactionPage = new CreateTransactionPage();
             this.NavigationService.Navigate(createTransactionPage);
         }
+
+        private void btnBack_Click(object sender, RoutedEventArgs e)
+        {
+            this.NavigationService.GoBack();
+        }
     }
 }
