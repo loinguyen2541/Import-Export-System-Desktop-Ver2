@@ -5,6 +5,7 @@
     xmlns:viewmodel="clr-namespace:ImportExportDesktopApp.ViewModels">
     <viewmodel:MainViewModel x:Key="MainVM" />
     <viewmodel:ProcessingViewModel x:Key="ProcessingVM" />
+    <viewmodel:TransactionListViewModel x:Key="TransactionListVM" />
     <!--  Colors  -->
     <Brush x:Key="Red">#F44336</Brush>
     <Brush x:Key="Blue">#2196F3</Brush>

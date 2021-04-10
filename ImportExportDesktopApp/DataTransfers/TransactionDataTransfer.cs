@@ -55,6 +55,30 @@ namespace ImportExportDesktopApp.DataTransfers
             return transaction;
         }
 
+        /// <summary>
+        ///     -1 is get all type
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public ObservableCollection<Transaction> GetTransactions(int page, int type)
+        {
+            if (type == -1)
+            {
+                return new ObservableCollection<Transaction>(ie.Transactions.OrderByDescending(t => t.CreatedDate).Take(10));
+            }
+            else
+            {
+                return new ObservableCollection<Transaction>(ie.Transactions.OrderByDescending(t => t.CreatedDate).Where(t => t.TransactionType == type).Take(10));
+            }
+        }
+
+        public int GetMaxPage(int pageSize)
+        {
+            int count = ie.Transactions.Count();
+            double totalPage = count * (1.0) / pageSize * (1.0);
+            return (int)Math.Ceiling(totalPage);
+        }
         public void Save()
         {
             ie.SaveChanges();
