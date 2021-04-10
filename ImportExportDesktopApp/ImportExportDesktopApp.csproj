@@ -82,7 +82,10 @@
     <Compile Include="Account.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Converters\PartnerTypesConverter.cs" />
     <Compile Include="Converters\RowIndexConverter.cs" />
+    <Compile Include="Converters\StatusColor.cs" />
+    <Compile Include="Converters\StatusColorConverter.cs" />
     <Compile Include="Converters\TransactionStatusConverter.cs" />
     <Compile Include="DataTransfers\CardDataTransfer.cs" />
     <Compile Include="DataTransfers\DataContext.cs" />
@@ -92,6 +95,8 @@
     <Compile Include="DataTransfers\ScheduleDataTransfer.cs" />
     <Compile Include="DataTransfers\SystemConfigDataTransfer.cs" />
     <Compile Include="DataTransfers\TimeTemplateItemDataTransfer.cs" />
+    <Compile Include="DisplayModel\GoodsDisplay.cs" />
+    <Compile Include="DisplayModel\InventoryDisplay.cs" />
     <Compile Include="Enums\EDeviceType.cs" />
     <Compile Include="Enums\EGate.cs" />
     <Compile Include="Enums\EPartnerType.cs" />
@@ -99,6 +104,7 @@
       <DependentUpon>IEModel.tt</DependentUpon>
     </Compile>
     <Compile Include="HttpServices\NotifyHubService.cs" />
+    <Compile Include="HttpServices\RelayCommand.cs" />
     <Compile Include="IdentityCard.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
     </Compile>
@@ -122,6 +128,21 @@
     </Compile>
     <Compile Include="InventoryDetail.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\InventoryDetailWindow.xaml.cs">
+      <DependentUpon>InventoryDetailWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ManageGoods.xaml.cs">
+      <DependentUpon>ManageGoods.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ManageInventoriesScreen.xaml.cs">
+      <DependentUpon>ManageInventoriesScreen.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ManagePartnersScreen.xaml.cs">
+      <DependentUpon>ManagePartnersScreen.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ManageSchedulesScreen.xaml.cs">
+      <DependentUpon>ManageSchedulesScreen.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ProcessingPage.xaml.cs">
       <DependentUpon>ProcessingPage.xaml</DependentUpon>
@@ -156,7 +177,12 @@
     </Compile>
     <Compile Include="DataTransfers\TransactionDataTransfer.cs" />
     <Compile Include="Utils\BaseNotifyPropertyChanged.cs" />
+    <Compile Include="ViewModels\InventoryDetailViewModel.cs" />
+    <Compile Include="ViewModels\ManGoods.cs" />
+    <Compile Include="ViewModels\ManInventoriesViewModel.cs" />
+    <Compile Include="ViewModels\ManPartnersViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\ManSchedulesViewModel.cs" />
     <Compile Include="ViewModels\ProcessingViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -170,6 +196,26 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pages\InventoryDetailWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ManageGoods.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ManageInventoriesScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ManagePartnersScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ManageSchedulesScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\ProcessingPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
