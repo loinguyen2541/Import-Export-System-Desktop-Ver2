@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ImportExportDesktopApp.Pages;
+using ImportExportDesktopApp.ViewModels;
 
 namespace ImportExportDesktopApp
 {
@@ -26,6 +27,7 @@ namespace ImportExportDesktopApp
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = new MainViewModel(AppService.Instance.EventAggregator);
             _mainFrame = (Frame)this.FindName("MainFrame");
             if (processingPage == null)
             {

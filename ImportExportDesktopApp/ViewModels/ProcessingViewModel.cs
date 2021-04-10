@@ -1,8 +1,10 @@
 ﻿using ImportExportDesktopApp.DataTransfers;
 using ImportExportDesktopApp.Enums;
+using ImportExportDesktopApp.Events;
 using ImportExportDesktopApp.ScaleModels;
 using ImportExportDesktopApp.Utils;
 using Notifications.Wpf;
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,6 +23,8 @@ namespace ImportExportDesktopApp.ViewModels
 {
     class ProcessingViewModel : BaseNotifyPropertyChanged
     {
+        private IEventAggregator _eventAggregator;
+
         private TransactionDataTransfer _transactionDataTransfer;
         private CardDataTransfer _cardDataTransfer;
         private SystemConfigDataTransfer _systemCongifDataTransfer;
@@ -41,7 +45,7 @@ namespace ImportExportDesktopApp.ViewModels
         private String _weightGate1;
         private String _weightGate2;
 
-        public ProcessingViewModel()
+        public ProcessingViewModel(IEventAggregator ea)
         {
             _transactionDataTransfer = new TransactionDataTransfer();
             _cardDataTransfer = new CardDataTransfer();
@@ -55,6 +59,9 @@ namespace ImportExportDesktopApp.ViewModels
             _storageCapacity = _systemCongifDataTransfer.GetStorageCappacity();
             ProcessingTransaction = _transactionDataTransfer.GetProcessingTransaction();
             SuccessTransaction = _transactionDataTransfer.GetSuccessTransaction();
+
+            //Set event
+            _eventAggregator = ea;
 
         }
 
@@ -90,34 +97,22 @@ namespace ImportExportDesktopApp.ViewModels
                         float weight = newTransaction.WeightOut - newTransaction.WeightIn;
                         Good good = _goodDataTransfer.UpdateInventory(partner.PartnerTypeId, weight, _storageCapacity);
                         double storageCapacity20 = _storageCapacity * 0.2;
-                        if (_storageCapacity - good.QuantityOfInventory <= storageCapacity20)
-                        {
-                            var notificationManager = new NotificationManager();
 
-                            notificationManager.Show(new NotificationContent
-                            {
-                                Title = "Warning",
-                                Message = "Storge capacity is almost full!!!!",
-                                Type = NotificationType.Warning
-                            }, expirationTime: TimeSpan.FromSeconds(30));
-                        }
+                        SendNotify(good.QuantityOfInventory, storageCapacity20);
+
+                        // send good inventoey to main view model
+                        _eventAggregator.GetEvent<UpdateInventoryEvent>().Publish(good.QuantityOfInventory + "");
                     }
                     else if (partner.PartnerTypeId == 2)
                     {
                         float weight = newTransaction.WeightIn - newTransaction.WeightOut;
                         Good good = _goodDataTransfer.UpdateInventory(partner.PartnerTypeId, weight, _storageCapacity);
                         double storageCapacity20 = _storageCapacity * 0.2;
-                        if (_storageCapacity - good.QuantityOfInventory <= storageCapacity20)
-                        {
-                            var notificationManager = new NotificationManager();
 
-                            notificationManager.Show(new NotificationContent
-                            {
-                                Title = "Warning",
-                                Message = "Storge capacity is almost full!!!!",
-                                Type = NotificationType.Warning
-                            });
-                        }
+                        SendNotify(good.QuantityOfInventory, storageCapacity20);
+
+                        // send good inventoey to main view model
+                        _eventAggregator.GetEvent<UpdateInventoryEvent>().Publish(good.QuantityOfInventory + "");
                     }
                     else
                     {
@@ -128,6 +123,33 @@ namespace ImportExportDesktopApp.ViewModels
                 }
             }
             return false;
+        }
+
+        void SendNotify(float inventory, double storageCapacity20)
+        {
+            if (_storageCapacity - inventory <= storageCapacity20)
+            {
+                var notificationManager = new NotificationManager();
+
+                notificationManager.Show(new NotificationContent
+                {
+                    Title = "Warning",
+                    Message = "Storge capacity is almost full!!!!",
+                    Type = NotificationType.Warning
+                });
+            }
+
+            if (inventory <= storageCapacity20)
+            {
+                var notificationManager = new NotificationManager();
+
+                notificationManager.Show(new NotificationContent
+                {
+                    Title = "Warning",
+                    Message = "The warehouse is comming out of stock!!!!",
+                    Type = NotificationType.Warning
+                });
+            }
         }
 
         public void CreateTransaction(TransactionScale transactionScale, Partner partner, Schedule schedule)

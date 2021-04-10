@@ -41,6 +41,7 @@ namespace ImportExportDesktopApp.Pages
         public ProcessingPage()
         {
             InitializeComponent();
+            this.DataContext = new ProcessingViewModel(AppService.Instance.EventAggregator);
             processingViewModel = DataContext as ProcessingViewModel;
             thread1 = new Thread(ReadSerial);
             thread1.Start();

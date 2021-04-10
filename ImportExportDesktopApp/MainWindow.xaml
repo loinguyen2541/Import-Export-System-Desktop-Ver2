@@ -10,7 +10,6 @@
     Width="1280"
     Height="720"
     Background="White"
-    DataContext="{StaticResource MainVM}"
     FontFamily="{DynamicResource MaterialDesignFont}"
     TextElement.FontSize="15"
     TextElement.FontWeight="Regular"
@@ -92,13 +91,43 @@
                 Grid.Row="2"
                 Margin="16,0"
                 Padding="8"
-                Background="{DynamicResource Cyan}"
+                Background="{DynamicResource Red}"
                 UniformCornerRadius="10">
                 <StackPanel Orientation="Vertical">
                     <TextBlock
                         FontWeight="Bold"
                         Foreground="White"
                         Text="Inventory" />
+                    <TextBlock
+                        Margin="0,8,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="25"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Text="{Binding Inventory, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+            </materialDesign:Card>
+            <materialDesign:Card
+                Grid.Row="2"
+                Margin="16,0"
+                Padding="8"
+                Background="{DynamicResource Cyan}"
+                UniformCornerRadius="10"
+                Visibility="{Binding InventoryWarn}">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Text="Inventory" />
+                    <TextBlock
+                        Margin="0,8,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="25"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Text="{Binding Inventory, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
             </materialDesign:Card>
 
@@ -106,13 +135,43 @@
                 Grid.Row="3"
                 Margin="16"
                 Padding="8"
-                Background="{DynamicResource Cyan}"
+                Background="{DynamicResource Red}"
                 UniformCornerRadius="10">
                 <StackPanel Orientation="Vertical">
                     <TextBlock
                         FontWeight="Bold"
                         Foreground="White"
                         Text="Available" />
+                    <TextBlock
+                        Margin="0,8,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="25"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Text="{Binding Available, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+            </materialDesign:Card>
+            <materialDesign:Card
+                Grid.Row="3"
+                Margin="16"
+                Padding="8"
+                Background="{DynamicResource Cyan}"
+                UniformCornerRadius="10"
+                Visibility="{Binding AvailableWarn}">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Text="Available" />
+                    <TextBlock
+                        Margin="0,8,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="25"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Text="{Binding Available, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
             </materialDesign:Card>
         </Grid>
