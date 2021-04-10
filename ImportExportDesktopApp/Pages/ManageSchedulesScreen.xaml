@@ -1,0 +1,342 @@
+﻿<Page x:Class="ImportExportDesktopApp.Pages.ManageSchedulesScreen"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ImportExportDesktopApp.Converters"
+      xmlns:converter="clr-namespace:ImportExportDesktopApp.Converters"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      DataContext="{StaticResource ManSchedule}"
+      Title="ManageSchedules">
+    <Page.Resources>
+        <local:StatusColorConverter x:Key="StatusColor" />
+        <converter:RowIndexConverter x:Key="RowIndex" />
+    </Page.Resources>
+    <Border Padding="16">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition />
+                <RowDefinition Height="35" />
+            </Grid.RowDefinitions>
+
+            <!--  Title  -->
+            <Grid Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                    Grid.Column="0"
+                    VerticalAlignment="Top"
+                    FontSize="24"
+                    FontWeight="Bold"
+                    Text="Schedules" />
+                <StackPanel
+                    Grid.Column="1"
+                    Height="35"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" Text="Schedule will reset at " />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="{Binding AutoSchedule}" />
+                    <Button
+                        Height="35"
+                        Margin="16,0,0,0"
+                        Background="{DynamicResource Green}"
+                        BorderBrush="{StaticResource Green}"
+                        Content="Edit" Click="Button_Click" />
+                </StackPanel>
+            </Grid>
+
+            <!--  Detail  -->
+            <Grid Grid.Row="1" VerticalAlignment="Bottom">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <!--  Weight and Date  -->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="182" />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <DatePicker
+                            Name="DatePicker"
+                            Width="100"
+                            Height="50"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Bottom"
+                            materialDesign:HintAssist.Hint="Pick Date"
+                            SelectedDate="{Binding Paging.Date}"
+                            Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <ComboBox
+                            x:Name="CbType"
+                            Width="150"
+                            Height="43"
+                            Margin="16,0,16,0"
+                            VerticalAlignment="Bottom"
+                            materialDesign:HintAssist.Hint="Type"
+                            IsEditable="True"
+                            ItemsSource="{Binding Types}"
+                            SelectedValue="{Binding Paging.Type, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+                    </Grid>
+                    <Grid Grid.Column="2">
+                        <TextBox
+                            x:Name="txtPartnerName"
+                            Height="48"
+                            Margin="0,0,16,0"
+                            VerticalAlignment="Bottom"
+                            materialDesign:HintAssist.Hint="Partner Name"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="{Binding Paging.Search}" />
+                    </Grid>
+
+                    <Grid Grid.Column="3">
+                        <StackPanel Orientation="Horizontal">
+                            <Button
+                                Width="100"
+                                Height="35"
+                                Margin="16,0,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Bottom"
+                                Command="{Binding SearchCommand}"
+                                FontSize="15"
+                                Style="{StaticResource MaterialDesignRaisedButton}">
+                                Search
+                            </Button>
+
+                            <Button
+                                Width="35"
+                                Height="35"
+                                Margin="8,0,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Bottom"
+                                Command="{Binding CancelSearchCommand}"
+                                ToolTip="MaterialDesignFloatingActionMiniButton">
+                                <Button.Style>
+                                    <Style BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}" TargetType="Button">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Path=IsSearch}" Value="false">
+                                                <Setter Property="Visibility" Value="Hidden" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                                <materialDesign:PackIcon
+                                    Width="24"
+                                    Height="24"
+                                    Kind="Close" />
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+
+                    <!--  floating action button with progress  -->
+                    <Button
+                        Grid.Column="4"
+                        Width="35"
+                        Height="35"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom"
+                        materialDesign:ButtonProgressAssist.IsIndeterminate="{Binding IsLoading}"
+                        materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding IsLoading}"
+                        materialDesign:ButtonProgressAssist.Value="-1"
+                        Command="{Binding RefreshCommand}"
+                        Content="{materialDesign:PackIcon Sync}"
+                        Style="{StaticResource MaterialDesignFloatingActionButton}" />
+                </Grid>
+
+
+
+                <!--  Partner Info  -->
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                </Grid>
+
+            </Grid>
+
+            <!--  Table  -->
+
+            <Grid Grid.Row="2">
+                <materialDesign:Card
+                    Margin="0,16,0,16"
+                    materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                    UniformCornerRadius="10">
+                    <DataGrid
+                        x:Name="ScheduleGrid"
+                        Width="auto"
+                        Height="auto"
+                        Padding="16"
+                        HorizontalAlignment="Stretch"
+                        materialDesign:DataGridAssist.CellPadding="16 8 16 8"
+                        materialDesign:DataGridAssist.ColumnHeaderPadding="16 16 16 16"
+                        AlternationCount="{Binding Schedules.Data.Count}"
+                        AutoGenerateColumns="False"
+                        CanUserAddRows="False"
+                        CanUserSortColumns="True"
+                        FontSize="15"
+                        IsReadOnly="True"
+                        ItemsSource="{Binding Schedules.Data, IsAsync=True}"
+                        MouseDoubleClick="DataGrid_MouseDoubleClick"
+                        SelectionChanged="ScheduleGrid_SelectionChanged_1">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Path=AlternationIndex, RelativeSource={RelativeSource AncestorType=DataGridRow}, Converter={StaticResource RowIndex}}" Header="No.">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style>
+                                        <Setter Property="FrameworkElement.VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn
+                                MinWidth="300"
+                                Binding="{Binding Partner.DisplayName}"
+                                Header="Partner name">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="FrameworkElement.VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding ScheduleDate}" Header="Date">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style>
+                                        <Setter Property="FrameworkElement.VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding TransactionType}" Header="Type">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style>
+                                        <Setter Property="FrameworkElement.VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding RegisteredWeight}" Header="Weight(kg)">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style>
+                                        <Setter Property="FrameworkElement.VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <!--<DataGridTextColumn Header="Unit">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style>
+                                        <Setter Property="FrameworkElement.VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>-->
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock>
+                                        Status
+                                    </TextBlock>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <materialDesign:Chip
+                                            Background="{Binding ScheduleStatus, Converter={StaticResource StatusColor}}"
+                                            Content="{Binding ScheduleStatus}"
+                                            FontSize="10"
+                                            Foreground="White" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </materialDesign:Card>
+            </Grid>
+            <!--  Paging  -->
+            <Grid Grid.Row="3">
+                <Border>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition Width="50" />
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <TextBlock
+                                x:Name="TxtPageInfo"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Text="{Binding TxtPageInfo, UpdateSourceTrigger=PropertyChanged, IsAsync=True}" />
+                        </Grid>
+
+                        <Grid Grid.Column="1" HorizontalAlignment="Right">
+
+                            <Button
+                                x:Name="BtnBefore"
+                                Width="35"
+                                Height="35"
+                                HorizontalAlignment="Left"
+                                Command="{Binding GetBeforePageCommand}"
+                                CommandParameter="{Binding Paging}"
+                                ToolTip="MaterialDesignFloatingActionMiniButton">
+                                <materialDesign:PackIcon
+                                    Width="24"
+                                    Height="24"
+                                    Kind="NavigateBefore" />
+                                <Button.Style>
+                                    <Style BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}" TargetType="Button">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Path=IsFirstPage}" Value="True">
+                                                <Setter Property="IsEnabled" Value="False" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Path=IsFirstPage}" Value="False">
+                                                <Setter Property="IsEnabled" Value="True" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </Grid>
+
+                        <Grid Grid.Column="2" HorizontalAlignment="Right">
+                            <Button
+                                x:Name="BtnNext"
+                                Width="35"
+                                Height="35"
+                                HorizontalAlignment="Left"
+                                Command="{Binding GetNextPageCommand}"
+                                CommandParameter="{Binding Paging}"
+                                ToolTip="MaterialDesignFloatingActionMiniButton">
+                                <materialDesign:PackIcon
+                                    Width="24"
+                                    Height="24"
+                                    Kind="NavigateNext" />
+                                <Button.Style>
+                                    <Style BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}" TargetType="Button">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Path=IsMaxPage}" Value="True">
+                                                <Setter Property="IsEnabled" Value="False" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Path=IsMaxPage}" Value="False">
+                                                <Setter Property="IsEnabled" Value="True" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+    </Border>
+</Page>

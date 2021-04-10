@@ -23,17 +23,21 @@ namespace ImportExportDesktopApp
     public partial class MainWindow : Window
     {
         private Frame _mainFrame;
-        private ProcessingPage processingPage;
+        private ManageInventoriesScreen manageInventoriesScreen;
+        private ManagePartnersScreen manPartnersScreen;
+        private ManageSchedulesScreen manScheduleScreen;
+        private ManageGoods manGoodsScreen;
+        private ProcessingPage proccessingPage;
         public MainWindow()
         {
             InitializeComponent();
             this.DataContext = new MainViewModel(AppService.Instance.EventAggregator);
             _mainFrame = (Frame)this.FindName("MainFrame");
-            if (processingPage == null)
+            if (proccessingPage == null)
             {
-                processingPage = new ProcessingPage();
+                proccessingPage = new ProcessingPage();
             }
-            _mainFrame.Navigate(processingPage);
+            _mainFrame.Navigate(proccessingPage);
         }
 
         public void Navigate(string value)
@@ -41,51 +45,52 @@ namespace ImportExportDesktopApp
             switch (value)
             {
                 case "ChartDonut":
-                    if (processingPage == null)
+                    if (proccessingPage == null)
                     {
-                        processingPage = new ProcessingPage();
+                        proccessingPage = new ProcessingPage();
                     }
-                    _mainFrame.Navigate(processingPage);
+                    _mainFrame.Navigate(proccessingPage);
                     break;
-                //case "AccountMultiple":
-                //    if (partnerList == null)
-                //    {
-                //        partnerList = new PartnerList();
-                //    }
-                //    mainFrame.Navigate(partnerList);
-                //    break;
-                //case "schedule":
-                //    if (scheduleDetail == null)
-                //    {
-                //        scheduleDetail = new ScheduleDetail();
-                //    }
-                //    mainFrame.Navigate(scheduleDetail);
-                //    break;
-                //case "PackageVariantClosed":
-                //    if (inventoriesScreen == null)
-                //    {
-                //        inventoriesScreen = new ManInventoriesScreen();
-                //    }
-                //    mainFrame.Navigate(inventoriesScreen);
-                //    break;
-                //case "Gift":
-                //    if (manGoodsScreen == null)
-                //    {
-                //        manGoodsScreen = new ManGoodsScreen();
-                //    }
-                //    mainFrame.Navigate(manGoodsScreen);
-                //    break;
+                case "AccountMultiple":
+                    if (manPartnersScreen == null)
+                    {
+                        manPartnersScreen = new ManagePartnersScreen();
+                    }
+                    _mainFrame.Navigate(manPartnersScreen);
+                    break;
+                case "schedule":
+                    if (manScheduleScreen == null)
+                    {
+                        manScheduleScreen = new ManageSchedulesScreen();
+                    }
+                    _mainFrame.Navigate(manScheduleScreen);
+                    break;
+                case "PackageVariantClosed":
+                    if (manageInventoriesScreen == null)
+                    {
+                        manageInventoriesScreen = new ManageInventoriesScreen();
+                    }
+                    _mainFrame.Navigate(manageInventoriesScreen);
+                    break;
+                case "Gift":
+                    if (manGoodsScreen == null)
+                    {
+                        manGoodsScreen = new ManageGoods();
+                    }
+                    _mainFrame.Navigate(manGoodsScreen);
+                    break;
                 default:
                     break;
             }
         }
 
-        private void page_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
         private void page_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            String value;
+            value = (DataContext as MainViewModel).SelectedItem.Value;
+            Navigate(value);
+        }
+        private void page_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
