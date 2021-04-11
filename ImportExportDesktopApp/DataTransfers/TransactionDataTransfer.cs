@@ -73,6 +73,16 @@ namespace ImportExportDesktopApp.DataTransfers
             }
         }
 
+        public void DisableAll(String identificationCode)
+        {
+            List<Transaction> transactions = ie.Transactions.Where(t => t.IdentificationCode == identificationCode && t.TransactionStatus == 0).ToList();
+            foreach (var item in transactions)
+            {
+                item.TransactionStatus = 2;
+                ie.Entry(item).State = EntityState.Modified;
+            }
+        }
+
         public int GetMaxPage(int pageSize)
         {
             int count = ie.Transactions.Count();

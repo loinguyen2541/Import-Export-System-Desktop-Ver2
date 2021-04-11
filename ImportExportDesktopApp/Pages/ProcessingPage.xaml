@@ -37,7 +37,7 @@
                     Margin="0,0,0,8"
                     Padding="16,8,16,16"
                     materialDesign:ShadowAssist.ShadowDepth="Depth2"
-                    Background="Green"
+                    Background="{Binding Gate1Bg}"
                     UniformCornerRadius="10">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -74,7 +74,8 @@
                                 Margin="0,8,0,16"
                                 HorizontalAlignment="Left"
                                 Foreground="REd"
-                                Text="+ Partner have wrong card!!!!!" />
+                                Text="{Binding MessageGate1}"
+                                TextWrapping="Wrap" />
                         </StackPanel>
                         <StackPanel
                             Grid.Row="2"
@@ -84,10 +85,12 @@
                             <Button
                                 Margin="0,0,8,0"
                                 BorderBrush="Transparent"
+                                Command="{Binding CreateTransactionGate1Command}"
                                 Content="Accept" />
                             <Button
                                 Background="{StaticResource Red}"
                                 BorderBrush="Transparent"
+                                Command="{Binding CancelGate1Command}"
                                 Content="Cancel" />
                         </StackPanel>
                     </Grid>
@@ -169,7 +172,7 @@
                     Margin="0,8,0,0"
                     Padding="16,8,16,16"
                     materialDesign:ShadowAssist.ShadowDepth="Depth2"
-                    Background="Green"
+                    Background="{Binding Gate2Bg}"
                     UniformCornerRadius="10">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -206,7 +209,8 @@
                                 Margin="0,8,0,16"
                                 HorizontalAlignment="Left"
                                 Foreground="REd"
-                                Text="+ Partner have wrong card!!!!!" />
+                                Text="{Binding MessageGate2}"
+                                TextWrapping="Wrap" />
                         </StackPanel>
                         <StackPanel
                             Grid.Row="2"
@@ -221,6 +225,7 @@
                             <Button
                                 Background="{StaticResource Red}"
                                 BorderBrush="Transparent"
+                                Command="{Binding CancelGate2Command}"
                                 Content="Cancel" />
                         </StackPanel>
                     </Grid>

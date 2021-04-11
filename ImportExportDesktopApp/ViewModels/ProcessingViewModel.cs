@@ -25,6 +25,9 @@ namespace ImportExportDesktopApp.ViewModels
 {
     class ProcessingViewModel : BaseNotifyPropertyChanged
     {
+        private String YELLOW_BG = "#FFC107";
+        private String GREEN_BG = "#4CAF50";
+
         private IEventAggregator _eventAggregator;
 
         private TransactionDataTransfer _transactionDataTransfer;
@@ -52,6 +55,9 @@ namespace ImportExportDesktopApp.ViewModels
 
         //Command
         public ICommand CreateTransactionGate2Command { get; set; }
+        public ICommand CancelGate2Command { get; set; }
+        public ICommand CreateTransactionGate1Command { get; set; }
+        public ICommand CancelGate1Command { get; set; }
 
         //Gate Exception handle
         private String _gate1ButtonVisibility;
@@ -64,9 +70,15 @@ namespace ImportExportDesktopApp.ViewModels
         private Schedule _scheduleGate2;
         private bool _isSlovingExeptionGate1;
         private bool _isSlovingExeptionGate2;
+        private String _gate1bg;
+        private String _gate2bg;
+        private EScaleExceptionType _exceptionTypeGate1;
+        private EScaleExceptionType _exceptionTypeGate2;
 
         public ProcessingViewModel(IEventAggregator ea)
         {
+            Gate1Bg = GREEN_BG;
+            Gate2Bg = GREEN_BG;
 
             _isSlovingExeptionGate1 = false;
             _isSlovingExeptionGate2 = false;
@@ -91,11 +103,22 @@ namespace ImportExportDesktopApp.ViewModels
             {
                 CreateTransactionGate2();
             });
-
+            CancelGate2Command = new RelayCommand<object>(p => { return true; }, p =>
+            {
+                ResetAcceptContent(new ScaleExeptionAction(EGate.Gate2, EScaleExceptionAction.Cancel));
+            });
+            CreateTransactionGate1Command = new RelayCommand<object>(p => { return true; }, p =>
+            {
+                CreateTransactionGate1();
+            });
+            CancelGate1Command = new RelayCommand<object>(p => { return true; }, p =>
+            {
+                ResetAcceptContent(new ScaleExeptionAction(EGate.Gate1, EScaleExceptionAction.Cancel));
+            });
 
             //Set event
             _eventAggregator = ea;
-
+            _eventAggregator.GetEvent<ReslovedScaleExceptionEvent>().Subscribe(ResetAcceptContent);
         }
 
         public bool CheckCard(TransactionScale transactionScale)
@@ -193,13 +216,15 @@ namespace ImportExportDesktopApp.ViewModels
                 {
                     if (transactionScale.Gate == EGate.Gate2)
                     {
-                        Gate2ButtonVisibility = EVisibility.Visible.ToString();
-                        TransactionScaleGate2 = transactionScale;
-                        PartnerGate2 = partner;
-                        ScheduleGate2 = schedule;
-                        _isSlovingExeptionGate2 = true;
-                        ScaleExeption scaleExeption = new ScaleExeption(transactionScale, partner, schedule);
-                        _eventAggregator.GetEvent<ScaleExceptionEvent>().Publish(scaleExeption);
+                        //Gate2ButtonVisibility = EVisibility.Visible.ToString();
+                        //TransactionScaleGate2 = transactionScale;
+                        //PartnerGate2 = partner;
+                        //ScheduleGate2 = schedule;
+                        //_isSlovingExeptionGate2 = true;
+                        //ScaleExeption scaleExeption = new ScaleExeption(transactionScale, partner, schedule);
+                        //_eventAggregator.GetEvent<ScaleExceptionEvent>().Publish(scaleExeption);
+                        //Gate2Bg = YELLOW_BG;
+                        AddException(transactionScale, partner, schedule, EScaleExceptionType.WrongProcess);
                         return false;
                     }
                     CreateTransaction(transactionScale, partner, schedule);
@@ -209,6 +234,7 @@ namespace ImportExportDesktopApp.ViewModels
                 {
                     if (transaction.Gate.Contains(transactionScale.Gate.ToString()))
                     {
+                        AddException(transactionScale, partner, schedule, EScaleExceptionType.Duplicate);
                         return false;
                     }
 
@@ -278,19 +304,95 @@ namespace ImportExportDesktopApp.ViewModels
             }
         }
 
+        public void AddException(TransactionScale transactionScale, Partner partner, Schedule schedule, EScaleExceptionType exceptionType)
+        {
+            if (transactionScale.Gate == EGate.Gate2)
+            {
+                Gate2ButtonVisibility = EVisibility.Visible.ToString();
+                TransactionScaleGate2 = transactionScale;
+                PartnerGate2 = partner;
+                ScheduleGate2 = schedule;
+                _isSlovingExeptionGate2 = true;
+                _exceptionTypeGate2 = exceptionType;
+                MessageGate2 =
+                                exceptionType == EScaleExceptionType.WrongProcess ? "Wrong process!! This partner has not passed through gate 1."
+                              : exceptionType == EScaleExceptionType.Duplicate ? "Partner is requesting to cancel the old transaction and create a new one !!!"
+                              : "Normal";
+
+                ScaleExeption scaleExeption = new ScaleExeption(transactionScale, partner, schedule, exceptionType);
+                _eventAggregator.GetEvent<ScaleExceptionEvent>().Publish(scaleExeption);
+                Gate2Bg = YELLOW_BG;
+            }
+            else if (transactionScale.Gate == EGate.Gate1)
+            {
+                Gate1ButtonVisibility = EVisibility.Visible.ToString();
+                TransactionScaleGate1 = transactionScale;
+                PartnerGate1 = partner;
+                ScheduleGate1 = schedule;
+                _isSlovingExeptionGate1 = true;
+                _exceptionTypeGate1 = exceptionType;
+                MessageGate1 =
+                                exceptionType == EScaleExceptionType.Duplicate ? "Partner is requesting to cancel the old transaction and create a new one !!!"
+                              : "Normal";
+                ScaleExeption scaleExeption = new ScaleExeption(transactionScale, partner, schedule, exceptionType);
+                _eventAggregator.GetEvent<ScaleExceptionEvent>().Publish(scaleExeption);
+                Gate1Bg = YELLOW_BG;
+            }
+        }
 
         public void CreateTransactionGate1()
         {
+            if (_exceptionTypeGate1 == EScaleExceptionType.Duplicate)
+            {
+                _transactionDataTransfer.DisableAll(TransactionScaleGate1.Indentify);
+            }
             CreateTransaction(TransactionScaleGate1, PartnerGate1, ScheduleGate1);
-            UpdateTable();
+            ResetAcceptContent(new ScaleExeptionAction(EGate.Gate1, EScaleExceptionAction.Accept));
         }
 
         public void CreateTransactionGate2()
         {
+            if (_exceptionTypeGate2 == EScaleExceptionType.Duplicate)
+            {
+                _transactionDataTransfer.DisableAll(TransactionScaleGate2.Indentify);
+            }
             CreateTransaction(TransactionScaleGate2, PartnerGate2, ScheduleGate2);
+            ResetAcceptContent(new ScaleExeptionAction(EGate.Gate2, EScaleExceptionAction.Accept));
+        }
+
+        public void ResetAcceptContent(ScaleExeptionAction exeptionAction)
+        {
+            if (exeptionAction.Gate == EGate.Gate2)
+            {
+                if (exeptionAction.Action == EScaleExceptionAction.Accept)
+                {
+                    Gate2ButtonVisibility = EVisibility.Hidden.ToString();
+                    _isSlovingExeptionGate2 = false;
+                }
+                else if (exeptionAction.Action == EScaleExceptionAction.Cancel)
+                {
+                    Gate2ButtonVisibility = EVisibility.Hidden.ToString();
+                    _isSlovingExeptionGate2 = false;
+                }
+                Gate2Bg = GREEN_BG;
+                MessageGate2 = "";
+            }
+            else if (exeptionAction.Gate == EGate.Gate1)
+            {
+                if (exeptionAction.Action == EScaleExceptionAction.Accept)
+                {
+                    Gate1ButtonVisibility = EVisibility.Hidden.ToString();
+                    _isSlovingExeptionGate1 = false;
+                }
+                else if (exeptionAction.Action == EScaleExceptionAction.Cancel)
+                {
+                    Gate1ButtonVisibility = EVisibility.Hidden.ToString();
+                    _isSlovingExeptionGate1 = false;
+                }
+                Gate1Bg = GREEN_BG;
+                MessageGate1 = "";
+            }
             UpdateTable();
-            Gate2ButtonVisibility = EVisibility.Hidden.ToString();
-            _isSlovingExeptionGate2 = false;
         }
 
         public void CreateTransaction(TransactionScale transactionScale, Partner partner, Schedule schedule)
@@ -612,7 +714,6 @@ namespace ImportExportDesktopApp.ViewModels
                 NotifyPropertyChanged();
             }
         }
-
         public String MessageGate1
         {
             get { return _messageGate1; }
@@ -633,5 +734,23 @@ namespace ImportExportDesktopApp.ViewModels
             }
         }
 
+        public String Gate1Bg
+        {
+            get { return _gate1bg; }
+            set
+            {
+                _gate1bg = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public String Gate2Bg
+        {
+            get { return _gate2bg; }
+            set
+            {
+                _gate2bg = value;
+                NotifyPropertyChanged();
+            }
+        }
     }
 }

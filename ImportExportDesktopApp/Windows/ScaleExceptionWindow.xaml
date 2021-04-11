@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    x:Name="GateNoti"
     Title="Notification Popup"
     Width="350"
     Height="350"
@@ -92,19 +93,19 @@
                             Margin="0,8,0,16"
                             HorizontalAlignment="Left"
                             Foreground="White"
-                            Text="{Binding PartnerNameGate2, UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding PartnerGate.DisplayName, UpdateSourceTrigger=PropertyChanged}" />
                         <TextBlock
                             Margin="0,8,0,16"
                             HorizontalAlignment="Left"
                             Foreground="White"
-                            Text="{Binding PartnerTypeNameGate2, UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding PartnerGate.PartnerTypeId, UpdateSourceTrigger=PropertyChanged}" />
                         <TextBlock
                             Margin="0,8,0,16"
                             HorizontalAlignment="Center"
                             FontSize="25"
                             FontWeight="Bold"
                             Foreground="White"
-                            Text="{Binding WeightGate2, UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding TransactionScaleGate.Weight, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                     <StackPanel
                         Grid.Row="2"
@@ -114,10 +115,14 @@
                         <Button
                             Margin="0,0,8,0"
                             BorderBrush="Transparent"
+                            Command="{Binding CreateTransactionGateCommand}"
+                            CommandParameter="{Binding ElementName=GateNoti}"
                             Content="Accept" />
                         <Button
                             Background="{StaticResource Red}"
                             BorderBrush="Transparent"
+                            Command="{Binding CancelGateCommand}"
+                            CommandParameter="{Binding ElementName=GateNoti}"
                             Content="Cancel" />
                     </StackPanel>
                 </Grid>

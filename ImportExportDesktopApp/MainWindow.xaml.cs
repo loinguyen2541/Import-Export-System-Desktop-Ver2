@@ -55,9 +55,9 @@ namespace ImportExportDesktopApp
             {
                 App.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
                 {
-                    var scaleExceptionWindow = new ScaleExceptionWindow();
-                    notify.Show();
-                    notify.Topmost = true;
+                    var scaleExceptionWindow = new ScaleExceptionWindow(scaleExeption);
+                    scaleExceptionWindow.Show();
+                    scaleExceptionWindow.Topmost = true;
                 }));
             }
         }
