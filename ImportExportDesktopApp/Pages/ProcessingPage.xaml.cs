@@ -98,7 +98,7 @@ namespace ImportExportDesktopApp.Pages
                     {
                         String[] values = value.Split('|');
                         TransactionScale transScale = JsonConvert.DeserializeObject<TransactionScale>(values[1]);
-                        bool result = processingViewModel.CheckCard(transScale);
+                        bool result = processingViewModel.CheckCardGate2(transScale);
                         if (result)
                         {
                             processingViewModel.UpdateTable();
@@ -135,7 +135,7 @@ namespace ImportExportDesktopApp.Pages
                     {
                         String[] values = value.Split('|');
                         TransactionScale transScale = JsonConvert.DeserializeObject<TransactionScale>(values[1]);
-                        bool result = processingViewModel.CheckCard(transScale);
+                        bool result = processingViewModel.CheckCardGate2(transScale);
                         if (result)
                         {
                             processingViewModel.UpdateTable();

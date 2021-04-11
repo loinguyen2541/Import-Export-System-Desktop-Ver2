@@ -37,16 +37,22 @@
                     Margin="0,0,0,8"
                     Padding="16,8,16,16"
                     materialDesign:ShadowAssist.ShadowDepth="Depth2"
-                    Background="{DynamicResource Green}"
+                    Background="Green"
                     UniformCornerRadius="10">
-                    <StackPanel Orientation="Vertical">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="46" />
+                            <RowDefinition />
+                            <RowDefinition Height="35" />
+                        </Grid.RowDefinitions>
                         <TextBlock
-                            Margin="0,8,0,16"
+                            Grid.Row="0"
+                            Margin="0,8,0,0"
                             FontSize="18"
                             FontWeight="Bold"
                             Foreground="White"
                             Text="Gate 1" />
-                        <StackPanel Orientation="Vertical">
+                        <StackPanel Grid.Row="1">
                             <TextBlock
                                 Margin="0,8,0,16"
                                 HorizontalAlignment="Left"
@@ -64,8 +70,27 @@
                                 FontWeight="Bold"
                                 Foreground="White"
                                 Text="{Binding WeightGate1, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock
+                                Margin="0,8,0,16"
+                                HorizontalAlignment="Left"
+                                Foreground="REd"
+                                Text="+ Partner have wrong card!!!!!" />
                         </StackPanel>
-                    </StackPanel>
+                        <StackPanel
+                            Grid.Row="2"
+                            HorizontalAlignment="Right"
+                            Orientation="Horizontal"
+                            Visibility="{Binding Gate1ButtonVisibility}">
+                            <Button
+                                Margin="0,0,8,0"
+                                BorderBrush="Transparent"
+                                Content="Accept" />
+                            <Button
+                                Background="{StaticResource Red}"
+                                BorderBrush="Transparent"
+                                Content="Cancel" />
+                        </StackPanel>
+                    </Grid>
                 </materialDesign:Card>
                 <materialDesign:Card
                     Grid.Column="1"
@@ -144,16 +169,22 @@
                     Margin="0,8,0,0"
                     Padding="16,8,16,16"
                     materialDesign:ShadowAssist.ShadowDepth="Depth2"
-                    Background="{DynamicResource Green}"
+                    Background="Green"
                     UniformCornerRadius="10">
-                    <StackPanel Orientation="Vertical">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="46" />
+                            <RowDefinition />
+                            <RowDefinition Height="35" />
+                        </Grid.RowDefinitions>
                         <TextBlock
+                            Grid.Row="0"
                             Margin="0,8,0,16"
                             FontSize="18"
                             FontWeight="Bold"
                             Foreground="White"
                             Text="Gate 2" />
-                        <StackPanel Orientation="Vertical">
+                        <StackPanel Grid.Row="1" Orientation="Vertical">
                             <TextBlock
                                 Margin="0,8,0,16"
                                 HorizontalAlignment="Left"
@@ -171,8 +202,28 @@
                                 FontWeight="Bold"
                                 Foreground="White"
                                 Text="{Binding WeightGate2, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock
+                                Margin="0,8,0,16"
+                                HorizontalAlignment="Left"
+                                Foreground="REd"
+                                Text="+ Partner have wrong card!!!!!" />
                         </StackPanel>
-                    </StackPanel>
+                        <StackPanel
+                            Grid.Row="2"
+                            HorizontalAlignment="Right"
+                            Orientation="Horizontal"
+                            Visibility="{Binding Gate2ButtonVisibility}">
+                            <Button
+                                Margin="0,0,8,0"
+                                BorderBrush="Transparent"
+                                Command="{Binding CreateTransactionGate2Command}"
+                                Content="Accept" />
+                            <Button
+                                Background="{StaticResource Red}"
+                                BorderBrush="Transparent"
+                                Content="Cancel" />
+                        </StackPanel>
+                    </Grid>
                 </materialDesign:Card>
                 <materialDesign:Card
                     Grid.Column="1"

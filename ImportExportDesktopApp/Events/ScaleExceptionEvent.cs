@@ -1,4 +1,5 @@
-﻿using Prism.Events;
+﻿using ImportExportDesktopApp.ScaleModels;
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace ImportExportDesktopApp.Events
 {
-    class ScaleExceptionEvent : PubSubEvent<String>
+    class ScaleExceptionEvent : PubSubEvent<ScaleExeption>
     {
     }
 }

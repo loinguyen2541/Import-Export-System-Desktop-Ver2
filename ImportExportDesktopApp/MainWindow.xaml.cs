@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using ImportExportDesktopApp.Events;
 using ImportExportDesktopApp.Pages;
+using ImportExportDesktopApp.ScaleModels;
 using ImportExportDesktopApp.ViewModels;
 using ImportExportDesktopApp.Windows;
 
@@ -48,18 +49,13 @@ namespace ImportExportDesktopApp
 
 
 
-        private void HandleScaleEvent(String value)
+        private void HandleScaleEvent(ScaleExeption scaleExeption)
         {
             if (!(_mainFrame.Content as Page).Name.Equals(PROCESSING_PAGE_NAME))
             {
-                //if (proccessingPage == null)
-                //{
-                //    proccessingPage = new ProcessingPage();
-                //}
-                //_mainFrame.Navigate(proccessingPage);
                 App.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
                 {
-                    var notify = new ScaleExceptionWindow();
+                    var scaleExceptionWindow = new ScaleExceptionWindow();
                     notify.Show();
                     notify.Topmost = true;
                 }));

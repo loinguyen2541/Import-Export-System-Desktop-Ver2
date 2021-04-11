@@ -1,4 +1,5 @@
-﻿using ImportExportDesktopApp.DataTransfers;
+﻿using ImportExportDesktopApp.Commands;
+using ImportExportDesktopApp.DataTransfers;
 using ImportExportDesktopApp.Enums;
 using ImportExportDesktopApp.Events;
 using ImportExportDesktopApp.ScaleModels;
@@ -12,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 /**
 * @author Loi Nguyen
@@ -33,6 +35,7 @@ namespace ImportExportDesktopApp.ViewModels
         private InventoryDetailDataTransfer _inventoryDetailDataTransfer;
         private ScheduleDataTransfer _scheduleDataTransfer;
         private TimeTemplateItemDataTransfer _timeTemplateItemDataTransfer;
+
         private ObservableCollection<Transaction> _processingTransaction;
         private ObservableCollection<Transaction> _successTransaction;
         private int _storageCapacity = 0;
@@ -44,9 +47,32 @@ namespace ImportExportDesktopApp.ViewModels
         private String _partnerTypeNameGate2;
         private String _weightGate1;
         private String _weightGate2;
+        private String _messageGate1;
+        private String _messageGate2;
+
+        //Command
+        public ICommand CreateTransactionGate2Command { get; set; }
+
+        //Gate Exception handle
+        private String _gate1ButtonVisibility;
+        private String _gate2ButtonVisibility;
+        private TransactionScale _transactionScaleGate1;
+        private Partner _partnerGate1;
+        private Schedule _scheduleGate1;
+        private TransactionScale _transactionScaleGate2;
+        private Partner _partnerGate2;
+        private Schedule _scheduleGate2;
+        private bool _isSlovingExeptionGate1;
+        private bool _isSlovingExeptionGate2;
 
         public ProcessingViewModel(IEventAggregator ea)
         {
+
+            _isSlovingExeptionGate1 = false;
+            _isSlovingExeptionGate2 = false;
+            Gate1ButtonVisibility = EVisibility.Hidden.ToString();
+            Gate2ButtonVisibility = EVisibility.Hidden.ToString();
+
             _transactionDataTransfer = new TransactionDataTransfer();
             _cardDataTransfer = new CardDataTransfer();
             _systemCongifDataTransfer = new SystemConfigDataTransfer();
@@ -60,6 +86,13 @@ namespace ImportExportDesktopApp.ViewModels
             ProcessingTransaction = _transactionDataTransfer.GetProcessingTransaction();
             SuccessTransaction = _transactionDataTransfer.GetSuccessTransaction();
 
+            //Command 
+            CreateTransactionGate2Command = new RelayCommand<object>(p => { return true; }, p =>
+            {
+                CreateTransactionGate2();
+            });
+
+
             //Set event
             _eventAggregator = ea;
 
@@ -67,11 +100,13 @@ namespace ImportExportDesktopApp.ViewModels
 
         public bool CheckCard(TransactionScale transactionScale)
         {
-            _eventAggregator.GetEvent<ScaleExceptionEvent>().Publish("Check");
+            //_eventAggregator.GetEvent<ScaleExceptionEvent>().Publish("Check");
+
             if (transactionScale.Weight < 10)
             {
                 return false;
             }
+
             Partner partner = _cardDataTransfer.CheckCard(transactionScale);
             UpdateGatePanel(partner, transactionScale);
 
@@ -81,6 +116,92 @@ namespace ImportExportDesktopApp.ViewModels
                 Transaction transaction = _transactionDataTransfer.IsProcessing(transactionScale.Indentify);
                 if (transaction == null)
                 {
+                    CreateTransaction(transactionScale, partner, schedule);
+                    return true;
+                }
+                else
+                {
+                    if (transaction.Gate.Contains(transactionScale.Gate.ToString()))
+                    {
+                        return false;
+                    }
+
+                    Transaction newTransaction = UpdateTransaction(transaction, transactionScale, partner, schedule);
+                    if (newTransaction == null)
+                    {
+                        return false;
+                    }
+
+                    if (partner.PartnerTypeId == 1)
+                    {
+                        float weight = newTransaction.WeightOut - newTransaction.WeightIn;
+                        Good good = _goodDataTransfer.UpdateInventory(partner.PartnerTypeId, weight, _storageCapacity);
+                        double storageCapacity20 = _storageCapacity * 0.2;
+
+                        SendNotify(good.QuantityOfInventory, storageCapacity20);
+
+                        // send good inventoey to main view model
+                        _eventAggregator.GetEvent<UpdateInventoryEvent>().Publish(good.QuantityOfInventory + "");
+                    }
+                    else if (partner.PartnerTypeId == 2)
+                    {
+                        float weight = newTransaction.WeightIn - newTransaction.WeightOut;
+                        Good good = _goodDataTransfer.UpdateInventory(partner.PartnerTypeId, weight, _storageCapacity);
+                        double storageCapacity20 = _storageCapacity * 0.2;
+
+                        SendNotify(good.QuantityOfInventory, storageCapacity20);
+
+                        // send good inventoey to main view model
+                        _eventAggregator.GetEvent<UpdateInventoryEvent>().Publish(good.QuantityOfInventory + "");
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+        public bool CheckCardGate2(TransactionScale transactionScale)
+        {
+            if (transactionScale.Gate == EGate.Gate1 && _isSlovingExeptionGate1)
+            {
+                return false;
+            }
+            else if (transactionScale.Gate == EGate.Gate2 && _isSlovingExeptionGate2)
+            {
+                return false;
+            }
+
+            if (transactionScale.Weight < 10)
+            {
+                return false;
+            }
+
+            Partner partner = _cardDataTransfer.CheckCard(transactionScale);
+            UpdateGatePanel(partner, transactionScale);
+
+            if (partner != null)
+            {
+                Schedule schedule = _scheduleDataTransfer.CheckSchedule(partner.PartnerId);
+                Transaction transaction = _transactionDataTransfer.IsProcessing(transactionScale.Indentify);
+                if (transaction == null)
+                {
+                    if (transactionScale.Gate == EGate.Gate2)
+                    {
+                        Gate2ButtonVisibility = EVisibility.Visible.ToString();
+                        TransactionScaleGate2 = transactionScale;
+                        PartnerGate2 = partner;
+                        ScheduleGate2 = schedule;
+                        _isSlovingExeptionGate2 = true;
+                        ScaleExeption scaleExeption = new ScaleExeption(transactionScale, partner, schedule);
+                        _eventAggregator.GetEvent<ScaleExceptionEvent>().Publish(scaleExeption);
+                        return false;
+                    }
                     CreateTransaction(transactionScale, partner, schedule);
                     return true;
                 }
@@ -155,6 +276,21 @@ namespace ImportExportDesktopApp.ViewModels
                     Type = NotificationType.Warning
                 });
             }
+        }
+
+
+        public void CreateTransactionGate1()
+        {
+            CreateTransaction(TransactionScaleGate1, PartnerGate1, ScheduleGate1);
+            UpdateTable();
+        }
+
+        public void CreateTransactionGate2()
+        {
+            CreateTransaction(TransactionScaleGate2, PartnerGate2, ScheduleGate2);
+            UpdateTable();
+            Gate2ButtonVisibility = EVisibility.Hidden.ToString();
+            _isSlovingExeptionGate2 = false;
         }
 
         public void CreateTransaction(TransactionScale transactionScale, Partner partner, Schedule schedule)
@@ -394,6 +530,105 @@ namespace ImportExportDesktopApp.ViewModels
             set
             {
                 _partnerTypeNameGate2 = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public String Gate1ButtonVisibility
+        {
+            get { return _gate1ButtonVisibility; }
+            set
+            {
+                _gate1ButtonVisibility = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public String Gate2ButtonVisibility
+        {
+            get { return _gate2ButtonVisibility; }
+            set
+            {
+                _gate2ButtonVisibility = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public TransactionScale TransactionScaleGate1
+        {
+            get { return _transactionScaleGate1; }
+            set
+            {
+                _transactionScaleGate1 = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public Partner PartnerGate1
+        {
+            get { return _partnerGate1; }
+            set
+            {
+                _partnerGate1 = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public Schedule ScheduleGate1
+        {
+            get { return _scheduleGate1; }
+            set
+            {
+                _scheduleGate1 = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public TransactionScale TransactionScaleGate2
+        {
+            get { return _transactionScaleGate2; }
+            set
+            {
+                _transactionScaleGate2 = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public Partner PartnerGate2
+        {
+            get { return _partnerGate2; }
+            set
+            {
+                _partnerGate2 = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public Schedule ScheduleGate2
+        {
+            get { return _scheduleGate2; }
+            set
+            {
+                _scheduleGate2 = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public String MessageGate1
+        {
+            get { return _messageGate1; }
+            set
+            {
+                _messageGate1 = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public String MessageGate2
+        {
+            get { return _messageGate2; }
+            set
+            {
+                _messageGate2 = value;
                 NotifyPropertyChanged();
             }
         }

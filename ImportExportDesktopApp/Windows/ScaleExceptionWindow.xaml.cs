@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ImportExportDesktopApp.ScaleModels;
+using ImportExportDesktopApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,10 +27,10 @@ namespace ImportExportDesktopApp.Windows
     /// </summary>
     public partial class ScaleExceptionWindow : Window
     {
-        public ScaleExceptionWindow()
+        public ScaleExceptionWindow(ScaleExeption scaleExeption)
         {
             InitializeComponent();
-
+            (this.DataContext as ScaleExceptionViewModel).Init(scaleExeption);
             //Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.ApplicationIdle, new Action(() =>
             //{
             //    var workingArea = System.Windows.SystemParameters.WorkArea;

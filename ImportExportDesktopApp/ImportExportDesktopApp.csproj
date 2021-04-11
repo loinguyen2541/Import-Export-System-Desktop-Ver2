@@ -140,6 +140,7 @@
     <Compile Include="Enums\EDeviceType.cs" />
     <Compile Include="Enums\EGate.cs" />
     <Compile Include="Enums\EPartnerType.cs" />
+    <Compile Include="Enums\EVisibility.cs" />
     <Compile Include="Events\ScaleExceptionEvent.cs" />
     <Compile Include="Events\UpdateInventoryEvent.cs" />
     <Compile Include="Good.cs">
@@ -204,6 +205,7 @@
     <Compile Include="Role.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ScaleModels\ScaleExeption.cs" />
     <Compile Include="ScaleModels\TransactionScale.cs" />
     <Compile Include="Schedule.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
@@ -232,6 +234,7 @@
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ManSchedulesViewModel.cs" />
     <Compile Include="ViewModels\ProcessingViewModel.cs" />
+    <Compile Include="ViewModels\ScaleExceptionViewModel.cs" />
     <Compile Include="ViewModels\TransactionListViewModel.cs" />
     <Compile Include="Windows\ScaleExceptionWindow.xaml.cs">
       <DependentUpon>ScaleExceptionWindow.xaml</DependentUpon>
