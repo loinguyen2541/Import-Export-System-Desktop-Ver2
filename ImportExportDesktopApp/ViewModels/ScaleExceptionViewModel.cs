@@ -62,6 +62,7 @@ namespace ImportExportDesktopApp.ViewModels
             PartnerGate = scaleExeption.Partner;
             ScheduleGate = scaleExeption.Schedule;
             ExceptionType = scaleExeption.ExceptionType;
+            MessageGate = scaleExeption.Message;
         }
         public void Accept(Window window)
         {
@@ -74,7 +75,7 @@ namespace ImportExportDesktopApp.ViewModels
                     Type = NotificationType.Information
                 });
 
-                _eventAggregator.GetEvent<ReslovedScaleExceptionEvent>().Publish(new ScaleExeptionAction(EGate.Gate2, EScaleExceptionAction.Accept));
+                _eventAggregator.GetEvent<ReslovedScaleExceptionEvent>().Publish(new ScaleExeptionAction(TransactionScaleGate.Gate, EScaleExceptionAction.Accept));
                 if (window != null)
                 {
                     window.Close();
@@ -84,7 +85,7 @@ namespace ImportExportDesktopApp.ViewModels
 
         public void Cancel(Window window)
         {
-            _eventAggregator.GetEvent<ReslovedScaleExceptionEvent>().Publish(new ScaleExeptionAction(EGate.Gate2, EScaleExceptionAction.Accept));
+            _eventAggregator.GetEvent<ReslovedScaleExceptionEvent>().Publish(new ScaleExeptionAction(TransactionScaleGate.Gate, EScaleExceptionAction.Cancel));
             if (window != null)
             {
                 window.Close();

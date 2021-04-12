@@ -165,5 +165,10 @@ namespace ImportExportDesktopApp.Pages
         {
             this.NavigationService.Navigate(new TransactionListPage());
         }
+
+        private void ComboBox_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }

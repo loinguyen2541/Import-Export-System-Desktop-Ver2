@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using ImportExportDesktopApp.Events;
+using ImportExportDesktopApp.HttpServices;
 using ImportExportDesktopApp.Pages;
 using ImportExportDesktopApp.ScaleModels;
 using ImportExportDesktopApp.ViewModels;
@@ -37,6 +38,9 @@ namespace ImportExportDesktopApp
         public MainWindow()
         {
             InitializeComponent();
+            NotifyService no = new NotifyService();
+            no.NotifyWeb();
+            no.NotifyAndroid();
             this.DataContext = new MainViewModel(AppService.Instance.EventAggregator);
             _mainFrame = (Frame)this.FindName("MainFrame");
             if (proccessingPage == null)

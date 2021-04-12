@@ -23,11 +23,15 @@
     </Page.Resources>
     <Border Padding="16">
         <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="317*" />
+                <ColumnDefinition Width="631*" />
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="5*" />
                 <RowDefinition Height="5*" />
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
+            <Grid Grid.Row="0" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*" />
                     <ColumnDefinition Width="7*" />
@@ -86,7 +90,7 @@
                                 Margin="0,0,8,0"
                                 BorderBrush="Transparent"
                                 Command="{Binding CreateTransactionGate1Command}"
-                                Content="Accept" />
+                                Content="{Binding BtnHanldeContentGate1}" />
                             <Button
                                 Background="{StaticResource Red}"
                                 BorderBrush="Transparent"
@@ -95,74 +99,106 @@
                         </StackPanel>
                     </Grid>
                 </materialDesign:Card>
-                <materialDesign:Card
-                    Grid.Column="1"
-                    Margin="16,0,0,8"
-                    Padding="16,10,16,16"
-                    materialDesign:ShadowAssist.ShadowDepth="Depth2"
-                    UniformCornerRadius="10">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="45" />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition />
-                                <ColumnDefinition />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock
-                                Grid.Column="0"
-                                Margin="0,8,0,16"
-                                FontSize="18"
-                                FontWeight="Bold"
-                                Text="Processing" />
-                            <Button
-                                Grid.Column="1"
-                                Height="25"
-                                Margin="0,0,0,5"
-                                HorizontalAlignment="Right"
-                                Click="Button_Click"
-                                Content="View more"
-                                FontSize="10" />
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="45" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <StackPanel
+                        Grid.Row="0"
+                        Margin="16,0,0,8"
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal">
+                        <ComboBox
+                            Width="250"
+                            materialDesign:HintAssist.Hint="Partner Name"
+                            DisplayMemberPath="DisplayName"
+                            IsEditable="True"
+                            ItemsSource="{Binding Partners}"
+                            MouseDown="ComboBox_MouseDown"
+                            Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+                        <Button
+                            Width="30"
+                            Height="30"
+                            Margin="8,0,0,0"
+                            VerticalAlignment="Bottom"
+                            Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                            ToolTip="MaterialDesignFloatingActionMiniDarkButton">
+                            <materialDesign:PackIcon
+                                Width="20"
+                                Height="20"
+                                Kind="Search" />
+                        </Button>
+                    </StackPanel>
+                    <materialDesign:Card
+                        Grid.Row="1"
+                        Margin="16,0,0,8"
+                        Padding="16,10,16,16"
+                        materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                        UniformCornerRadius="10">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="45" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    Grid.Column="0"
+                                    Margin="0,8,0,16"
+                                    FontSize="18"
+                                    FontWeight="Bold"
+                                    Text="Processing" />
+                                <Button
+                                    Grid.Column="1"
+                                    Height="25"
+                                    Margin="0,0,0,5"
+                                    HorizontalAlignment="Right"
+                                    Click="Button_Click"
+                                    Content="View more"
+                                    FontSize="10" />
+                            </Grid>
+                            <ScrollViewer
+                                Grid.Row="1"
+                                HorizontalScrollBarVisibility="Auto"
+                                VerticalScrollBarVisibility="Auto">
+                                <DataGrid
+                                    Width="auto"
+                                    Height="auto"
+                                    materialDesign:DataGridAssist.CellPadding="16 16 16 16"
+                                    materialDesign:DataGridAssist.ColumnHeaderPadding="16 16 16 16"
+                                    AlternationCount="{Binding ProcessingTransaction.Count}"
+                                    AutoGenerateColumns="False"
+                                    Background="White"
+                                    CanUserAddRows="False"
+                                    CanUserSortColumns="True"
+                                    FontSize="15"
+                                    IsHitTestVisible="False"
+                                    IsReadOnly="True"
+                                    ItemsSource="{Binding ProcessingTransaction}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn
+                                            Width="60"
+                                            Binding="{Binding Path=AlternationIndex, RelativeSource={RelativeSource AncestorType=DataGridRow}, Converter={StaticResource RowIndexConverter}}"
+                                            Header="No." />
+                                        <DataGridTextColumn Binding="{Binding Partner.DisplayName}" Header="Partner" />
+                                        <DataGridTextColumn
+                                            Width="100"
+                                            Binding="{Binding WeightIn}"
+                                            Header="Weight in" />
+                                        <DataGridTextColumn Binding="{Binding TimeIn}" Header="Time in" />
+                                        <DataGridTextColumn Binding="{Binding TransactionType, Converter={StaticResource TransactionTypeConverter}}" Header="Type" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </ScrollViewer>
                         </Grid>
-                        <ScrollViewer
-                            Grid.Row="1"
-                            HorizontalScrollBarVisibility="Auto"
-                            VerticalScrollBarVisibility="Auto">
-                            <DataGrid
-                                Width="auto"
-                                Height="auto"
-                                materialDesign:DataGridAssist.CellPadding="16 16 16 16"
-                                materialDesign:DataGridAssist.ColumnHeaderPadding="16 16 16 16"
-                                AlternationCount="{Binding ProcessingTransaction.Count}"
-                                AutoGenerateColumns="False"
-                                Background="White"
-                                CanUserAddRows="False"
-                                CanUserSortColumns="True"
-                                FontSize="15"
-                                IsHitTestVisible="False"
-                                IsReadOnly="True"
-                                ItemsSource="{Binding ProcessingTransaction}">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn
-                                        Width="60"
-                                        Binding="{Binding Path=AlternationIndex, RelativeSource={RelativeSource AncestorType=DataGridRow}, Converter={StaticResource RowIndexConverter}}"
-                                        Header="No." />
-                                    <DataGridTextColumn Binding="{Binding Partner.DisplayName}" Header="Partner" />
-                                    <DataGridTextColumn
-                                        Width="100"
-                                        Binding="{Binding WeightIn}"
-                                        Header="Weight in" />
-                                    <DataGridTextColumn Binding="{Binding TimeIn}" Header="Time in" />
-                                    <DataGridTextColumn Binding="{Binding TransactionType, Converter={StaticResource TransactionTypeConverter}}" Header="Type" />
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </ScrollViewer>
-                    </Grid>
-                </materialDesign:Card>
+                    </materialDesign:Card>
+                </Grid>
             </Grid>
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="1" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*" />
                     <ColumnDefinition Width="7*" />
@@ -221,7 +257,7 @@
                                 Margin="0,0,8,0"
                                 BorderBrush="Transparent"
                                 Command="{Binding CreateTransactionGate2Command}"
-                                Content="Accept" />
+                                Content="{Binding BtnHanldeContentGate2}" />
                             <Button
                                 Background="{StaticResource Red}"
                                 BorderBrush="Transparent"

@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 /**
 * @author Loi Nguyen
 *
-* @date - 4/11/2021 11:40:51 PM 
+* @date - 4/13/2021 2:59:23 AM 
 */
 
 namespace ImportExportDesktopApp.Enums
 {
-    public enum EScaleExceptionType
+    enum ETransactionType
     {
-        WrongProcess, Duplicate, WrongTransactionType
+        Import, Export
     }
 }

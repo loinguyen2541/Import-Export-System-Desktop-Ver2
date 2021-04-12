@@ -4,6 +4,7 @@ using ImportExportDesktopApp.Enums;
 using ImportExportDesktopApp.Events;
 using ImportExportDesktopApp.ScaleModels;
 using ImportExportDesktopApp.Utils;
+using ImportExportDesktopApp.Windows;
 using Notifications.Wpf;
 using Prism.Events;
 using System;
@@ -30,6 +31,8 @@ namespace ImportExportDesktopApp.ViewModels
 
         private IEventAggregator _eventAggregator;
 
+        private ObservableCollection<Partner> _partners;
+
         private TransactionDataTransfer _transactionDataTransfer;
         private CardDataTransfer _cardDataTransfer;
         private SystemConfigDataTransfer _systemCongifDataTransfer;
@@ -38,6 +41,7 @@ namespace ImportExportDesktopApp.ViewModels
         private InventoryDetailDataTransfer _inventoryDetailDataTransfer;
         private ScheduleDataTransfer _scheduleDataTransfer;
         private TimeTemplateItemDataTransfer _timeTemplateItemDataTransfer;
+        private PartnerDataTransfer _partnerDataTransfer;
 
         private ObservableCollection<Transaction> _processingTransaction;
         private ObservableCollection<Transaction> _successTransaction;
@@ -70,6 +74,8 @@ namespace ImportExportDesktopApp.ViewModels
         private Schedule _scheduleGate2;
         private bool _isSlovingExeptionGate1;
         private bool _isSlovingExeptionGate2;
+        private String _btnHanldeContentGate1;
+        private String _btnHanldeContentGate2;
         private String _gate1bg;
         private String _gate2bg;
         private EScaleExceptionType _exceptionTypeGate1;
@@ -80,8 +86,12 @@ namespace ImportExportDesktopApp.ViewModels
             Gate1Bg = GREEN_BG;
             Gate2Bg = GREEN_BG;
 
+            BtnHanldeContentGate1 = EBtnHandleContent.Accept.ToString();
+            BtnHanldeContentGate2 = EBtnHandleContent.Accept.ToString();
+
             _isSlovingExeptionGate1 = false;
             _isSlovingExeptionGate2 = false;
+
             Gate1ButtonVisibility = EVisibility.Hidden.ToString();
             Gate2ButtonVisibility = EVisibility.Hidden.ToString();
 
@@ -93,6 +103,7 @@ namespace ImportExportDesktopApp.ViewModels
             _inventoryDetailDataTransfer = new InventoryDetailDataTransfer();
             _scheduleDataTransfer = new ScheduleDataTransfer();
             _timeTemplateItemDataTransfer = new TimeTemplateItemDataTransfer();
+            _partnerDataTransfer = new PartnerDataTransfer();
 
             _storageCapacity = _systemCongifDataTransfer.GetStorageCappacity();
             ProcessingTransaction = _transactionDataTransfer.GetProcessingTransaction();
@@ -216,14 +227,6 @@ namespace ImportExportDesktopApp.ViewModels
                 {
                     if (transactionScale.Gate == EGate.Gate2)
                     {
-                        //Gate2ButtonVisibility = EVisibility.Visible.ToString();
-                        //TransactionScaleGate2 = transactionScale;
-                        //PartnerGate2 = partner;
-                        //ScheduleGate2 = schedule;
-                        //_isSlovingExeptionGate2 = true;
-                        //ScaleExeption scaleExeption = new ScaleExeption(transactionScale, partner, schedule);
-                        //_eventAggregator.GetEvent<ScaleExceptionEvent>().Publish(scaleExeption);
-                        //Gate2Bg = YELLOW_BG;
                         AddException(transactionScale, partner, schedule, EScaleExceptionType.WrongProcess);
                         return false;
                     }
@@ -317,9 +320,13 @@ namespace ImportExportDesktopApp.ViewModels
                 MessageGate2 =
                                 exceptionType == EScaleExceptionType.WrongProcess ? "Wrong process!! This partner has not passed through gate 1."
                               : exceptionType == EScaleExceptionType.Duplicate ? "Partner is requesting to cancel the old transaction and create a new one !!!"
+                              : exceptionType == EScaleExceptionType.WrongTransactionType ? "Wrong partner type"
                               : "Normal";
-
-                ScaleExeption scaleExeption = new ScaleExeption(transactionScale, partner, schedule, exceptionType);
+                if (exceptionType == EScaleExceptionType.WrongTransactionType)
+                {
+                    BtnHanldeContentGate2 = EBtnHandleContent.Edit.ToString();
+                }
+                ScaleExeption scaleExeption = new ScaleExeption(transactionScale, partner, schedule, exceptionType, MessageGate2);
                 _eventAggregator.GetEvent<ScaleExceptionEvent>().Publish(scaleExeption);
                 Gate2Bg = YELLOW_BG;
             }
@@ -333,8 +340,13 @@ namespace ImportExportDesktopApp.ViewModels
                 _exceptionTypeGate1 = exceptionType;
                 MessageGate1 =
                                 exceptionType == EScaleExceptionType.Duplicate ? "Partner is requesting to cancel the old transaction and create a new one !!!"
+                              : exceptionType == EScaleExceptionType.WrongTransactionType ? "Wrong partner type"
                               : "Normal";
-                ScaleExeption scaleExeption = new ScaleExeption(transactionScale, partner, schedule, exceptionType);
+                if (exceptionType == EScaleExceptionType.WrongTransactionType)
+                {
+                    BtnHanldeContentGate1 = EBtnHandleContent.Edit.ToString();
+                }
+                ScaleExeption scaleExeption = new ScaleExeption(transactionScale, partner, schedule, exceptionType, MessageGate1);
                 _eventAggregator.GetEvent<ScaleExceptionEvent>().Publish(scaleExeption);
                 Gate1Bg = YELLOW_BG;
             }
@@ -342,21 +354,65 @@ namespace ImportExportDesktopApp.ViewModels
 
         public void CreateTransactionGate1()
         {
-            if (_exceptionTypeGate1 == EScaleExceptionType.Duplicate)
+            if (_exceptionTypeGate1 == EScaleExceptionType.WrongTransactionType)
             {
-                _transactionDataTransfer.DisableAll(TransactionScaleGate1.Indentify);
+                Transaction transaction = _transactionDataTransfer.IsProcessing(TransactionScaleGate1.Indentify);
+                EditExceptionTransactionWindow editExceptionTransactionWindow = new EditExceptionTransactionWindow(transaction, TransactionScaleGate1);
+                var point = Mouse.GetPosition(Application.Current.MainWindow);
+                //Application curApp = Application.Current;
+                //Window mainWindow = curApp.MainWindow;
+                editExceptionTransactionWindow.Left = point.X;
+                editExceptionTransactionWindow.Top = point.Y - 150;
+                editExceptionTransactionWindow.ShowDialog();
+                bool isCancel = editExceptionTransactionWindow.IsCancel;
+                if (isCancel)
+                {
+                    return;
+                }
+                ChangePartner(transaction, TransactionScaleGate1, editExceptionTransactionWindow.SelectedPartner, ScheduleGate1);
+                PartnerNameGate1 = "Partner:" + transaction.Partner.DisplayName;
+                PartnerTypeNameGate1 = "Type: " + transaction.Partner.PartnerType.PartnerTypeName;
             }
-            CreateTransaction(TransactionScaleGate1, PartnerGate1, ScheduleGate1);
+            else
+            {
+                if (_exceptionTypeGate1 == EScaleExceptionType.Duplicate)
+                {
+                    _transactionDataTransfer.DisableAll(TransactionScaleGate1.Indentify);
+                }
+                CreateTransaction(TransactionScaleGate1, PartnerGate1, ScheduleGate1);
+            }
             ResetAcceptContent(new ScaleExeptionAction(EGate.Gate1, EScaleExceptionAction.Accept));
         }
 
         public void CreateTransactionGate2()
         {
-            if (_exceptionTypeGate2 == EScaleExceptionType.Duplicate)
+            if (_exceptionTypeGate2 == EScaleExceptionType.WrongTransactionType)
             {
-                _transactionDataTransfer.DisableAll(TransactionScaleGate2.Indentify);
+                Transaction transaction = _transactionDataTransfer.IsProcessing(TransactionScaleGate2.Indentify);
+                EditExceptionTransactionWindow editExceptionTransactionWindow = new EditExceptionTransactionWindow(transaction, TransactionScaleGate2);
+                var point = Mouse.GetPosition(Application.Current.MainWindow);
+                //Application curApp = Application.Current;
+                //Window mainWindow = curApp.MainWindow;
+                editExceptionTransactionWindow.Left = point.X;
+                editExceptionTransactionWindow.Top = point.Y - 150;
+                editExceptionTransactionWindow.ShowDialog();
+                bool isCancel = editExceptionTransactionWindow.IsCancel;
+                if (isCancel)
+                {
+                    return;
+                }
+                ChangePartner(transaction, TransactionScaleGate2, editExceptionTransactionWindow.SelectedPartner, ScheduleGate2);
+                PartnerNameGate2 = "Partner:" + transaction.Partner.DisplayName;
+                PartnerTypeNameGate2 = "Type: " + transaction.Partner.PartnerType.PartnerTypeName;
             }
-            CreateTransaction(TransactionScaleGate2, PartnerGate2, ScheduleGate2);
+            else
+            {
+                if (_exceptionTypeGate2 == EScaleExceptionType.Duplicate)
+                {
+                    _transactionDataTransfer.DisableAll(TransactionScaleGate2.Indentify);
+                }
+                CreateTransaction(TransactionScaleGate2, PartnerGate2, ScheduleGate2);
+            }
             ResetAcceptContent(new ScaleExeptionAction(EGate.Gate2, EScaleExceptionAction.Accept));
         }
 
@@ -376,6 +432,7 @@ namespace ImportExportDesktopApp.ViewModels
                 }
                 Gate2Bg = GREEN_BG;
                 MessageGate2 = "";
+                BtnHanldeContentGate2 = EBtnHandleContent.Accept.ToString();
             }
             else if (exeptionAction.Gate == EGate.Gate1)
             {
@@ -391,6 +448,7 @@ namespace ImportExportDesktopApp.ViewModels
                 }
                 Gate1Bg = GREEN_BG;
                 MessageGate1 = "";
+                BtnHanldeContentGate2 = EBtnHandleContent.Accept.ToString();
             }
             UpdateTable();
         }
@@ -421,11 +479,24 @@ namespace ImportExportDesktopApp.ViewModels
             _transactionDataTransfer.InsertTransaction(transaction);
         }
 
+        public bool ChangePartner(Transaction transaction, TransactionScale transactionScale, Partner partner, Schedule schedule)
+        {
+            transaction.PartnerId = partner.PartnerId;
+            transaction.TransactionType = transaction.TransactionType = partner.PartnerTypeId == 1 ? 1 : 0;
+            transaction = UpdateTransaction(transaction, transactionScale, partner, schedule);
+            if (transaction == null)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public Transaction UpdateTransaction(Transaction transaction, TransactionScale transactionScale, Partner partner, Schedule schedule)
         {
             float goodInventory = _goodDataTransfer.getInventory();
             if (!CheckWeight(partner.PartnerTypeId, transaction.WeightIn, transactionScale.Weight, goodInventory))
             {
+                AddException(transactionScale, partner, schedule, EScaleExceptionType.WrongTransactionType);
                 return null;
             }
             transaction.WeightOut = transactionScale.Weight;
@@ -474,7 +545,7 @@ namespace ImportExportDesktopApp.ViewModels
                 if (partner != null)
                 {
                     PartnerNameGate2 = "Partner: " + partner.DisplayName;
-                    PartnerTypeNameGate2 = "Type:" + partner.PartnerType.PartnerTypeName;
+                    PartnerTypeNameGate2 = "Type: " + partner.PartnerType.PartnerTypeName;
                 }
                 else
                 {
@@ -539,6 +610,11 @@ namespace ImportExportDesktopApp.ViewModels
             }
 
             return true;
+        }
+
+        public void GetAllPartners()
+        {
+            Partners = _partnerDataTransfer.GetAll();
         }
 
         public float getTotalWeight(int partnerTypeId, float weightIn, float weightOut)
@@ -749,6 +825,34 @@ namespace ImportExportDesktopApp.ViewModels
             set
             {
                 _gate2bg = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public String BtnHanldeContentGate1
+        {
+            get { return _btnHanldeContentGate1; }
+            set
+            {
+                _btnHanldeContentGate1 = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public String BtnHanldeContentGate2
+        {
+            get { return _btnHanldeContentGate2; }
+            set
+            {
+                _btnHanldeContentGate2 = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<Partner> Partners
+        {
+            get { return _partners; }
+            set
+            {
+                _partners = value;
                 NotifyPropertyChanged();
             }
         }

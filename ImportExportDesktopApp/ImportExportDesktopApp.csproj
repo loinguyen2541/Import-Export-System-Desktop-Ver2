@@ -132,15 +132,18 @@
     <Compile Include="DataTransfers\GoodDataTransfer.cs" />
     <Compile Include="DataTransfers\InventoryDataTransfer.cs" />
     <Compile Include="DataTransfers\InventoryDetailDataTransfer.cs" />
+    <Compile Include="DataTransfers\PartnerDataTransfer.cs" />
     <Compile Include="DataTransfers\ScheduleDataTransfer.cs" />
     <Compile Include="DataTransfers\SystemConfigDataTransfer.cs" />
     <Compile Include="DataTransfers\TimeTemplateItemDataTransfer.cs" />
     <Compile Include="DisplayModel\GoodsDisplay.cs" />
     <Compile Include="DisplayModel\InventoryDisplay.cs" />
+    <Compile Include="Enums\EBtnHandleContent.cs" />
     <Compile Include="Enums\EDeviceType.cs" />
     <Compile Include="Enums\EGate.cs" />
     <Compile Include="Enums\EPartnerType.cs" />
     <Compile Include="Enums\EScaleExceptionType.cs" />
+    <Compile Include="Enums\ETransactionType.cs" />
     <Compile Include="Enums\EVisibility.cs" />
     <Compile Include="Enums\EScaleExceptionAction.cs" />
     <Compile Include="Events\ReslovedScaleExceptionEvent.cs" />
@@ -149,7 +152,7 @@
     <Compile Include="Good.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="HttpServices\NotifyHubService.cs" />
+    <Compile Include="HttpServices\NotifyService.cs" />
     <Compile Include="HttpServices\RelayCommand.cs" />
     <Compile Include="IdentityCard.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
@@ -240,6 +243,9 @@
     <Compile Include="ViewModels\ProcessingViewModel.cs" />
     <Compile Include="ViewModels\ScaleExceptionViewModel.cs" />
     <Compile Include="ViewModels\TransactionListViewModel.cs" />
+    <Compile Include="Windows\EditExceptionTransactionWindow.xaml.cs">
+      <DependentUpon>EditExceptionTransactionWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ScaleExceptionWindow.xaml.cs">
       <DependentUpon>ScaleExceptionWindow.xaml</DependentUpon>
     </Compile>
@@ -288,6 +294,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\MainSource.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\EditExceptionTransactionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
