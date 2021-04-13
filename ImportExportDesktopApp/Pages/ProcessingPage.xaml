@@ -89,6 +89,12 @@
                             <Button
                                 Margin="0,0,8,0"
                                 BorderBrush="Transparent"
+                                Command="{Binding DisableGate1Command}"
+                                Content="Disable"
+                                Visibility="{Binding DisableButtonVisibilityGate1}" />
+                            <Button
+                                Margin="0,0,8,0"
+                                BorderBrush="Transparent"
                                 Command="{Binding CreateTransactionGate1Command}"
                                 Content="{Binding BtnHanldeContentGate1}" />
                             <Button
@@ -109,19 +115,34 @@
                         Margin="16,0,0,8"
                         HorizontalAlignment="Right"
                         Orientation="Horizontal">
+                        <Button
+                            Width="30"
+                            Height="30"
+                            Margin="8,0,8,0"
+                            VerticalAlignment="Bottom"
+                            Command="{Binding CloseSearchCommand}"
+                            Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                            ToolTip="MaterialDesignFloatingActionMiniDarkButton"
+                            Visibility="{Binding CancelSearchVisibility}">
+                            <materialDesign:PackIcon
+                                Width="20"
+                                Height="20"
+                                Kind="Close" />
+                        </Button>
                         <ComboBox
                             Width="250"
                             materialDesign:HintAssist.Hint="Partner Name"
                             DisplayMemberPath="DisplayName"
                             IsEditable="True"
                             ItemsSource="{Binding Partners}"
-                            MouseDown="ComboBox_MouseDown"
+                            SelectedValue="{Binding SelectedPartner}"
                             Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
                         <Button
                             Width="30"
                             Height="30"
                             Margin="8,0,0,0"
                             VerticalAlignment="Bottom"
+                            Command="{Binding SearchByPartnerCommand}"
                             Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
                             ToolTip="MaterialDesignFloatingActionMiniDarkButton">
                             <materialDesign:PackIcon
@@ -253,6 +274,12 @@
                             HorizontalAlignment="Right"
                             Orientation="Horizontal"
                             Visibility="{Binding Gate2ButtonVisibility}">
+                            <Button
+                                Margin="0,0,8,0"
+                                BorderBrush="Transparent"
+                                Command="{Binding DisableGate2Command}"
+                                Content="Disable"
+                                Visibility="{Binding DisableButtonVisibilityGate2}" />
                             <Button
                                 Margin="0,0,8,0"
                                 BorderBrush="Transparent"

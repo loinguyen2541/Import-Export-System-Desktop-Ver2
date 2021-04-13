@@ -28,7 +28,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>3</ApplicationRevision>
+    <ApplicationRevision>4</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -153,7 +153,6 @@
       <DependentUpon>IEModel.tt</DependentUpon>
     </Compile>
     <Compile Include="HttpServices\NotifyService.cs" />
-    <Compile Include="HttpServices\RelayCommand.cs" />
     <Compile Include="IdentityCard.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
     </Compile>

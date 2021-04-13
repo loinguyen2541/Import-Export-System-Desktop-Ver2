@@ -2,6 +2,7 @@
 using ImportExportDesktopApp.DataTransfers;
 using ImportExportDesktopApp.Enums;
 using ImportExportDesktopApp.Events;
+using ImportExportDesktopApp.HttpServices;
 using ImportExportDesktopApp.ScaleModels;
 using ImportExportDesktopApp.Utils;
 using ImportExportDesktopApp.Windows;
@@ -31,7 +32,10 @@ namespace ImportExportDesktopApp.ViewModels
 
         private IEventAggregator _eventAggregator;
 
+        //search
         private ObservableCollection<Partner> _partners;
+        private Partner _selectedPartner;
+        private String _cancelSearchVisibility;
 
         private TransactionDataTransfer _transactionDataTransfer;
         private CardDataTransfer _cardDataTransfer;
@@ -42,6 +46,7 @@ namespace ImportExportDesktopApp.ViewModels
         private ScheduleDataTransfer _scheduleDataTransfer;
         private TimeTemplateItemDataTransfer _timeTemplateItemDataTransfer;
         private PartnerDataTransfer _partnerDataTransfer;
+        private NotifyService _notifyService;
 
         private ObservableCollection<Transaction> _processingTransaction;
         private ObservableCollection<Transaction> _successTransaction;
@@ -62,6 +67,11 @@ namespace ImportExportDesktopApp.ViewModels
         public ICommand CancelGate2Command { get; set; }
         public ICommand CreateTransactionGate1Command { get; set; }
         public ICommand CancelGate1Command { get; set; }
+        public ICommand SearchByPartnerCommand { get; set; }
+        public ICommand CloseSearchCommand { get; set; }
+        public ICommand DisableGate1Command { get; set; }
+        public ICommand DisableGate2Command { get; set; }
+
 
         //Gate Exception handle
         private String _gate1ButtonVisibility;
@@ -80,14 +90,22 @@ namespace ImportExportDesktopApp.ViewModels
         private String _gate2bg;
         private EScaleExceptionType _exceptionTypeGate1;
         private EScaleExceptionType _exceptionTypeGate2;
+        private String _disableButtonVisibilityGate1;
+        private String _disableButtonVisibilityGate2;
+
 
         public ProcessingViewModel(IEventAggregator ea)
         {
+            _cancelSearchVisibility = EVisibility.Hidden.ToString();
+
             Gate1Bg = GREEN_BG;
             Gate2Bg = GREEN_BG;
 
             BtnHanldeContentGate1 = EBtnHandleContent.Accept.ToString();
             BtnHanldeContentGate2 = EBtnHandleContent.Accept.ToString();
+
+            DisableButtonVisibilityGate1 = EVisibility.Hidden.ToString();
+            DisableButtonVisibilityGate2 = EVisibility.Hidden.ToString();
 
             _isSlovingExeptionGate1 = false;
             _isSlovingExeptionGate2 = false;
@@ -104,10 +122,15 @@ namespace ImportExportDesktopApp.ViewModels
             _scheduleDataTransfer = new ScheduleDataTransfer();
             _timeTemplateItemDataTransfer = new TimeTemplateItemDataTransfer();
             _partnerDataTransfer = new PartnerDataTransfer();
+            _notifyService = new NotifyService();
 
-            _storageCapacity = _systemCongifDataTransfer.GetStorageCappacity();
-            ProcessingTransaction = _transactionDataTransfer.GetProcessingTransaction();
-            SuccessTransaction = _transactionDataTransfer.GetSuccessTransaction();
+            Task.Run(new Action(() =>
+            {
+                GetAllPartners();
+                _storageCapacity = _systemCongifDataTransfer.GetStorageCappacity();
+                ProcessingTransaction = _transactionDataTransfer.GetProcessingTransaction();
+                SuccessTransaction = _transactionDataTransfer.GetSuccessTransaction();
+            }));
 
             //Command 
             CreateTransactionGate2Command = new RelayCommand<object>(p => { return true; }, p =>
@@ -125,6 +148,22 @@ namespace ImportExportDesktopApp.ViewModels
             CancelGate1Command = new RelayCommand<object>(p => { return true; }, p =>
             {
                 ResetAcceptContent(new ScaleExeptionAction(EGate.Gate1, EScaleExceptionAction.Cancel));
+            });
+            SearchByPartnerCommand = new RelayCommand<object>(p => { return true; }, p =>
+            {
+                SearchByPartner();
+            });
+            CloseSearchCommand = new RelayCommand<object>(p => { return true; }, p =>
+            {
+                CloseSearch();
+            });
+            DisableGate1Command = new RelayCommand<object>(p => { return true; }, p =>
+            {
+                Disable(EGate.Gate1);
+            });
+            DisableGate2Command = new RelayCommand<object>(p => { return true; }, p =>
+            {
+                Disable(EGate.Gate2);
             });
 
             //Set event
@@ -231,6 +270,13 @@ namespace ImportExportDesktopApp.ViewModels
                         return false;
                     }
                     CreateTransaction(transactionScale, partner, schedule);
+                    Task.Run(new Action(() =>
+                    {
+                        if (transactionScale.Device == EDeviceType.Android)
+                        {
+                            _notifyService.NotifyAndroid();
+                        }
+                    }));
                     return true;
                 }
                 else
@@ -274,6 +320,13 @@ namespace ImportExportDesktopApp.ViewModels
                         return false;
                     }
 
+                    Task.Run(new Action(() =>
+                    {
+                        if (transactionScale.Device == EDeviceType.Android)
+                        {
+                            _notifyService.NotifyAndroid();
+                        }
+                    }));
                     return true;
                 }
             }
@@ -325,6 +378,7 @@ namespace ImportExportDesktopApp.ViewModels
                 if (exceptionType == EScaleExceptionType.WrongTransactionType)
                 {
                     BtnHanldeContentGate2 = EBtnHandleContent.Edit.ToString();
+                    DisableButtonVisibilityGate2 = EVisibility.Visible.ToString();
                 }
                 ScaleExeption scaleExeption = new ScaleExeption(transactionScale, partner, schedule, exceptionType, MessageGate2);
                 _eventAggregator.GetEvent<ScaleExceptionEvent>().Publish(scaleExeption);
@@ -345,6 +399,7 @@ namespace ImportExportDesktopApp.ViewModels
                 if (exceptionType == EScaleExceptionType.WrongTransactionType)
                 {
                     BtnHanldeContentGate1 = EBtnHandleContent.Edit.ToString();
+                    DisableButtonVisibilityGate1 = EVisibility.Visible.ToString();
                 }
                 ScaleExeption scaleExeption = new ScaleExeption(transactionScale, partner, schedule, exceptionType, MessageGate1);
                 _eventAggregator.GetEvent<ScaleExceptionEvent>().Publish(scaleExeption);
@@ -381,6 +436,13 @@ namespace ImportExportDesktopApp.ViewModels
                 }
                 CreateTransaction(TransactionScaleGate1, PartnerGate1, ScheduleGate1);
             }
+            Task.Run(new Action(() =>
+            {
+                if (TransactionScaleGate1.Device == EDeviceType.Android)
+                {
+                    _notifyService.NotifyAndroid();
+                }
+            }));
             ResetAcceptContent(new ScaleExeptionAction(EGate.Gate1, EScaleExceptionAction.Accept));
         }
 
@@ -413,6 +475,13 @@ namespace ImportExportDesktopApp.ViewModels
                 }
                 CreateTransaction(TransactionScaleGate2, PartnerGate2, ScheduleGate2);
             }
+            Task.Run(new Action(() =>
+            {
+                if (TransactionScaleGate2.Device == EDeviceType.Android)
+                {
+                    _notifyService.NotifyAndroid();
+                }
+            }));
             ResetAcceptContent(new ScaleExeptionAction(EGate.Gate2, EScaleExceptionAction.Accept));
         }
 
@@ -433,6 +502,7 @@ namespace ImportExportDesktopApp.ViewModels
                 Gate2Bg = GREEN_BG;
                 MessageGate2 = "";
                 BtnHanldeContentGate2 = EBtnHandleContent.Accept.ToString();
+                DisableButtonVisibilityGate2 = EVisibility.Hidden.ToString();
             }
             else if (exeptionAction.Gate == EGate.Gate1)
             {
@@ -448,7 +518,8 @@ namespace ImportExportDesktopApp.ViewModels
                 }
                 Gate1Bg = GREEN_BG;
                 MessageGate1 = "";
-                BtnHanldeContentGate2 = EBtnHandleContent.Accept.ToString();
+                BtnHanldeContentGate1 = EBtnHandleContent.Accept.ToString();
+                DisableButtonVisibilityGate1 = EVisibility.Hidden.ToString();
             }
             UpdateTable();
         }
@@ -477,6 +548,10 @@ namespace ImportExportDesktopApp.ViewModels
             transaction.TransactionType = partner.PartnerTypeId == 1 ? 1 : 0;
             transaction.Gate = transactionScale.Gate.ToString();
             _transactionDataTransfer.InsertTransaction(transaction);
+            if (transactionScale.Device == EDeviceType.Android)
+            {
+                _notifyService.NotifyAndroid();
+            }
         }
 
         public bool ChangePartner(Transaction transaction, TransactionScale transactionScale, Partner partner, Schedule schedule)
@@ -487,6 +562,14 @@ namespace ImportExportDesktopApp.ViewModels
             if (transaction == null)
             {
                 return false;
+            }
+            else
+            {
+                UpdateGood(partner, transaction);
+            }
+            if (transactionScale.Device == EDeviceType.Android)
+            {
+                _notifyService.NotifyAndroid();
             }
             return true;
         }
@@ -525,6 +608,32 @@ namespace ImportExportDesktopApp.ViewModels
             return transaction;
         }
 
+        void UpdateGood(Partner partner, Transaction newTransaction)
+        {
+            if (partner.PartnerTypeId == 1)
+            {
+                float weight = newTransaction.WeightOut - newTransaction.WeightIn;
+                Good good = _goodDataTransfer.UpdateInventory(partner.PartnerTypeId, weight, _storageCapacity);
+                double storageCapacity20 = _storageCapacity * 0.2;
+
+                SendNotify(good.QuantityOfInventory, storageCapacity20);
+
+                // send good inventoey to main view model
+                _eventAggregator.GetEvent<UpdateInventoryEvent>().Publish(good.QuantityOfInventory + "");
+            }
+            else if (partner.PartnerTypeId == 2)
+            {
+                float weight = newTransaction.WeightIn - newTransaction.WeightOut;
+                Good good = _goodDataTransfer.UpdateInventory(partner.PartnerTypeId, weight, _storageCapacity);
+                double storageCapacity20 = _storageCapacity * 0.2;
+
+                SendNotify(good.QuantityOfInventory, storageCapacity20);
+
+                // send good inventoey to main view model
+                _eventAggregator.GetEvent<UpdateInventoryEvent>().Publish(good.QuantityOfInventory + "");
+            }
+        }
+
         private void UpdateGatePanel(Partner partner, TransactionScale transactionScale)
         {
             if (transactionScale.Gate == EGate.Gate1)
@@ -555,7 +664,27 @@ namespace ImportExportDesktopApp.ViewModels
             }
         }
 
+        public void Disable(EGate gate)
+        {
+            if (gate == EGate.Gate1)
+            {
+                _transactionDataTransfer.DisableAll(TransactionScaleGate1.Indentify);
+            }
+            else if (gate == EGate.Gate2)
+            {
+                _transactionDataTransfer.DisableAll(TransactionScaleGate2.Indentify);
+            }
+            _transactionDataTransfer.Save();
+            ResetAcceptContent(new ScaleExeptionAction(EGate.Gate2, EScaleExceptionAction.Accept));
+        }
 
+        public void CloseSearch()
+        {
+            CancelSearchVisibility = EVisibility.Hidden.ToString();
+            SelectedPartner = null;
+            ProcessingTransaction = _transactionDataTransfer.GetProcessingTransaction();
+            SuccessTransaction = _transactionDataTransfer.GetSuccessTransaction();
+        }
 
         /// <summary>
         ///   Check the total weight is valid or not!!!
@@ -615,6 +744,13 @@ namespace ImportExportDesktopApp.ViewModels
         public void GetAllPartners()
         {
             Partners = _partnerDataTransfer.GetAll();
+        }
+
+        public void SearchByPartner()
+        {
+            CancelSearchVisibility = EVisibility.Visible.ToString();
+            ProcessingTransaction = _transactionDataTransfer.GetProcessingTransactionByPartnerToday(SelectedPartner.PartnerId);
+            SuccessTransaction = _transactionDataTransfer.GetSuccessTransactionByPartnerToday(SelectedPartner.PartnerId);
         }
 
         public float getTotalWeight(int partnerTypeId, float weightIn, float weightOut)
@@ -853,6 +989,65 @@ namespace ImportExportDesktopApp.ViewModels
             set
             {
                 _partners = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public Partner SelectedPartner
+        {
+            get { return _selectedPartner; }
+            set
+            {
+                _selectedPartner = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public bool IsSlovingExeptionGate1
+        {
+            get { return _isSlovingExeptionGate1; }
+            set
+            {
+                _isSlovingExeptionGate1 = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public bool IsSlovingExeptionGate2
+        {
+            get { return _isSlovingExeptionGate2; }
+            set
+            {
+                _isSlovingExeptionGate2 = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public String CancelSearchVisibility
+        {
+            get { return _cancelSearchVisibility; }
+            set
+            {
+                _cancelSearchVisibility = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public String DisableButtonVisibilityGate1
+        {
+            get { return _disableButtonVisibilityGate1; }
+            set
+            {
+                _disableButtonVisibilityGate1 = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public String DisableButtonVisibilityGate2
+        {
+            get { return _disableButtonVisibilityGate2; }
+            set
+            {
+                _disableButtonVisibilityGate2 = value;
                 NotifyPropertyChanged();
             }
         }

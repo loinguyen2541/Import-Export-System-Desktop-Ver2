@@ -111,9 +111,12 @@ namespace ImportExportDesktopApp.Pages
                     }
                     else if (value.Trim().StartsWith("@getOffScale"))
                     {
-                        processingViewModel.PartnerNameGate1 = null;
-                        processingViewModel.PartnerTypeNameGate1 = null;
-                        processingViewModel.WeightGate1 = "...";
+                        if (!processingViewModel.IsSlovingExeptionGate1)
+                        {
+                            processingViewModel.PartnerNameGate1 = null;
+                            processingViewModel.PartnerTypeNameGate1 = null;
+                            processingViewModel.WeightGate1 = "...";
+                        }
                     }
                     else
                     {
@@ -148,9 +151,12 @@ namespace ImportExportDesktopApp.Pages
                     }
                     else if (value.Trim().StartsWith("@getOffScale"))
                     {
-                        processingViewModel.PartnerNameGate2 = null;
-                        processingViewModel.PartnerTypeNameGate2 = null;
-                        processingViewModel.WeightGate2 = "...";
+                        if (!processingViewModel.IsSlovingExeptionGate2)
+                        {
+                            processingViewModel.PartnerNameGate2 = null;
+                            processingViewModel.PartnerTypeNameGate2 = null;
+                            processingViewModel.WeightGate2 = "...";
+                        }
                     }
                     else
                     {
@@ -164,11 +170,6 @@ namespace ImportExportDesktopApp.Pages
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             this.NavigationService.Navigate(new TransactionListPage());
-        }
-
-        private void ComboBox_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-
         }
     }
 }

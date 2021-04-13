@@ -38,9 +38,9 @@ namespace ImportExportDesktopApp
         public MainWindow()
         {
             InitializeComponent();
-            NotifyService no = new NotifyService();
-            no.NotifyWeb();
-            no.NotifyAndroid();
+            //NotifyService no = new NotifyService();
+            //no.NotifyWeb();
+            //no.NotifyAndroid();
             this.DataContext = new MainViewModel(AppService.Instance.EventAggregator);
             _mainFrame = (Frame)this.FindName("MainFrame");
             if (proccessingPage == null)

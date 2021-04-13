@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,6 +34,19 @@ namespace ImportExportDesktopApp.DataTransfers
         public ObservableCollection<Transaction> GetSuccessTransaction()
         {
             return new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == 1).OrderByDescending(t => t.TimeOut).Take(5));
+        }
+
+        public ObservableCollection<Transaction> GetProcessingTransactionByPartnerToday(int partnerId)
+        {
+            var today = DateTime.Now;
+
+            return new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == 0 && t.PartnerId == partnerId && DbFunctions.TruncateTime(t.CreatedDate) == today.Date).OrderByDescending(t => t.TimeIn).ToList());
+        }
+
+        public ObservableCollection<Transaction> GetSuccessTransactionByPartnerToday(int partnerId)
+        {
+            var today = DateTime.Now;
+            return new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == 1 && t.PartnerId == partnerId && DbFunctions.TruncateTime(t.CreatedDate) == today.Date).OrderByDescending(t => t.TimeOut).ToList());
         }
 
         public Transaction InsertTransaction(Transaction transaction)

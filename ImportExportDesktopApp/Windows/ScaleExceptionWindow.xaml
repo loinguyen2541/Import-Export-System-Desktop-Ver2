@@ -87,7 +87,7 @@
                         FontSize="18"
                         FontWeight="Bold"
                         Foreground="White"
-                        Text="Gate 2" />
+                        Text="{Binding Gate}" />
                     <StackPanel Grid.Row="1" Orientation="Vertical">
                         <TextBlock
                             Margin="0,8,0,16"
@@ -118,6 +118,13 @@
                         HorizontalAlignment="Right"
                         Orientation="Horizontal"
                         Visibility="{Binding Gate2ButtonVisibility}">
+                        <Button
+                            Margin="0,0,8,0"
+                            BorderBrush="Transparent"
+                            Command="{Binding DisableGateCommand}"
+                            CommandParameter="{Binding ElementName=GateNoti}"
+                            Content="Disable"
+                            Visibility="{Binding DisableButtonVisibilityGate}" />
                         <Button
                             Margin="0,0,8,0"
                             BorderBrush="Transparent"
