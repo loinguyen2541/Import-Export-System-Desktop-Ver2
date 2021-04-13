@@ -1,4 +1,5 @@
-﻿using ImportExportDesktopApp.Utils;
+﻿using ImportExportDesktopApp.HttpServices;
+using ImportExportDesktopApp.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,14 +15,18 @@ namespace ImportExportDesktopApp.ViewModels
         private List<Partner> _partners;
         //private QueryParams _paging;
         private List<PartnerType> _types;
+        private Partner _partner;
 
         private bool _isSearch;
-
+        private string _search;
         private PartnerType _selectedType;
+        private String _visibility;
+        private String _errorMessage;
         public Partner TableSelectedItem { get; set; }
         //private PartnerHttpService HttpService;
         private bool _isLoading;
         public ICommand SearchCommand { get; set; }
+        public ICommand AddPartnerCommnand { get; set; }
         public ICommand TableDoubleClickCommand { get; set; }
         public ICommand GetNextPageCommand { get; set; }
         public ICommand GetBeforePageCommand { get; set; }
@@ -43,17 +48,23 @@ namespace ImportExportDesktopApp.ViewModels
             {
                 Init();
             });
-
+            _search = "";
+            _visibility = "Hidden";
+            Partner = new Partner();
             //GetNextPageCommand = new RelayCommand<QueryParams>((p) => { return true; }, GetNextPage);
             //GetBeforePageCommand = new RelayCommand<QueryParams>((p) => { return true; }, GetBeforePage);
             //TableDoubleClickCommand = new RelayCommand<object>((p) => { return true; }, p =>
             //{
             //    OpenDialog();
             //});
-            //SearchCommand = new RelayCommand<object>((p) => { return true; }, p =>
-            //{
-            //    SearchSchedules();
-            //});
+            SearchCommand = new RelayCommand<object>((p) => { return true; }, p =>
+            {
+                SearchSchedules();
+            });
+            AddPartnerCommnand = new RelayCommand<object>((p) => { return true; }, p =>
+            {
+                AddPartner();
+            });
             //RefreshCommand = new RelayCommand<object>((p) => { return true; }, p =>
             //{
             //    Refresh();
@@ -94,9 +105,46 @@ namespace ImportExportDesktopApp.ViewModels
             //window.ShowDialog();
         }
 
+        private void AddPartner()
+        {
+            bool check = CheckValid();
+            if (check)
+            {
+                this.ie.Partners.Add(Partner);
+                this.ie.SaveChangesAsync();
+                MessageBoxResult result = MessageBox.Show("Add Partner Success", "Confirmation");
+            }
+        }
+
+        private bool CheckValid()
+        {
+            if(Partner != null)
+            {
+                if(Partner.DisplayName == null || Partner.Email == null || Partner.PhoneNumber == null)
+                {
+                    Visibility = "Visible";
+                    ErrorMessage = "Some fields can not be null";
+                    return false;
+                }
+                if (Partner.DisplayName.Length == 0 || Partner.Email.Length == 0 || Partner.PhoneNumber.Length == 0)
+                {
+                    Visibility = "Visible";
+                    ErrorMessage = "Some fields can not be null";
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            Visibility = "Visible";
+            ErrorMessage = "Some fields can not be null";
+            return false;
+        }
         public void SearchSchedules()
         {
             IsSearch = true;
+            int type = 0;
             //Paging.Page = 1;
             //if (SelectedType.PartnerTypeId != 0)
             //{
@@ -108,6 +156,7 @@ namespace ImportExportDesktopApp.ViewModels
             //}
             //Pagination<Partner> partners = HttpService.SearchPartner(Paging).Result;
             //RefreshTableAndLabel(partners);
+            Partners = this.ie.Partners.Where( p => p.PartnerTypeId == SelectedType.PartnerTypeId && p.DisplayName.Contains(Search)).ToList();
         }
 
         //public void GetNextPage(QueryParams query)
@@ -285,6 +334,46 @@ namespace ImportExportDesktopApp.ViewModels
             set
             {
                 _types = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public String Search
+        {
+            get { return _search; }
+            set
+            {
+                _search = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public String Visibility
+        {
+            get { return _visibility; }
+            set
+            {
+                _visibility = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public String ErrorMessage
+        {
+            get { return _errorMessage; }
+            set
+            {
+                _errorMessage = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public Partner Partner
+        {
+            get { return _partner; }
+            set
+            {
+                _partner = value;
                 NotifyPropertyChanged();
             }
         }

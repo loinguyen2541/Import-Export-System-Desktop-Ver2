@@ -55,10 +55,10 @@ namespace ImportExportDesktopApp.ViewModels
             //_txtPageInfo = String.Format("Page {0} of {1}", ListInventory.Page, ListInventory.TotalPage);
             //CheckPage();
 
-            //SearchCommand = new RelayCommand<object>((p) => { return true; }, p =>
-            //{
-            //    SearchInventory();
-            //});
+            SearchCommand = new RelayCommand<object>((p) => { return true; }, p =>
+            {
+                SearchInventory();
+            });
             _selectedInventory = new InventoryDisplay();
             DoubleClickCommand = new RelayCommand<InventoryDisplay>((p) => { return true; }, p =>
             {
@@ -92,6 +92,24 @@ namespace ImportExportDesktopApp.ViewModels
                 }
             }
         }
+
+        private void SearchInventory()
+        {
+            DateTime startDate, endDate;
+            if (DateTime.TryParse(FromDate, out startDate) && DateTime.TryParse(ToDate, out endDate))
+            {
+                List<Inventory> inventory = this.ie.Inventories.Where(i => startDate <= i.RecordedDate && i.RecordedDate <= endDate).ToList();
+                if (inventory != null && inventory.Count!=0)
+                {
+                    foreach (var item in inventory)
+                    {
+
+                        ListInventory.Add(GetDisplayInventory(item));
+                    }
+                }
+            }
+        }
+
         private InventoryDisplay GetDisplayInventory(Inventory item)
         {
             InventoryDisplay temp = new InventoryDisplay();

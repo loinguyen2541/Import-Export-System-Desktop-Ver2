@@ -33,11 +33,7 @@ namespace ImportExportDesktopApp.Pages
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //if (addProvider == null)
-            //{
-            //    addProvider = new AddProvider();
-            //}
-            //this.NavigationService.Navigate(addProvider);
+            this.NavigationService.Navigate(new CreatePartner());
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
