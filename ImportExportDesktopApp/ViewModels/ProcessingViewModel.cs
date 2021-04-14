@@ -25,6 +25,12 @@ using System.Windows.Input;
 
 namespace ImportExportDesktopApp.ViewModels
 {
+    //
+    //
+    // Update transction chua update inventory
+    //
+    //
+    //
     class ProcessingViewModel : BaseNotifyPropertyChanged
     {
         private String YELLOW_BG = "#FFC107";
@@ -139,7 +145,7 @@ namespace ImportExportDesktopApp.ViewModels
             });
             CancelGate2Command = new RelayCommand<object>(p => { return true; }, p =>
             {
-                ResetAcceptContent(new ScaleExeptionAction(EGate.Gate2, EScaleExceptionAction.Cancel));
+                CancelTransaction(EGate.Gate2, new ScaleExeptionAction(EGate.Gate2, EScaleExceptionAction.Cancel));
             });
             CreateTransactionGate1Command = new RelayCommand<object>(p => { return true; }, p =>
             {
@@ -147,7 +153,7 @@ namespace ImportExportDesktopApp.ViewModels
             });
             CancelGate1Command = new RelayCommand<object>(p => { return true; }, p =>
             {
-                ResetAcceptContent(new ScaleExeptionAction(EGate.Gate1, EScaleExceptionAction.Cancel));
+                CancelTransaction(EGate.Gate1, new ScaleExeptionAction(EGate.Gate1, EScaleExceptionAction.Cancel));
             });
             SearchByPartnerCommand = new RelayCommand<object>(p => { return true; }, p =>
             {
@@ -189,7 +195,7 @@ namespace ImportExportDesktopApp.ViewModels
                 Transaction transaction = _transactionDataTransfer.IsProcessing(transactionScale.Indentify);
                 if (transaction == null)
                 {
-                    CreateTransaction(transactionScale, partner, schedule);
+                    CreateTransaction(transactionScale, partner, schedule, false);
                     return true;
                 }
                 else
@@ -199,7 +205,7 @@ namespace ImportExportDesktopApp.ViewModels
                         return false;
                     }
 
-                    Transaction newTransaction = UpdateTransaction(transaction, transactionScale, partner, schedule);
+                    Transaction newTransaction = UpdateTransaction(transaction, transactionScale, partner, schedule, true);
                     if (newTransaction == null)
                     {
                         return false;
@@ -269,7 +275,7 @@ namespace ImportExportDesktopApp.ViewModels
                         AddException(transactionScale, partner, schedule, EScaleExceptionType.WrongProcess);
                         return false;
                     }
-                    CreateTransaction(transactionScale, partner, schedule);
+                    CreateTransaction(transactionScale, partner, schedule, false);
                     Task.Run(new Action(() =>
                     {
                         if (transactionScale.Device == EDeviceType.Android)
@@ -287,7 +293,7 @@ namespace ImportExportDesktopApp.ViewModels
                         return false;
                     }
 
-                    Transaction newTransaction = UpdateTransaction(transaction, transactionScale, partner, schedule);
+                    Transaction newTransaction = UpdateTransaction(transaction, transactionScale, partner, schedule, true);
                     if (newTransaction == null)
                     {
                         return false;
@@ -326,6 +332,7 @@ namespace ImportExportDesktopApp.ViewModels
                         {
                             _notifyService.NotifyAndroid();
                         }
+                        _notifyService.NotifyWeb();
                     }));
                     return true;
                 }
@@ -374,6 +381,8 @@ namespace ImportExportDesktopApp.ViewModels
                                 exceptionType == EScaleExceptionType.WrongProcess ? "Wrong process!! This partner has not passed through gate 1."
                               : exceptionType == EScaleExceptionType.Duplicate ? "Partner is requesting to cancel the old transaction and create a new one !!!"
                               : exceptionType == EScaleExceptionType.WrongTransactionType ? "Wrong partner type"
+                              : exceptionType == EScaleExceptionType.OverWeightImport ? "Storage capacity is full!!"
+                              : exceptionType == EScaleExceptionType.OverWeightExport ? "Storage is out of stock!!!"
                               : "Normal";
                 if (exceptionType == EScaleExceptionType.WrongTransactionType)
                 {
@@ -395,6 +404,8 @@ namespace ImportExportDesktopApp.ViewModels
                 MessageGate1 =
                                 exceptionType == EScaleExceptionType.Duplicate ? "Partner is requesting to cancel the old transaction and create a new one !!!"
                               : exceptionType == EScaleExceptionType.WrongTransactionType ? "Wrong partner type"
+                              : exceptionType == EScaleExceptionType.OverWeightImport ? "Storage capacity is full!!"
+                              : exceptionType == EScaleExceptionType.OverWeightExport ? "Storage is out of stock!!!"
                               : "Normal";
                 if (exceptionType == EScaleExceptionType.WrongTransactionType)
                 {
@@ -434,7 +445,15 @@ namespace ImportExportDesktopApp.ViewModels
                 {
                     _transactionDataTransfer.DisableAll(TransactionScaleGate1.Indentify);
                 }
-                CreateTransaction(TransactionScaleGate1, PartnerGate1, ScheduleGate1);
+                if (_exceptionTypeGate1 == EScaleExceptionType.OverWeightImport || _exceptionTypeGate1 == EScaleExceptionType.OverWeightExport)
+                {
+                    Transaction transaction = _transactionDataTransfer.IsProcessing(TransactionScaleGate1.Indentify);
+                    UpdateTransaction(transaction, TransactionScaleGate1, PartnerGate1, ScheduleGate1, false);
+                }
+                else
+                {
+                    CreateTransaction(TransactionScaleGate1, PartnerGate1, ScheduleGate1, false);
+                }
             }
             Task.Run(new Action(() =>
             {
@@ -473,7 +492,16 @@ namespace ImportExportDesktopApp.ViewModels
                 {
                     _transactionDataTransfer.DisableAll(TransactionScaleGate2.Indentify);
                 }
-                CreateTransaction(TransactionScaleGate2, PartnerGate2, ScheduleGate2);
+
+                if (_exceptionTypeGate2 == EScaleExceptionType.OverWeightImport || _exceptionTypeGate2 == EScaleExceptionType.OverWeightExport)
+                {
+                    Transaction transaction = _transactionDataTransfer.IsProcessing(TransactionScaleGate2.Indentify);
+                    UpdateTransaction(transaction, TransactionScaleGate2, PartnerGate2, ScheduleGate2, false);
+                }
+                else
+                {
+                    CreateTransaction(TransactionScaleGate2, PartnerGate2, ScheduleGate2, false);
+                }
             }
             Task.Run(new Action(() =>
             {
@@ -524,7 +552,25 @@ namespace ImportExportDesktopApp.ViewModels
             UpdateTable();
         }
 
-        public void CreateTransaction(TransactionScale transactionScale, Partner partner, Schedule schedule)
+        public void CancelTransaction(EGate gate, ScaleExeptionAction exceptionAction)
+        {
+            if (gate == EGate.Gate1)
+            {
+                CreateTransaction(TransactionScaleGate1, PartnerGate1, ScheduleGate1, true);
+            }
+            else if (gate == EGate.Gate2)
+            {
+                if (gate == EGate.Gate1)
+                {
+                    CreateTransaction(TransactionScaleGate2, PartnerGate2, ScheduleGate2, true);
+                }
+            }
+
+            ResetAcceptContent(exceptionAction);
+
+        }
+
+        public void CreateTransaction(TransactionScale transactionScale, Partner partner, Schedule schedule, bool isCancel)
         {
             Transaction transaction = new Transaction();
             transaction.PartnerId = partner.PartnerId;
@@ -544,11 +590,11 @@ namespace ImportExportDesktopApp.ViewModels
             transaction.WeightIn = transactionScale.Weight;
             transaction.WeightOut = 0;
             transaction.IdentificationCode = transactionScale.Indentify;
-            transaction.TransactionStatus = 0;
+            transaction.TransactionStatus = isCancel ? 2 : 0;
             transaction.TransactionType = partner.PartnerTypeId == 1 ? 1 : 0;
             transaction.Gate = transactionScale.Gate.ToString();
             _transactionDataTransfer.InsertTransaction(transaction);
-            if (transactionScale.Device == EDeviceType.Android)
+            if (transactionScale.Device == EDeviceType.Android && isCancel == false)
             {
                 _notifyService.NotifyAndroid();
             }
@@ -558,7 +604,7 @@ namespace ImportExportDesktopApp.ViewModels
         {
             transaction.PartnerId = partner.PartnerId;
             transaction.TransactionType = transaction.TransactionType = partner.PartnerTypeId == 1 ? 1 : 0;
-            transaction = UpdateTransaction(transaction, transactionScale, partner, schedule);
+            transaction = UpdateTransaction(transaction, transactionScale, partner, schedule, true);
             if (transaction == null)
             {
                 return false;
@@ -567,19 +613,22 @@ namespace ImportExportDesktopApp.ViewModels
             {
                 UpdateGood(partner, transaction);
             }
-            if (transactionScale.Device == EDeviceType.Android)
+            Task.Run(new Action(() =>
             {
-                _notifyService.NotifyAndroid();
-            }
+                if (transactionScale.Device == EDeviceType.Android)
+                {
+                    _notifyService.NotifyAndroid();
+                    _notifyService.NotifyWeb();
+                }
+            }));
             return true;
         }
 
-        public Transaction UpdateTransaction(Transaction transaction, TransactionScale transactionScale, Partner partner, Schedule schedule)
+        public Transaction UpdateTransaction(Transaction transaction, TransactionScale transactionScale, Partner partner, Schedule schedule, bool isCheckWeight)
         {
             float goodInventory = _goodDataTransfer.getInventory();
-            if (!CheckWeight(partner.PartnerTypeId, transaction.WeightIn, transactionScale.Weight, goodInventory))
+            if (isCheckWeight == true && !CheckWeight(transaction, partner, schedule, transactionScale, goodInventory))
             {
-                AddException(transactionScale, partner, schedule, EScaleExceptionType.WrongTransactionType);
                 return null;
             }
             transaction.WeightOut = transactionScale.Weight;
@@ -704,30 +753,34 @@ namespace ImportExportDesktopApp.ViewModels
         ///  else 
         ///     return true
         /// </returns>
-        public bool CheckWeight(int partnerTypeId, float weightIn, float weightOut, float goodInventory)
+        public bool CheckWeight(Transaction transaction, Partner partner, Schedule schedule, TransactionScale transactionScale, float goodInventory)
         {
             // Export
-            if (partnerTypeId == 1)
+            if (partner.PartnerTypeId == 1)
             {
-                if (weightIn > weightOut)
+                if (transaction.WeightIn > transactionScale.Weight)
                 {
+                    AddException(transactionScale, partner, schedule, EScaleExceptionType.WrongTransactionType);
                     return false;
                 }
-                else if ((weightOut - weightIn) > goodInventory)
+                else if ((transactionScale.Weight - transaction.WeightIn) > goodInventory)
                 {
+                    AddException(transactionScale, partner, schedule, EScaleExceptionType.OverWeightExport);
                     return false;
                 }
             }
 
             //Import
-            else if (partnerTypeId == 2)
+            else if (partner.PartnerId == 2)
             {
-                if (weightIn < weightOut)
+                if (transaction.WeightIn < transactionScale.Weight)
                 {
+                    AddException(transactionScale, partner, schedule, EScaleExceptionType.WrongTransactionType);
                     return false;
                 }
-                else if ((weightIn - weightOut) > (_storageCapacity - goodInventory))
+                else if ((transaction.WeightIn - transactionScale.Weight) > (_storageCapacity - goodInventory))
                 {
+                    AddException(transactionScale, partner, schedule, EScaleExceptionType.OverWeightImport);
                     return false;
                 }
             }
@@ -767,8 +820,11 @@ namespace ImportExportDesktopApp.ViewModels
         }
         public void UpdateTable()
         {
-            ProcessingTransaction = _transactionDataTransfer.GetProcessingTransaction();
-            SuccessTransaction = _transactionDataTransfer.GetSuccessTransaction();
+            if (CancelSearchVisibility == EVisibility.Hidden.ToString())
+            {
+                ProcessingTransaction = _transactionDataTransfer.GetProcessingTransaction();
+                SuccessTransaction = _transactionDataTransfer.GetSuccessTransaction();
+            }
         }
 
         public ObservableCollection<Transaction> ProcessingTransaction

@@ -28,7 +28,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>4</ApplicationRevision>
+    <ApplicationRevision>5</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -122,10 +122,12 @@
     </Compile>
     <Compile Include="AppServices.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Converters\DateConverter.cs" />
     <Compile Include="Converters\PartnerTypesConverter.cs" />
     <Compile Include="Converters\RowIndexConverter.cs" />
     <Compile Include="Converters\StatusColor.cs" />
     <Compile Include="Converters\StatusColorConverter.cs" />
+    <Compile Include="Converters\TimeConverter.cs" />
     <Compile Include="Converters\TransactionStatusConverter.cs" />
     <Compile Include="DataTransfers\CardDataTransfer.cs" />
     <Compile Include="DataTransfers\DataContext.cs" />

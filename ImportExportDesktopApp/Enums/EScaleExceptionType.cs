@@ -15,6 +15,6 @@ namespace ImportExportDesktopApp.Enums
 {
     public enum EScaleExceptionType
     {
-        WrongProcess, Duplicate, WrongTransactionType
+        WrongProcess, Duplicate, WrongTransactionType, OverWeightExport, OverWeightImport
     }
 }

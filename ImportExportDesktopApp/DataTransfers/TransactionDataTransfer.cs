@@ -28,12 +28,12 @@ namespace ImportExportDesktopApp.DataTransfers
 
         public ObservableCollection<Transaction> GetProcessingTransaction()
         {
-            return new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == 0).OrderByDescending(t => t.TimeIn).Take(5));
+            return new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == 0).OrderByDescending(t => t.TimeIn).Take(10));
         }
 
         public ObservableCollection<Transaction> GetSuccessTransaction()
         {
-            return new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == 1).OrderByDescending(t => t.TimeOut).Take(5));
+            return new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == 1).OrderByDescending(t => t.TimeOut).Take(10));
         }
 
         public ObservableCollection<Transaction> GetProcessingTransactionByPartnerToday(int partnerId)
@@ -93,6 +93,7 @@ namespace ImportExportDesktopApp.DataTransfers
             foreach (var item in transactions)
             {
                 item.TransactionStatus = 2;
+                item.TimeOut = DateTime.Now;
                 ie.Entry(item).State = EntityState.Modified;
             }
         }

@@ -203,16 +203,31 @@ namespace ImportExportDesktopApp.ViewModels
             {
                 return false;
             }
+            else
+            {
+                UpdateGood(partner, transaction);
+            }
             if (transactionScale.Device == EDeviceType.Android)
             {
                 _notifyService.NotifyAndroid();
             }
+            _notifyService.NotifyWeb();
             return true;
         }
 
         public Transaction UpdateTransaction(Transaction transaction, TransactionScale transactionScale, Partner partner, Schedule schedule)
         {
             float goodInventory = _goodDataTransfer.getInventory();
+            if (!CheckWeight(partner.PartnerTypeId, transaction.WeightIn, transactionScale.Weight, goodInventory))
+            {
+                _notificationManager.Show(new NotificationContent
+                {
+                    Title = "Notification",
+                    Message = "Cannot complete trasaction for" + PartnerGate.DisplayName + " please check inventory",
+                    Type = NotificationType.Error
+                });
+                return null;
+            }
             transaction.WeightOut = transactionScale.Weight;
             transaction.TimeOut = DateTime.Now;
             transaction.TransactionStatus = 1;
@@ -238,7 +253,42 @@ namespace ImportExportDesktopApp.ViewModels
             _transactionDataTransfer.Save();
             return transaction;
         }
+        public bool CheckWeight(int partnerTypeId, float weightIn, float weightOut, float goodInventory)
+        {
+            // Export
+            if (partnerTypeId == 1)
+            {
+                if (weightIn > weightOut)
+                {
+                    return false;
+                }
+                else if ((weightOut - weightIn) > goodInventory)
+                {
+                    return false;
+                }
+            }
 
+            //Import
+            else if (partnerTypeId == 2)
+            {
+                if (weightIn < weightOut)
+                {
+                    return false;
+                }
+                else if ((weightIn - weightOut) > (_storageCapacity - goodInventory))
+                {
+                    return false;
+                }
+            }
+
+            // Other
+            else
+            {
+                return false;
+            }
+
+            return true;
+        }
         void UpdateGood(Partner partner, Transaction newTransaction)
         {
             if (partner.PartnerTypeId == 1)
@@ -308,6 +358,10 @@ namespace ImportExportDesktopApp.ViewModels
         public void Cancel(Window window)
         {
             _eventAggregator.GetEvent<ReslovedScaleExceptionEvent>().Publish(new ScaleExeptionAction(TransactionScaleGate.Gate, EScaleExceptionAction.Cancel));
+            if (ExceptionType != EScaleExceptionType.WrongTransactionType)
+            {
+                CreateTransaction(TransactionScaleGate, PartnerGate, ScheduleGate, ExceptionType);
+            }
             if (window != null)
             {
                 window.Close();

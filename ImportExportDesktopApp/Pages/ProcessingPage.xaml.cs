@@ -76,7 +76,7 @@ namespace ImportExportDesktopApp.Pages
             {
                 try
                 {
-                    port1.PortName = "COM7";
+                    port1.PortName = "COM8";
                     port1.BaudRate = BaudRate;
                     port1.Open();
                 }

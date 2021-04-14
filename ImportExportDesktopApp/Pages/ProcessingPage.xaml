@@ -20,6 +20,8 @@
     <Page.Resources>
         <converter:TransactionStatusConverter x:Key="TransactionTypeConverter" />
         <converter:RowIndexConverter x:Key="RowIndexConverter" />
+        <converter:TimeConverter x:Key="TimeConverter" />
+        <converter:DateConverter x:Key="DateConverter" />
     </Page.Resources>
     <Border Padding="16">
         <Grid>
@@ -200,6 +202,15 @@
                                     IsHitTestVisible="False"
                                     IsReadOnly="True"
                                     ItemsSource="{Binding ProcessingTransaction}">
+                                    <DataGrid.RowStyle>
+                                        <Style TargetType="DataGridRow">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding TransactionType}" Value="0">
+                                                    <Setter Property="Background" Value="#f1f6f9" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </DataGrid.RowStyle>
                                     <DataGrid.Columns>
                                         <DataGridTextColumn
                                             Width="60"
@@ -342,6 +353,15 @@
                                 IsHitTestVisible="False"
                                 IsReadOnly="True"
                                 ItemsSource="{Binding SuccessTransaction}">
+                                <DataGrid.RowStyle>
+                                    <Style TargetType="DataGridRow">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding TransactionType}" Value="0">
+                                                <Setter Property="Background" Value="#f1f6f9" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.RowStyle>
                                 <DataGrid.Columns>
                                     <DataGridTextColumn
                                         Width="60"
@@ -350,8 +370,14 @@
                                     <DataGridTextColumn Binding="{Binding Partner.DisplayName}" Header="Partner" />
                                     <DataGridTextColumn Binding="{Binding WeightIn}" Header="Weight in" />
                                     <DataGridTextColumn Binding="{Binding WeightOut}" Header="Weight out" />
-                                    <DataGridTextColumn Binding="{Binding Total}" Header="Total" />
+                                    <DataGridTextColumn
+                                        Binding="{Binding Total}"
+                                        FontWeight="Bold"
+                                        Header="Total" />
                                     <DataGridTextColumn Binding="{Binding TransactionType, Converter={StaticResource TransactionTypeConverter}}" Header="Type" />
+                                    <DataGridTextColumn Binding="{Binding TimeIn, Converter={StaticResource DateConverter}}" Header="Date" />
+                                    <DataGridTextColumn Binding="{Binding TimeIn, Converter={StaticResource TimeConverter}}" Header="Time In" />
+                                    <DataGridTextColumn Binding="{Binding TimeOut, Converter={StaticResource TimeConverter}}" Header="Time Out" />
                                 </DataGrid.Columns>
                             </DataGrid>
                         </ScrollViewer>
