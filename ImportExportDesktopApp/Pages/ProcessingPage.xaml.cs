@@ -76,7 +76,7 @@ namespace ImportExportDesktopApp.Pages
             {
                 try
                 {
-                    port1.PortName = "COM7";
+                    port1.PortName = "COM8";
                     port1.BaudRate = BaudRate;
                     port1.Open();
                 }
@@ -98,7 +98,7 @@ namespace ImportExportDesktopApp.Pages
                     {
                         String[] values = value.Split('|');
                         TransactionScale transScale = JsonConvert.DeserializeObject<TransactionScale>(values[1]);
-                        bool result = processingViewModel.CheckCard(transScale);
+                        bool result = processingViewModel.CheckCardGate2(transScale);
                         if (result)
                         {
                             processingViewModel.UpdateTable();
@@ -108,13 +108,15 @@ namespace ImportExportDesktopApp.Pages
                         {
                             port1.WriteLine("@response|Fail");
                         }
-
                     }
                     else if (value.Trim().StartsWith("@getOffScale"))
                     {
-                        processingViewModel.PartnerNameGate1 = null;
-                        processingViewModel.PartnerTypeNameGate1 = null;
-                        processingViewModel.WeightGate1 = "...";
+                        if (!processingViewModel.IsSlovingExeptionGate1)
+                        {
+                            processingViewModel.PartnerNameGate1 = null;
+                            processingViewModel.PartnerTypeNameGate1 = null;
+                            processingViewModel.WeightGate1 = "...";
+                        }
                     }
                     else
                     {
@@ -136,7 +138,7 @@ namespace ImportExportDesktopApp.Pages
                     {
                         String[] values = value.Split('|');
                         TransactionScale transScale = JsonConvert.DeserializeObject<TransactionScale>(values[1]);
-                        bool result = processingViewModel.CheckCard(transScale);
+                        bool result = processingViewModel.CheckCardGate2(transScale);
                         if (result)
                         {
                             processingViewModel.UpdateTable();
@@ -149,9 +151,12 @@ namespace ImportExportDesktopApp.Pages
                     }
                     else if (value.Trim().StartsWith("@getOffScale"))
                     {
-                        processingViewModel.PartnerNameGate2 = null;
-                        processingViewModel.PartnerTypeNameGate2 = null;
-                        processingViewModel.WeightGate2 = "...";
+                        if (!processingViewModel.IsSlovingExeptionGate2)
+                        {
+                            processingViewModel.PartnerNameGate2 = null;
+                            processingViewModel.PartnerTypeNameGate2 = null;
+                            processingViewModel.WeightGate2 = "...";
+                        }
                     }
                     else
                     {

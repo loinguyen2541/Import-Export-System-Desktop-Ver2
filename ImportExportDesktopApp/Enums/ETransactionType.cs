@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 /**
 * @author Loi Nguyen
 *
-* @date - 4/8/2021 12:08:24 AM 
+* @date - 4/13/2021 2:59:23 AM 
 */
 
 namespace ImportExportDesktopApp.Enums
 {
-    public enum EDeviceType
+    enum ETransactionType
     {
-        Card, Android
+        Import, Export
     }
 }

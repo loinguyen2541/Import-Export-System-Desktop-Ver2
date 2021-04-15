@@ -3,10 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
-namespace ImportExportDesktopApp.HttpServices
+/**
+* @author Loi Nguyen
+*
+* @date - 4/10/2021 10:54:29 AM 
+*/
+
+namespace ImportExportDesktopApp.Commands
 {
-    class RelayCommand<T> : ICommand
+    public class RelayCommand<T> : ICommand
     {
         private readonly Predicate<T> _canExecute;
         private readonly Action<T> _execute;

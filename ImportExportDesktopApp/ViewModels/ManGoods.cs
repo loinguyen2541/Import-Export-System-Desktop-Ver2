@@ -1,4 +1,5 @@
-﻿using ImportExportDesktopApp.DisplayModel;
+﻿using ImportExportDesktopApp.Commands;
+using ImportExportDesktopApp.DisplayModel;
 using ImportExportDesktopApp.HttpServices;
 using System;
 using System.Collections.Generic;
@@ -33,7 +34,7 @@ namespace ImportExportDesktopApp.ViewModels
                 temp.GoodsId = item.GoodsId;
                 temp.GoodName = item.GoodName;
                 temp.QuantityOfInventory = item.QuantityOfInventory;
-                if(item.GoodsStatus == 0)
+                if (item.GoodsStatus == 0)
                 {
                     temp.GoodsStatus = "Available";
                 }

@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 /**
 * @author Loi Nguyen
 *
-* @date - 4/8/2021 12:08:24 AM 
+* @date - 4/11/2021 5:25:57 PM 
 */
 
 namespace ImportExportDesktopApp.Enums
 {
-    public enum EDeviceType
+    public enum EScaleExceptionAction
     {
-        Card, Android
+        Accept, Cancel
     }
 }

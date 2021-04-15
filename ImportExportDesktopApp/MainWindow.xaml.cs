@@ -12,8 +12,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
+using ImportExportDesktopApp.Events;
+using ImportExportDesktopApp.HttpServices;
 using ImportExportDesktopApp.Pages;
+using ImportExportDesktopApp.ScaleModels;
 using ImportExportDesktopApp.ViewModels;
+using ImportExportDesktopApp.Windows;
 
 namespace ImportExportDesktopApp
 {
@@ -22,6 +27,8 @@ namespace ImportExportDesktopApp
     /// </summary>
     public partial class MainWindow : Window
     {
+        private String PROCESSING_PAGE_NAME = "Processing_Page";
+
         private Frame _mainFrame;
         private ManageInventoriesScreen manageInventoriesScreen;
         private ManagePartnersScreen manPartnersScreen;
@@ -31,13 +38,32 @@ namespace ImportExportDesktopApp
         public MainWindow()
         {
             InitializeComponent();
+            //NotifyService no = new NotifyService();
+            //no.NotifyWeb();
+            //no.NotifyAndroid();
             this.DataContext = new MainViewModel(AppService.Instance.EventAggregator);
             _mainFrame = (Frame)this.FindName("MainFrame");
             if (proccessingPage == null)
             {
                 proccessingPage = new ProcessingPage();
             }
-            _mainFrame.Navigate(new ManageGoods());
+            _mainFrame.Navigate(proccessingPage);
+            AppService.Instance.EventAggregator.GetEvent<ScaleExceptionEvent>().Subscribe(HandleScaleEvent);
+        }
+
+
+
+        private void HandleScaleEvent(ScaleExeption scaleExeption)
+        {
+            if (!(_mainFrame.Content as Page).Name.Equals(PROCESSING_PAGE_NAME))
+            {
+                App.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
+                {
+                    var scaleExceptionWindow = new ScaleExceptionWindow(scaleExeption);
+                    scaleExceptionWindow.Show();
+                    scaleExceptionWindow.Topmost = true;
+                }));
+            }
         }
 
         public void Navigate(string value)

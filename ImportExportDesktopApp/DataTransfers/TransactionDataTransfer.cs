@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,12 +28,25 @@ namespace ImportExportDesktopApp.DataTransfers
 
         public ObservableCollection<Transaction> GetProcessingTransaction()
         {
-            return new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == 0).OrderByDescending(t => t.TimeIn).Take(5));
+            return new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == 0).OrderByDescending(t => t.TimeIn).Take(10));
         }
 
         public ObservableCollection<Transaction> GetSuccessTransaction()
         {
-            return new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == 1).OrderByDescending(t => t.TimeOut).Take(5));
+            return new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == 1).OrderByDescending(t => t.TimeOut).Take(10));
+        }
+
+        public ObservableCollection<Transaction> GetProcessingTransactionByPartnerToday(int partnerId)
+        {
+            var today = DateTime.Now;
+
+            return new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == 0 && t.PartnerId == partnerId && DbFunctions.TruncateTime(t.CreatedDate) == today.Date).OrderByDescending(t => t.TimeIn).ToList());
+        }
+
+        public ObservableCollection<Transaction> GetSuccessTransactionByPartnerToday(int partnerId)
+        {
+            var today = DateTime.Now;
+            return new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == 1 && t.PartnerId == partnerId && DbFunctions.TruncateTime(t.CreatedDate) == today.Date).OrderByDescending(t => t.TimeOut).ToList());
         }
 
         public Transaction InsertTransaction(Transaction transaction)
@@ -65,11 +79,22 @@ namespace ImportExportDesktopApp.DataTransfers
         {
             if (type == -1)
             {
-                return new ObservableCollection<Transaction>(ie.Transactions.OrderByDescending(t => t.CreatedDate).Take(10));
+                return new ObservableCollection<Transaction>(ie.Transactions.OrderByDescending(t => t.CreatedDate).Take(10).Skip((page - 1) * 10));
             }
             else
             {
-                return new ObservableCollection<Transaction>(ie.Transactions.OrderByDescending(t => t.CreatedDate).Where(t => t.TransactionType == type).Take(10));
+                return new ObservableCollection<Transaction>(ie.Transactions.OrderByDescending(t => t.CreatedDate).Where(t => t.TransactionType == type).Take(10).Skip((page - 1) * 10));
+            }
+        }
+
+        public void DisableAll(String identificationCode)
+        {
+            List<Transaction> transactions = ie.Transactions.Where(t => t.IdentificationCode == identificationCode && t.TransactionStatus == 0).ToList();
+            foreach (var item in transactions)
+            {
+                item.TransactionStatus = 2;
+                item.TimeOut = DateTime.Now;
+                ie.Entry(item).State = EntityState.Modified;
             }
         }
 

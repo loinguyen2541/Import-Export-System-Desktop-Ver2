@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 /**
 * @author Loi Nguyen
 *
-* @date - 4/8/2021 12:08:24 AM 
+* @date - 4/12/2021 11:46:12 PM 
 */
 
 namespace ImportExportDesktopApp.Enums
 {
-    public enum EDeviceType
+    enum EBtnHandleContent
     {
-        Card, Android
+        Accept, Edit
     }
 }

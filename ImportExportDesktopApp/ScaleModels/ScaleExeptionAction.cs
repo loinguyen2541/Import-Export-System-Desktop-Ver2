@@ -9,17 +9,20 @@ using System.Threading.Tasks;
 /**
 * @author Loi Nguyen
 *
-* @date - 4/8/2021 12:07:08 AM 
+* @date - 4/11/2021 9:22:10 PM 
 */
 
 namespace ImportExportDesktopApp.ScaleModels
 {
-    public class TransactionScale
+    class ScaleExeptionAction
     {
-        public EDeviceType Device { get; set; }
+        public ScaleExeptionAction(EGate gate, EScaleExceptionAction action)
+        {
+            Gate = gate;
+            Action = action;
+        }
+
         public EGate Gate { get; set; }
-        public String Indentify { get; set; }
-        public int PartnerId { get; set; }
-        public float Weight { get; set; }
+        public EScaleExceptionAction Action { get; set; }
     }
 }

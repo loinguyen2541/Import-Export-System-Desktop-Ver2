@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 /**
 * @author Loi Nguyen
 *
-* @date - 4/8/2021 12:08:24 AM 
+* @date - 4/11/2021 3:05:42 PM 
 */
 
 namespace ImportExportDesktopApp.Enums
 {
-    public enum EDeviceType
+    enum EVisibility
     {
-        Card, Android
+        Visible, Hidden
     }
 }

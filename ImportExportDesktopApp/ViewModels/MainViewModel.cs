@@ -44,9 +44,9 @@ namespace ImportExportDesktopApp.ViewModels
             _goodDataTransfer = new GoodDataTransfer();
             _capacity = _systemCongifDataTransfer.GetStorageCappacity();
             GetInventory();
-            ea.GetEvent<UpdateInventoryEvent>().Subscribe(HandleEvent);
+            ea.GetEvent<UpdateInventoryEvent>().Subscribe(HandleInventoryEvent);
         }
-        private void HandleEvent(String value)
+        private void HandleInventoryEvent(String value)
         {
             float inventory = float.Parse(value.Trim());
             if (inventory < (_capacity * 0.2))
@@ -69,6 +69,7 @@ namespace ImportExportDesktopApp.ViewModels
             Inventory = Math.Round(inventory, 1) + " kg";
             Available = Math.Round(available, 1) + " kg";
         }
+
         public void GetInventory()
         {
             float inventory = _goodDataTransfer.getInventory();

@@ -4,13 +4,14 @@
     xmlns:local="clr-namespace:ImportExportDesktopApp.Resources"
     xmlns:viewmodel="clr-namespace:ImportExportDesktopApp.ViewModels">
     <viewmodel:MainViewModel x:Key="MainVM" />
-    <viewmodel:ManPartnersViewModel x:Key="ManPartner"/>
-    <viewmodel:InventoryDetailViewModel x:Key="InventoryDetail"/>
-    <viewmodel:ManGoods x:Key="ManGoods"/>
-    <viewmodel:ManSchedulesViewModel x:Key="ManSchedule"/>
-    <viewmodel:ManInventoriesViewModel x:Key="ManInventory"/>
+    <viewmodel:ManPartnersViewModel x:Key="ManPartner" />
+    <viewmodel:InventoryDetailViewModel x:Key="InventoryDetail" />
+    <viewmodel:ManGoods x:Key="ManGoods" />
+    <viewmodel:ManSchedulesViewModel x:Key="ManSchedule" />
+    <viewmodel:ManInventoriesViewModel x:Key="ManInventory" />
     <viewmodel:ProcessingViewModel x:Key="ProcessingVM" />
     <viewmodel:TransactionListViewModel x:Key="TransactionListVM" />
+    <viewmodel:ScaleExceptionViewModel x:Key="ScaleExceptionVM" />
     <!--  Colors  -->
     <Brush x:Key="Red">#F44336</Brush>
     <Brush x:Key="Blue">#2196F3</Brush>
