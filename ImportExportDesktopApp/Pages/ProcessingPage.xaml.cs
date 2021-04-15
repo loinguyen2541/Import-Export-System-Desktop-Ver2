@@ -14,6 +14,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -76,7 +77,7 @@ namespace ImportExportDesktopApp.Pages
             {
                 try
                 {
-                    port1.PortName = "COM8";
+                    port1.PortName = "COM7";
                     port1.BaudRate = BaudRate;
                     port1.Open();
                 }
@@ -170,6 +171,11 @@ namespace ImportExportDesktopApp.Pages
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             this.NavigationService.Navigate(new TransactionListPage());
+        }
+
+        private void TabablzControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

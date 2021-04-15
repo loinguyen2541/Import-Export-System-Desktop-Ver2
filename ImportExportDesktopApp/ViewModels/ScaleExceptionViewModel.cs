@@ -50,6 +50,7 @@ namespace ImportExportDesktopApp.ViewModels
         private PartnerDataTransfer _partnerDataTransfer;
 
         private NotifyService _notifyService;
+        private NotificationApiService _notificationApiService;
 
         int _storageCapacity = 0;
 
@@ -78,6 +79,7 @@ namespace ImportExportDesktopApp.ViewModels
             _timeTemplateItemDataTransfer = new TimeTemplateItemDataTransfer();
             _partnerDataTransfer = new PartnerDataTransfer();
             _notifyService = new NotifyService();
+            _notificationApiService = new NotificationApiService();
 
             CreateTransactionGateCommand = new RelayCommand<Window>(p => { return true; }, p =>
             {
@@ -147,11 +149,52 @@ namespace ImportExportDesktopApp.ViewModels
                     Message = "Transaction has been updated for " + PartnerGate.DisplayName,
                     Type = NotificationType.Information
                 });
-                _eventAggregator.GetEvent<ReslovedScaleExceptionEvent>().Publish(new ScaleExeptionAction(TransactionScaleGate.Gate, EScaleExceptionAction.Accept));
+            }
+            else if (ExceptionType == EScaleExceptionType.Overload)
+            {
+                Transaction transaction = _transactionDataTransfer.IsProcessing(TransactionScaleGate.Indentify);
+                if (transaction != null)
+                {
+                    if (transaction.Gate.Contains(TransactionScaleGate.Gate.ToString()))
+                    {
+                        ExceptionType = EScaleExceptionType.Duplicate;
+                        MessageGate = "Partner is requesting to cancel the old transaction and create a new one !!!";
+                        return;
+                    }
+                    transaction = UpdateTransaction(transaction, TransactionScaleGate, PartnerGate, ScheduleGate, true);
+                    if (transaction == null)
+                    {
+                        return;
+                    }
+                    UpdateGood(PartnerGate, transaction);
+                    Task.Run(new Action(() =>
+                    {
+                        NotifyHttpAll(transaction);
+                    }));
+                }
+                else
+                {
+                    if (TransactionScaleGate.Gate == EGate.Gate2)
+                    {
+                        ExceptionType = EScaleExceptionType.WrongProcess;
+                        MessageGate = "Wrong process!!This partner has not passed through gate 1!!";
+                        return;
+                    }
+                    else
+                    {
+                        CreateTransaction(TransactionScaleGate, PartnerGate, ScheduleGate, false);
+                    }
+                }
             }
             else
             {
-                if (CreateTransaction(TransactionScaleGate, PartnerGate, ScheduleGate, ExceptionType))
+                if (ExceptionType == EScaleExceptionType.OverWeightImport || ExceptionType == EScaleExceptionType.OverWeightExport)
+                {
+                    Transaction transaction = _transactionDataTransfer.IsProcessing(TransactionScaleGate.Indentify);
+                    transaction = UpdateTransaction(transaction, TransactionScaleGate, PartnerGate, ScheduleGate, false);
+                    UpdateGood(PartnerGate, transaction);
+                }
+                else if (CreateTransaction(TransactionScaleGate, PartnerGate, ScheduleGate, false))
                 {
                     _notificationManager.Show(new NotificationContent
                     {
@@ -160,9 +203,10 @@ namespace ImportExportDesktopApp.ViewModels
                         Type = NotificationType.Information
                     });
 
-                    _eventAggregator.GetEvent<ReslovedScaleExceptionEvent>().Publish(new ScaleExeptionAction(TransactionScaleGate.Gate, EScaleExceptionAction.Accept));
+
                 }
             }
+            _eventAggregator.GetEvent<ReslovedScaleExceptionEvent>().Publish(new ScaleExeptionAction(TransactionScaleGate.Gate, EScaleExceptionAction.Accept));
             if (window != null)
             {
                 window.Close();
@@ -198,7 +242,7 @@ namespace ImportExportDesktopApp.ViewModels
         {
             transaction.PartnerId = partner.PartnerId;
             transaction.TransactionType = transaction.TransactionType = partner.PartnerTypeId == 1 ? 1 : 0;
-            transaction = UpdateTransaction(transaction, transactionScale, partner, schedule);
+            transaction = UpdateTransaction(transaction, transactionScale, partner, schedule, false);
             if (transaction == null)
             {
                 return false;
@@ -207,25 +251,15 @@ namespace ImportExportDesktopApp.ViewModels
             {
                 UpdateGood(partner, transaction);
             }
-            if (transactionScale.Device == EDeviceType.Android)
-            {
-                _notifyService.NotifyAndroid();
-            }
-            _notifyService.NotifyWeb();
+            NotifyHttpAll(transaction);
             return true;
         }
 
-        public Transaction UpdateTransaction(Transaction transaction, TransactionScale transactionScale, Partner partner, Schedule schedule)
+        public Transaction UpdateTransaction(Transaction transaction, TransactionScale transactionScale, Partner partner, Schedule schedule, bool isCheckWeight)
         {
             float goodInventory = _goodDataTransfer.getInventory();
-            if (!CheckWeight(partner.PartnerTypeId, transaction.WeightIn, transactionScale.Weight, goodInventory))
+            if (isCheckWeight && !CheckWeight(partner.PartnerTypeId, transaction.WeightIn, transactionScale.Weight, goodInventory))
             {
-                _notificationManager.Show(new NotificationContent
-                {
-                    Title = "Notification",
-                    Message = "Cannot complete trasaction for" + PartnerGate.DisplayName + " please check inventory",
-                    Type = NotificationType.Error
-                });
                 return null;
             }
             transaction.WeightOut = transactionScale.Weight;
@@ -260,10 +294,18 @@ namespace ImportExportDesktopApp.ViewModels
             {
                 if (weightIn > weightOut)
                 {
+
+                    ExceptionType = EScaleExceptionType.WrongTransactionType;
+                    HandleButtonContent = EBtnHandleContent.Edit.ToString();
+                    DisableButtonVisibilityGate = EVisibility.Visible.ToString();
+                    MessageGate = "Wrong partner type";
                     return false;
                 }
                 else if ((weightOut - weightIn) > goodInventory)
                 {
+
+                    ExceptionType = EScaleExceptionType.OverWeightExport;
+                    MessageGate = "Storage is out of stock!!!";
                     return false;
                 }
             }
@@ -273,10 +315,16 @@ namespace ImportExportDesktopApp.ViewModels
             {
                 if (weightIn < weightOut)
                 {
+                    ExceptionType = EScaleExceptionType.WrongTransactionType;
+                    HandleButtonContent = EBtnHandleContent.Edit.ToString();
+                    DisableButtonVisibilityGate = EVisibility.Visible.ToString();
+                    MessageGate = "Wrong partner type";
                     return false;
                 }
                 else if ((weightIn - weightOut) > (_storageCapacity - goodInventory))
                 {
+                    ExceptionType = EScaleExceptionType.OverWeightImport;
+                    MessageGate = "Storage capacity is full!!";
                     return false;
                 }
             }
@@ -360,7 +408,7 @@ namespace ImportExportDesktopApp.ViewModels
             _eventAggregator.GetEvent<ReslovedScaleExceptionEvent>().Publish(new ScaleExeptionAction(TransactionScaleGate.Gate, EScaleExceptionAction.Cancel));
             if (ExceptionType != EScaleExceptionType.WrongTransactionType)
             {
-                CreateTransaction(TransactionScaleGate, PartnerGate, ScheduleGate, ExceptionType);
+                CreateTransaction(TransactionScaleGate, PartnerGate, ScheduleGate, true);
             }
             if (window != null)
             {
@@ -368,7 +416,27 @@ namespace ImportExportDesktopApp.ViewModels
             }
         }
 
-        public bool CreateTransaction(TransactionScale transactionScale, Partner partner, Schedule schedule, EScaleExceptionType exceptionType)
+        void NotifyHttpAll(Transaction transaction)
+        {
+            if (TransactionScaleGate.Device == EDeviceType.Android)
+            {
+                _notifyService.NotifyAndroid();
+            }
+            Notification notification = new Notification();
+            notification.ContentForAdmin = "the partner " + PartnerGate.DisplayName + " has just completed a transaction!";
+            notification.ContentForPartner = "You have just completed a transaction!";
+            notification.CreatedDate = transaction.CreatedDate;
+            notification.TransactionId = transaction.TransactionId;
+            notification.PartnerId = PartnerGate.PartnerId;
+            notification.NotificationType = PartnerGate.PartnerTypeId == 1 ? 1 : 0;
+            bool noResult = _notificationApiService.PostNotification(notification);
+            if (noResult)
+            {
+                _notifyService.NotifyWeb();
+            }
+        }
+
+        public bool CreateTransaction(TransactionScale transactionScale, Partner partner, Schedule schedule, bool isCancel)
         {
             _transactionDataTransfer.DisableAll(transactionScale.Indentify);
 
@@ -390,7 +458,7 @@ namespace ImportExportDesktopApp.ViewModels
             transaction.WeightIn = transactionScale.Weight;
             transaction.WeightOut = 0;
             transaction.IdentificationCode = transactionScale.Indentify;
-            transaction.TransactionStatus = 0;
+            transaction.TransactionStatus = isCancel ? 2 : 0;
             transaction.TransactionType = partner.PartnerTypeId == 1 ? 1 : 0;
             transaction.Gate = transactionScale.Gate.ToString();
             try

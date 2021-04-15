@@ -52,6 +52,20 @@
           <Property Name="GoodsId" Type="int" Nullable="false" />
           <Property Name="PartnerId" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="Notification">
+          <Key>
+            <PropertyRef Name="NotificationId" />
+          </Key>
+          <Property Name="NotificationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NotificationType" Type="int" Nullable="false" />
+          <Property Name="StatusAdmin" Type="int" Nullable="false" />
+          <Property Name="StatusPartner" Type="int" Nullable="false" />
+          <Property Name="ContentForAdmin" Type="nvarchar(max)" />
+          <Property Name="ContentForPartner" Type="nvarchar(max)" />
+          <Property Name="PartnerId" Type="int" Nullable="false" />
+          <Property Name="TransactionId" Type="int" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
         <EntityType Name="Partner">
           <Key>
             <PropertyRef Name="PartnerId" />
@@ -147,9 +161,9 @@
           <Property Name="PartnerId" Type="int" Nullable="false" />
           <Property Name="IdentificationCode" Type="nvarchar(max)" />
           <Property Name="GoodsId" Type="int" Nullable="false" />
-          <Property Name="Gate" Type="varchar" MaxLength="10" />
+          <Property Name="Gate" Type="varchar" MaxLength="25" />
         </EntityType>
-        <Association Name="FK_Account_Role">
+        <Association Name="FK_Account_Role_RoleId">
           <End Role="Role" Type="Self.Role" Multiplicity="1" />
           <End Role="Account" Type="Self.Account" Multiplicity="*" />
           <ReferentialConstraint>
@@ -161,7 +175,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_IdentityCard_Partner">
+        <Association Name="FK_IdentityCard_Partner_PartnerId">
           <End Role="Partner" Type="Self.Partner" Multiplicity="1" />
           <End Role="IdentityCard" Type="Self.IdentityCard" Multiplicity="*" />
           <ReferentialConstraint>
@@ -173,7 +187,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_InventoryDetail_Goods">
+        <Association Name="FK_InventoryDetail_Goods_GoodsId">
           <End Role="Goods" Type="Self.Goods" Multiplicity="1" />
           <End Role="InventoryDetail" Type="Self.InventoryDetail" Multiplicity="*" />
           <ReferentialConstraint>
@@ -185,7 +199,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_InventoryDetail_Inventory">
+        <Association Name="FK_InventoryDetail_Inventory_InventoryId">
           <End Role="Inventory" Type="Self.Inventory" Multiplicity="1" />
           <End Role="InventoryDetail" Type="Self.InventoryDetail" Multiplicity="*" />
           <ReferentialConstraint>
@@ -197,7 +211,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_InventoryDetail_Partner">
+        <Association Name="FK_InventoryDetail_Partner_PartnerId">
           <End Role="Partner" Type="Self.Partner" Multiplicity="1" />
           <End Role="InventoryDetail" Type="Self.InventoryDetail" Multiplicity="*" />
           <ReferentialConstraint>
@@ -209,7 +223,31 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Partner_Account">
+        <Association Name="FK_Notification_Partner_PartnerId">
+          <End Role="Partner" Type="Self.Partner" Multiplicity="1" />
+          <End Role="Notification" Type="Self.Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Partner">
+              <PropertyRef Name="PartnerId" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="PartnerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Notification_Transaction_TransactionId">
+          <End Role="Transaction" Type="Self.Transaction" Multiplicity="1" />
+          <End Role="Notification" Type="Self.Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Transaction">
+              <PropertyRef Name="TransactionId" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="TransactionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Partner_Account_Username">
           <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
           <End Role="Partner" Type="Self.Partner" Multiplicity="*" />
           <ReferentialConstraint>
@@ -221,7 +259,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Partner_PartnerType">
+        <Association Name="FK_Partner_PartnerType_PartnerTypeId">
           <End Role="PartnerType" Type="Self.PartnerType" Multiplicity="1" />
           <End Role="Partner" Type="Self.Partner" Multiplicity="*" />
           <ReferentialConstraint>
@@ -233,7 +271,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Schedule_Goods">
+        <Association Name="FK_Schedule_Goods_GoodsId">
           <End Role="Goods" Type="Self.Goods" Multiplicity="1" />
           <End Role="Schedule" Type="Self.Schedule" Multiplicity="*" />
           <ReferentialConstraint>
@@ -245,7 +283,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Schedule_Partner">
+        <Association Name="FK_Schedule_Partner_PartnerId">
           <End Role="Partner" Type="Self.Partner" Multiplicity="1" />
           <End Role="Schedule" Type="Self.Schedule" Multiplicity="*" />
           <ReferentialConstraint>
@@ -257,7 +295,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Schedule_TimeTemplateItem">
+        <Association Name="FK_Schedule_TimeTemplateItem_TimeTemplateItemId">
           <End Role="TimeTemplateItem" Type="Self.TimeTemplateItem" Multiplicity="1" />
           <End Role="Schedule" Type="Self.Schedule" Multiplicity="*" />
           <ReferentialConstraint>
@@ -269,7 +307,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_TimeTemplateItem_TimeTemplate">
+        <Association Name="FK_TimeTemplateItem_TimeTemplate_TimeTemplateId">
           <End Role="TimeTemplate" Type="Self.TimeTemplate" Multiplicity="1" />
           <End Role="TimeTemplateItem" Type="Self.TimeTemplateItem" Multiplicity="*" />
           <ReferentialConstraint>
@@ -281,7 +319,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Transaction_Goods">
+        <Association Name="FK_Transaction_Goods_GoodsId">
           <End Role="Goods" Type="Self.Goods" Multiplicity="1" />
           <End Role="Transaction" Type="Self.Transaction" Multiplicity="*" />
           <ReferentialConstraint>
@@ -293,7 +331,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Transaction_Partner">
+        <Association Name="FK_Transaction_Partner_PartnerId">
           <End Role="Partner" Type="Self.Partner" Multiplicity="1" />
           <End Role="Transaction" Type="Self.Transaction" Multiplicity="*" />
           <ReferentialConstraint>
@@ -311,6 +349,7 @@
           <EntitySet Name="IdentityCard" EntityType="Self.IdentityCard" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Inventory" EntityType="Self.Inventory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="InventoryDetail" EntityType="Self.InventoryDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Notification" EntityType="Self.Notification" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Partner" EntityType="Self.Partner" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PartnerType" EntityType="Self.PartnerType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
@@ -320,55 +359,63 @@
           <EntitySet Name="TimeTemplate" EntityType="Self.TimeTemplate" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TimeTemplateItem" EntityType="Self.TimeTemplateItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Transaction" EntityType="Self.Transaction" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_Account_Role" Association="Self.FK_Account_Role">
+          <AssociationSet Name="FK_Account_Role_RoleId" Association="Self.FK_Account_Role_RoleId">
             <End Role="Role" EntitySet="Role" />
             <End Role="Account" EntitySet="Account" />
           </AssociationSet>
-          <AssociationSet Name="FK_IdentityCard_Partner" Association="Self.FK_IdentityCard_Partner">
+          <AssociationSet Name="FK_IdentityCard_Partner_PartnerId" Association="Self.FK_IdentityCard_Partner_PartnerId">
             <End Role="Partner" EntitySet="Partner" />
             <End Role="IdentityCard" EntitySet="IdentityCard" />
           </AssociationSet>
-          <AssociationSet Name="FK_InventoryDetail_Goods" Association="Self.FK_InventoryDetail_Goods">
+          <AssociationSet Name="FK_InventoryDetail_Goods_GoodsId" Association="Self.FK_InventoryDetail_Goods_GoodsId">
             <End Role="Goods" EntitySet="Goods" />
             <End Role="InventoryDetail" EntitySet="InventoryDetail" />
           </AssociationSet>
-          <AssociationSet Name="FK_InventoryDetail_Inventory" Association="Self.FK_InventoryDetail_Inventory">
+          <AssociationSet Name="FK_InventoryDetail_Inventory_InventoryId" Association="Self.FK_InventoryDetail_Inventory_InventoryId">
             <End Role="Inventory" EntitySet="Inventory" />
             <End Role="InventoryDetail" EntitySet="InventoryDetail" />
           </AssociationSet>
-          <AssociationSet Name="FK_InventoryDetail_Partner" Association="Self.FK_InventoryDetail_Partner">
+          <AssociationSet Name="FK_InventoryDetail_Partner_PartnerId" Association="Self.FK_InventoryDetail_Partner_PartnerId">
             <End Role="Partner" EntitySet="Partner" />
             <End Role="InventoryDetail" EntitySet="InventoryDetail" />
           </AssociationSet>
-          <AssociationSet Name="FK_Partner_Account" Association="Self.FK_Partner_Account">
+          <AssociationSet Name="FK_Notification_Partner_PartnerId" Association="Self.FK_Notification_Partner_PartnerId">
+            <End Role="Partner" EntitySet="Partner" />
+            <End Role="Notification" EntitySet="Notification" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Notification_Transaction_TransactionId" Association="Self.FK_Notification_Transaction_TransactionId">
+            <End Role="Transaction" EntitySet="Transaction" />
+            <End Role="Notification" EntitySet="Notification" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Partner_Account_Username" Association="Self.FK_Partner_Account_Username">
             <End Role="Account" EntitySet="Account" />
             <End Role="Partner" EntitySet="Partner" />
           </AssociationSet>
-          <AssociationSet Name="FK_Partner_PartnerType" Association="Self.FK_Partner_PartnerType">
+          <AssociationSet Name="FK_Partner_PartnerType_PartnerTypeId" Association="Self.FK_Partner_PartnerType_PartnerTypeId">
             <End Role="PartnerType" EntitySet="PartnerType" />
             <End Role="Partner" EntitySet="Partner" />
           </AssociationSet>
-          <AssociationSet Name="FK_Schedule_Goods" Association="Self.FK_Schedule_Goods">
+          <AssociationSet Name="FK_Schedule_Goods_GoodsId" Association="Self.FK_Schedule_Goods_GoodsId">
             <End Role="Goods" EntitySet="Goods" />
             <End Role="Schedule" EntitySet="Schedule" />
           </AssociationSet>
-          <AssociationSet Name="FK_Schedule_Partner" Association="Self.FK_Schedule_Partner">
+          <AssociationSet Name="FK_Schedule_Partner_PartnerId" Association="Self.FK_Schedule_Partner_PartnerId">
             <End Role="Partner" EntitySet="Partner" />
             <End Role="Schedule" EntitySet="Schedule" />
           </AssociationSet>
-          <AssociationSet Name="FK_Schedule_TimeTemplateItem" Association="Self.FK_Schedule_TimeTemplateItem">
+          <AssociationSet Name="FK_Schedule_TimeTemplateItem_TimeTemplateItemId" Association="Self.FK_Schedule_TimeTemplateItem_TimeTemplateItemId">
             <End Role="TimeTemplateItem" EntitySet="TimeTemplateItem" />
             <End Role="Schedule" EntitySet="Schedule" />
           </AssociationSet>
-          <AssociationSet Name="FK_TimeTemplateItem_TimeTemplate" Association="Self.FK_TimeTemplateItem_TimeTemplate">
+          <AssociationSet Name="FK_TimeTemplateItem_TimeTemplate_TimeTemplateId" Association="Self.FK_TimeTemplateItem_TimeTemplate_TimeTemplateId">
             <End Role="TimeTemplate" EntitySet="TimeTemplate" />
             <End Role="TimeTemplateItem" EntitySet="TimeTemplateItem" />
           </AssociationSet>
-          <AssociationSet Name="FK_Transaction_Goods" Association="Self.FK_Transaction_Goods">
+          <AssociationSet Name="FK_Transaction_Goods_GoodsId" Association="Self.FK_Transaction_Goods_GoodsId">
             <End Role="Goods" EntitySet="Goods" />
             <End Role="Transaction" EntitySet="Transaction" />
           </AssociationSet>
-          <AssociationSet Name="FK_Transaction_Partner" Association="Self.FK_Transaction_Partner">
+          <AssociationSet Name="FK_Transaction_Partner_PartnerId" Association="Self.FK_Transaction_Partner_PartnerId">
             <End Role="Partner" EntitySet="Partner" />
             <End Role="Transaction" EntitySet="Transaction" />
           </AssociationSet>
@@ -452,6 +499,7 @@
           <NavigationProperty Name="PartnerType" Relationship="Self.FK_Partner_PartnerType" FromRole="Partner" ToRole="PartnerType" />
           <NavigationProperty Name="Schedules" Relationship="Self.FK_Schedule_Partner" FromRole="Partner" ToRole="Schedule" />
           <NavigationProperty Name="Transactions" Relationship="Self.FK_Transaction_Partner" FromRole="Partner" ToRole="Transaction" />
+          <NavigationProperty Name="Notifications" Relationship="IEModel.FK_Notification_Partner_PartnerId" FromRole="Partner" ToRole="Notification" />
         </EntityType>
         <EntityType Name="PartnerType">
           <Key>
@@ -545,7 +593,8 @@
           <Property Name="GoodsId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Good" Relationship="Self.FK_Transaction_Goods" FromRole="Transaction" ToRole="Goods" />
           <NavigationProperty Name="Partner" Relationship="Self.FK_Transaction_Partner" FromRole="Transaction" ToRole="Partner" />
-          <Property Name="Gate" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Gate" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Notifications" Relationship="IEModel.FK_Notification_Transaction_TransactionId" FromRole="Transaction" ToRole="Notification" />
         </EntityType>
         <Association Name="FK_Account_Role">
           <End Role="Role" Type="Self.Role" Multiplicity="1" />
@@ -770,7 +819,56 @@
             <End Role="TimeTemplate" EntitySet="TimeTemplates" />
             <End Role="TimeTemplateItem" EntitySet="TimeTemplateItems" />
           </AssociationSet>
+          <EntitySet Name="Notifications" EntityType="IEModel.Notification" />
+          <AssociationSet Name="FK_Notification_Partner_PartnerId" Association="IEModel.FK_Notification_Partner_PartnerId">
+            <End Role="Partner" EntitySet="Partners" />
+            <End Role="Notification" EntitySet="Notifications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Notification_Transaction_TransactionId" Association="IEModel.FK_Notification_Transaction_TransactionId">
+            <End Role="Transaction" EntitySet="Transactions" />
+            <End Role="Notification" EntitySet="Notifications" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Notification">
+          <Key>
+            <PropertyRef Name="NotificationId" />
+          </Key>
+          <Property Name="NotificationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NotificationType" Type="Int32" Nullable="false" />
+          <Property Name="StatusAdmin" Type="Int32" Nullable="false" />
+          <Property Name="StatusPartner" Type="Int32" Nullable="false" />
+          <Property Name="ContentForAdmin" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ContentForPartner" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PartnerId" Type="Int32" Nullable="false" />
+          <Property Name="TransactionId" Type="Int32" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="Partner" Relationship="IEModel.FK_Notification_Partner_PartnerId" FromRole="Notification" ToRole="Partner" />
+          <NavigationProperty Name="Transaction" Relationship="IEModel.FK_Notification_Transaction_TransactionId" FromRole="Notification" ToRole="Transaction" />
+        </EntityType>
+        <Association Name="FK_Notification_Partner_PartnerId">
+          <End Type="IEModel.Partner" Role="Partner" Multiplicity="1" />
+          <End Type="IEModel.Notification" Role="Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Partner">
+              <PropertyRef Name="PartnerId" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="PartnerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Notification_Transaction_TransactionId">
+          <End Type="IEModel.Transaction" Role="Transaction" Multiplicity="1" />
+          <End Type="IEModel.Notification" Role="Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Transaction">
+              <PropertyRef Name="TransactionId" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="TransactionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -932,6 +1030,21 @@
                 <ScalarProperty Name="PartnerId" ColumnName="PartnerId" />
                 <ScalarProperty Name="IdentificationCode" ColumnName="IdentificationCode" />
                 <ScalarProperty Name="GoodsId" ColumnName="GoodsId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Notifications">
+            <EntityTypeMapping TypeName="IEModel.Notification">
+              <MappingFragment StoreEntitySet="Notification">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
+                <ScalarProperty Name="PartnerId" ColumnName="PartnerId" />
+                <ScalarProperty Name="ContentForPartner" ColumnName="ContentForPartner" />
+                <ScalarProperty Name="ContentForAdmin" ColumnName="ContentForAdmin" />
+                <ScalarProperty Name="StatusPartner" ColumnName="StatusPartner" />
+                <ScalarProperty Name="StatusAdmin" ColumnName="StatusAdmin" />
+                <ScalarProperty Name="NotificationType" ColumnName="NotificationType" />
+                <ScalarProperty Name="NotificationId" ColumnName="NotificationId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

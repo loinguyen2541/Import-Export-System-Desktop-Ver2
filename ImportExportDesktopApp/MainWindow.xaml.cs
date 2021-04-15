@@ -38,9 +38,9 @@ namespace ImportExportDesktopApp
         public MainWindow()
         {
             InitializeComponent();
-            //NotifyService no = new NotifyService();
-            //no.NotifyWeb();
-            //no.NotifyAndroid();
+            //tifyService no = new NotifyService();
+            //.NotifyWeb();
+            //.NotifyAndroid();
             this.DataContext = new MainViewModel(AppService.Instance.EventAggregator);
             _mainFrame = (Frame)this.FindName("MainFrame");
             if (proccessingPage == null)
@@ -50,8 +50,6 @@ namespace ImportExportDesktopApp
             _mainFrame.Navigate(proccessingPage);
             AppService.Instance.EventAggregator.GetEvent<ScaleExceptionEvent>().Subscribe(HandleScaleEvent);
         }
-
-
 
         private void HandleScaleEvent(ScaleExeption scaleExeption)
         {
