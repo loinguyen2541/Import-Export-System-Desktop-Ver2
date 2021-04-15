@@ -53,7 +53,22 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>8E87B6F457E8D79D904EC91892BFD346F0B2FF7B</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>ImportExportDesktopApp_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dragablz, Version=0.0.3.223, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dragablz.0.0.3.223\lib\net45\Dragablz.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -122,6 +137,7 @@
     <Compile Include="DataTransfers\GoodDataTransfer.cs" />
     <Compile Include="DataTransfers\InventoryDataTransfer.cs" />
     <Compile Include="DataTransfers\InventoryDetailDataTransfer.cs" />
+    <Compile Include="DataTransfers\NotificationDataTransfer.cs" />
     <Compile Include="DataTransfers\PartnerDataTransfer.cs" />
     <Compile Include="DataTransfers\ScheduleDataTransfer.cs" />
     <Compile Include="DataTransfers\SystemConfigDataTransfer.cs" />
@@ -142,6 +158,7 @@
     <Compile Include="Good.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="HttpServices\NotificationApiService.cs" />
     <Compile Include="HttpServices\NotifyService.cs" />
     <Compile Include="IdentityCard.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
@@ -169,6 +186,9 @@
     </Compile>
     <Compile Include="Pages\CreatePartner.xaml.cs">
       <DependentUpon>CreatePartner.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Notification.cs">
+      <DependentUpon>IEModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Pages\CreateTransactionPage.xaml.cs">
       <DependentUpon>CreateTransactionPage.xaml</DependentUpon>

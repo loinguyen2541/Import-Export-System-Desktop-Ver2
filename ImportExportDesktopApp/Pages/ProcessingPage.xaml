@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converter="clr-namespace:ImportExportDesktopApp.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
     xmlns:local="clr-namespace:ImportExportDesktopApp.Pages"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -25,10 +26,6 @@
     </Page.Resources>
     <Border Padding="16">
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="317*" />
-                <ColumnDefinition Width="631*" />
-            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="5*" />
                 <RowDefinition Height="5*" />
@@ -382,6 +379,189 @@
                             </DataGrid>
                         </ScrollViewer>
                     </Grid>
+                </materialDesign:Card>
+            </Grid>
+            <Grid Grid.Row="0" Grid.RowSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="7*" />
+                </Grid.ColumnDefinitions>
+                <materialDesign:Card
+                    x:Name="card"
+                    Grid.Column="1"
+                    Margin="14.4,45.4,-2.6,0"
+                    materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                    RenderTransformOrigin="0.5,0.5"
+                    UniformCornerRadius="10"
+                    Visibility="{Binding CancelSearchVisibility}">
+                    <dragablz:TabablzControl BorderThickness="0" SelectionChanged="TabablzControl_SelectionChanged">
+                        <dragablz:TabablzControl.InterTabController>
+                            <dragablz:InterTabController />
+                        </dragablz:TabablzControl.InterTabController>
+                        <TabItem Header="{Binding SuccessHeader}">
+                            <Grid>
+                                <Border
+                                    Margin="16"
+                                    BorderBrush="LightGray"
+                                    BorderThickness="1">
+                                    <ScrollViewer
+                                        Grid.Row="1"
+                                        HorizontalScrollBarVisibility="Auto"
+                                        VerticalScrollBarVisibility="Auto">
+                                        <Border Padding="8">
+                                            <DataGrid
+                                                Width="auto"
+                                                Height="auto"
+                                                materialDesign:DataGridAssist.CellPadding="16 16 16 16"
+                                                materialDesign:DataGridAssist.ColumnHeaderPadding="16 16 16 16"
+                                                AlternationCount="{Binding SuccessTransactionSearch.Count}"
+                                                AutoGenerateColumns="False"
+                                                Background="White"
+                                                CanUserAddRows="False"
+                                                CanUserSortColumns="True"
+                                                FontSize="15"
+                                                IsHitTestVisible="False"
+                                                IsReadOnly="True"
+                                                ItemsSource="{Binding SuccessTransactionSearch, UpdateSourceTrigger=PropertyChanged}">
+                                                <DataGrid.RowStyle>
+                                                    <Style TargetType="DataGridRow">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding TransactionType}" Value="0">
+                                                                <Setter Property="Background" Value="#f1f6f9" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </DataGrid.RowStyle>
+                                                <DataGrid.Columns>
+                                                    <DataGridTextColumn
+                                                        Width="60"
+                                                        Binding="{Binding Path=AlternationIndex, RelativeSource={RelativeSource AncestorType=DataGridRow}, Converter={StaticResource RowIndexConverter}}"
+                                                        Header="No." />
+                                                    <DataGridTextColumn Binding="{Binding Partner.DisplayName}" Header="Partner" />
+                                                    <DataGridTextColumn Binding="{Binding WeightIn}" Header="Weight in" />
+                                                    <DataGridTextColumn Binding="{Binding WeightOut}" Header="Weight out" />
+                                                    <DataGridTextColumn
+                                                        Binding="{Binding Total}"
+                                                        FontWeight="Bold"
+                                                        Header="Total" />
+                                                    <DataGridTextColumn Binding="{Binding TransactionType, Converter={StaticResource TransactionTypeConverter}}" Header="Type" />
+                                                    <DataGridTextColumn Binding="{Binding TimeIn, Converter={StaticResource DateConverter}}" Header="Date" />
+                                                    <DataGridTextColumn Binding="{Binding TimeIn, Converter={StaticResource TimeConverter}}" Header="Time In" />
+                                                    <DataGridTextColumn Binding="{Binding TimeOut, Converter={StaticResource TimeConverter}}" Header="Time Out" />
+                                                </DataGrid.Columns>
+                                            </DataGrid>
+                                        </Border>
+                                    </ScrollViewer>
+                                </Border>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="{Binding ProcessingHeader}">
+                            <Grid>
+                                <Border
+                                    Margin="16"
+                                    BorderBrush="LightGray"
+                                    BorderThickness="1">
+                                    <ScrollViewer
+                                        Grid.Row="1"
+                                        HorizontalScrollBarVisibility="Auto"
+                                        VerticalScrollBarVisibility="Auto">
+                                        <Border Padding="8">
+                                            <DataGrid
+                                                Width="auto"
+                                                Height="auto"
+                                                materialDesign:DataGridAssist.CellPadding="16 16 16 16"
+                                                materialDesign:DataGridAssist.ColumnHeaderPadding="16 16 16 16"
+                                                AlternationCount="{Binding ProcessingTransactionSearch.Count}"
+                                                AutoGenerateColumns="False"
+                                                Background="White"
+                                                CanUserAddRows="False"
+                                                CanUserSortColumns="True"
+                                                FontSize="15"
+                                                IsHitTestVisible="False"
+                                                IsReadOnly="True"
+                                                ItemsSource="{Binding ProcessingTransactionSearch, UpdateSourceTrigger=PropertyChanged}">
+                                                <DataGrid.RowStyle>
+                                                    <Style TargetType="DataGridRow">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding TransactionType}" Value="0">
+                                                                <Setter Property="Background" Value="#f1f6f9" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </DataGrid.RowStyle>
+                                                <DataGrid.Columns>
+                                                    <DataGridTextColumn
+                                                        Width="60"
+                                                        Binding="{Binding Path=AlternationIndex, RelativeSource={RelativeSource AncestorType=DataGridRow}, Converter={StaticResource RowIndexConverter}}"
+                                                        Header="No." />
+                                                    <DataGridTextColumn
+                                                        Width="200"
+                                                        Binding="{Binding Partner.DisplayName}"
+                                                        Header="Partner" />
+                                                    <DataGridTextColumn Binding="{Binding WeightIn}" Header="Weight in" />
+                                                    <DataGridTextColumn Binding="{Binding TransactionType, Converter={StaticResource TransactionTypeConverter}}" Header="Type" />
+                                                    <DataGridTextColumn Binding="{Binding TimeIn, Converter={StaticResource DateConverter}}" Header="Date" />
+                                                    <DataGridTextColumn Binding="{Binding TimeIn, Converter={StaticResource TimeConverter}}" Header="Time In" />
+
+                                                </DataGrid.Columns>
+                                            </DataGrid>
+                                        </Border>
+                                    </ScrollViewer>
+                                </Border>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="{Binding FailHeader}">
+                            <Grid>
+                                <Border
+                                    Margin="16"
+                                    BorderBrush="LightGray"
+                                    BorderThickness="1">
+                                    <ScrollViewer
+                                        Grid.Row="1"
+                                        HorizontalScrollBarVisibility="Auto"
+                                        VerticalScrollBarVisibility="Auto">
+                                        <DataGrid
+                                            Width="auto"
+                                            Height="auto"
+                                            materialDesign:DataGridAssist.CellPadding="16 16 16 16"
+                                            materialDesign:DataGridAssist.ColumnHeaderPadding="16 16 16 16"
+                                            AlternationCount="{Binding FailTransactionSearch.Count}"
+                                            AutoGenerateColumns="False"
+                                            Background="White"
+                                            CanUserAddRows="False"
+                                            CanUserSortColumns="True"
+                                            FontSize="15"
+                                            IsHitTestVisible="False"
+                                            IsReadOnly="True"
+                                            ItemsSource="{Binding FailTransactionSearch, UpdateSourceTrigger=PropertyChanged}">
+                                            <DataGrid.RowStyle>
+                                                <Style TargetType="DataGridRow">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding TransactionType}" Value="0">
+                                                            <Setter Property="Background" Value="#f1f6f9" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </DataGrid.RowStyle>
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn
+                                                    Width="60"
+                                                    Binding="{Binding Path=AlternationIndex, RelativeSource={RelativeSource AncestorType=DataGridRow}, Converter={StaticResource RowIndexConverter}}"
+                                                    Header="No." />
+                                                <DataGridTextColumn Binding="{Binding Partner.DisplayName}" Header="Partner" />
+                                                <DataGridTextColumn Binding="{Binding WeightIn}" Header="Weight in" />
+                                                <DataGridTextColumn Binding="{Binding WeightOut}" Header="Weight out" />
+                                                <DataGridTextColumn Binding="{Binding TransactionType, Converter={StaticResource TransactionTypeConverter}}" Header="Type" />
+                                                <DataGridTextColumn Binding="{Binding TimeIn, Converter={StaticResource DateConverter}}" Header="Date" />
+                                                <DataGridTextColumn Binding="{Binding TimeIn, Converter={StaticResource TimeConverter}}" Header="Time In" />
+                                                <DataGridTextColumn Binding="{Binding TimeOut, Converter={StaticResource TimeConverter}}" Header="Time Out" />
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </ScrollViewer>
+                                </Border>
+                            </Grid>
+                        </TabItem>
+                    </dragablz:TabablzControl>
                 </materialDesign:Card>
             </Grid>
         </Grid>

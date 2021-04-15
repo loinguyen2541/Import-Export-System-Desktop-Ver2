@@ -40,13 +40,19 @@ namespace ImportExportDesktopApp.DataTransfers
         {
             var today = DateTime.Now;
 
-            return new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == 0 && t.PartnerId == partnerId && DbFunctions.TruncateTime(t.CreatedDate) == today.Date).OrderByDescending(t => t.TimeIn).ToList());
+            return new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == 0  && t.PartnerId == partnerId && DbFunctions.TruncateTime(t.CreatedDate) == today.Date).OrderByDescending(t => t.TimeIn).ToList());
         }
 
         public ObservableCollection<Transaction> GetSuccessTransactionByPartnerToday(int partnerId)
         {
             var today = DateTime.Now;
             return new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == 1 && t.PartnerId == partnerId && DbFunctions.TruncateTime(t.CreatedDate) == today.Date).OrderByDescending(t => t.TimeOut).ToList());
+        }
+
+        public ObservableCollection<Transaction> GetFailTransactionByPartnerToday(int partnerId)
+        {
+            var today = DateTime.Now;
+            return new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == 2 && t.PartnerId == partnerId && DbFunctions.TruncateTime(t.CreatedDate) == today.Date).OrderByDescending(t => t.TimeOut).ToList());
         }
 
         public Transaction InsertTransaction(Transaction transaction)

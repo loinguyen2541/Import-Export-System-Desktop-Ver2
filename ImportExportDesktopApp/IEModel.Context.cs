@@ -39,5 +39,6 @@ namespace ImportExportDesktopApp
         public virtual DbSet<TimeTemplate> TimeTemplates { get; set; }
         public virtual DbSet<TimeTemplateItem> TimeTemplateItems { get; set; }
         public virtual DbSet<Transaction> Transactions { get; set; }
+        public virtual DbSet<Notification> Notifications { get; set; }
     }
 }

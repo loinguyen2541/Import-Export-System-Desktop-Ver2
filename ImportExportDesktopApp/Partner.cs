@@ -21,6 +21,7 @@ namespace ImportExportDesktopApp
             this.InventoryDetails = new HashSet<InventoryDetail>();
             this.Schedules = new HashSet<Schedule>();
             this.Transactions = new HashSet<Transaction>();
+            this.Notifications = new HashSet<Notification>();
         }
     
         public int PartnerId { get; set; }
@@ -42,5 +43,7 @@ namespace ImportExportDesktopApp
         public virtual ICollection<Schedule> Schedules { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Transaction> Transactions { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Notification> Notifications { get; set; }
     }
 }
