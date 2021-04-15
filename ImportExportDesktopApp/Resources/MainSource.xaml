@@ -4,7 +4,7 @@
     xmlns:local="clr-namespace:ImportExportDesktopApp.Resources"
     xmlns:viewmodel="clr-namespace:ImportExportDesktopApp.ViewModels">
     <viewmodel:MainViewModel x:Key="MainVM" />
-    <viewmodel:ManPartnersViewModel x:Key="ManPartner" />
+    <viewmodel:ManPartnersViewModel x:Key="ManPartners" />
     <viewmodel:InventoryDetailViewModel x:Key="InventoryDetail" />
     <viewmodel:ManGoods x:Key="ManGoods" />
     <viewmodel:ManSchedulesViewModel x:Key="ManSchedule" />

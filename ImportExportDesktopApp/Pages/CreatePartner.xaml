@@ -7,7 +7,7 @@
       mc:Ignorable="d" 
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       d:DesignHeight="450" d:DesignWidth="800"
-      DataContext="{StaticResource ManPartner}"
+      DataContext="{StaticResource ManPartners}"
       Title="CreatePartner">
 
     <Border Margin="16">
@@ -188,7 +188,7 @@
                             BorderBrush="DarkGray"
                             BorderThickness="2"
                             CornerRadius="10">
-                            <ListBox FontSize="15" ItemsSource="{Binding Types}">
+                            <ListBox FontSize="15" ItemsSource="{Binding Types}" SelectedItem="{Binding Path=SelectedType, Mode=TwoWay}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding PartnerTypeName}" />
@@ -196,7 +196,7 @@
                                 </ListBox.ItemTemplate>
                                 <ListBox.ItemContainerStyle>
                                     <Style BasedOn="{StaticResource MaterialDesignToolToggleListBoxItem}" TargetType="{x:Type ListBoxItem}">
-                                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                        <Setter Property="IsSelected" Value="{Binding SelectedType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                     </Style>
                                 </ListBox.ItemContainerStyle>
                             </ListBox>
@@ -235,6 +235,7 @@
                         <TextBox
                             x:Name="txtCardId"
                             materialDesign:HintAssist.Hint="Card Id"
+                            Text="{Binding CardId}"
                             FontSize="15">
                         </TextBox>
                     </Border>
@@ -289,9 +290,10 @@
                             materialDesign:DataGridAssist.ColumnHeaderPadding="16 16 16 16"
                             CanUserAddRows="False"
                             CanUserSortColumns="True"
+                            AutoGenerateColumns="True"
                             FontSize="15"
                             IsReadOnly="True"
-                            ItemsSource="{Binding Partner.IdentityCards, UpdateSourceTrigger=PropertyChanged}">
+                            ItemsSource="{Binding ListIdentityCards, UpdateSourceTrigger=PropertyChanged}">
                             <DataGrid.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem

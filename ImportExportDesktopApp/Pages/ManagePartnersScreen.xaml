@@ -6,9 +6,9 @@
       xmlns:local="clr-namespace:ImportExportDesktopApp.Pages"
       mc:Ignorable="d" 
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-     xmlns:converter="clr-namespace:ImportExportDesktopApp.Converters"
+      xmlns:converter="clr-namespace:ImportExportDesktopApp.Converters"
       d:DesignHeight="450" d:DesignWidth="800"
-      DataContext="{StaticResource ManPartner}"
+      DataContext="{StaticResource ManPartners}"
       Title="ManagePartnersScreen">
 
     <Page.Resources>
@@ -62,16 +62,15 @@
             </Grid>
             <Grid Grid.Row="1" VerticalAlignment="Top">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="85*" />
-                    <ColumnDefinition Width="256*" />
-                    <ColumnDefinition Width="171*" />
-                    <ColumnDefinition Width="256*" />
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="4*" />
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="2*" />
                 </Grid.ColumnDefinitions>
                 <ComboBox
                     Grid.Column="0"
                     Height="46"
                     VerticalAlignment="Bottom"
-                   Margin="0,0,0.333,0"
                     materialDesign:HintAssist.Hint="Type"
                     IsEditable="false"
                     ItemsSource="{Binding Types}"
@@ -92,9 +91,9 @@
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                     Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}"
                     TextChanged="TextBox_TextChanged" />
-                <Grid Grid.Column="1" Grid.ColumnSpan="2" Margin="255.667,0,0,0">
-                    <StackPanel Orientation="Horizontal">
-                        <Button
+
+                <StackPanel Orientation="Horizontal" Grid.Column="2">
+                    <Button
                             Width="100"
                             Height="35"
                             Margin="16,0,0,0"
@@ -104,7 +103,7 @@
                             Content="Search"
                             FontSize="15"
                             Style="{StaticResource MaterialDesignRaisedButton}" />
-                        <Button
+                    <Button
                             Width="35"
                             Height="35"
                             Margin="8,0,0,0"
@@ -112,22 +111,21 @@
                             VerticalAlignment="Bottom"
                             Command="{Binding CancelSearchCommand}"
                             ToolTip="MaterialDesignFloatingActionMiniButton">
-                            <Button.Style>
-                                <Style BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}" TargetType="Button">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Path=IsSearch}" Value="false">
-                                            <Setter Property="Visibility" Value="Hidden" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                            <materialDesign:PackIcon
+                        <Button.Style>
+                            <Style BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}" TargetType="Button">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=IsSearch}" Value="false">
+                                        <Setter Property="Visibility" Value="Hidden" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <materialDesign:PackIcon
                                 Width="24"
                                 Height="24"
                                 Kind="Close" />
-                        </Button>
-                    </StackPanel>
-                </Grid>
+                    </Button>
+                </StackPanel>
 
                 <!--  floating action button with progress  -->
                 <Button

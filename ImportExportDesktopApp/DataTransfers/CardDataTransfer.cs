@@ -41,5 +41,31 @@ namespace ImportExportDesktopApp.DataTransfers
             }
             return null;
         }
+
+        public ICollection<IdentityCard> InsertCard(ICollection<IdentityCard> cards)
+        {
+            List<IdentityCard> tempList = new List<IdentityCard>();
+            IdentityCard tempCard = null;
+            bool check = true;
+            foreach (var item in cards)
+            {
+                tempCard = ie.IdentityCards.Add(item);
+                if (tempCard != null)
+                {
+                    tempList.Add(tempCard);
+                }
+                else
+                {
+                    check = false;
+                    break;
+                }
+                tempCard = null;
+            }
+            if (check)
+            {
+                ie.SaveChanges();
+            }
+            return tempList;
+        }
     }
 }

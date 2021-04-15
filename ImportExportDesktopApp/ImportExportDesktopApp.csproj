@@ -53,18 +53,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <ManifestCertificateThumbprint>8E87B6F457E8D79D904EC91892BFD346F0B2FF7B</ManifestCertificateThumbprint>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ManifestKeyFile>ImportExportDesktopApp_TemporaryKey.pfx</ManifestKeyFile>
-  </PropertyGroup>
-  <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignManifests>true</SignManifests>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Dragablz, Version=0.0.3.223, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Dragablz.0.0.3.223\lib\net45\Dragablz.dll</HintPath>
@@ -132,6 +120,7 @@
     <Compile Include="Converters\StatusColorConverter.cs" />
     <Compile Include="Converters\TimeConverter.cs" />
     <Compile Include="Converters\TransactionStatusConverter.cs" />
+    <Compile Include="DataTransfers\AccountDataTransfer.cs" />
     <Compile Include="DataTransfers\CardDataTransfer.cs" />
     <Compile Include="DataTransfers\DataContext.cs" />
     <Compile Include="DataTransfers\GoodDataTransfer.cs" />

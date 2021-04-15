@@ -1,9 +1,13 @@
-﻿using ImportExportDesktopApp.HttpServices;
+﻿using ImportExportDesktopApp.Commands;
+using ImportExportDesktopApp.DataTransfers;
+using ImportExportDesktopApp.HttpServices;
 using ImportExportDesktopApp.Utils;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -12,9 +16,9 @@ namespace ImportExportDesktopApp.ViewModels
 {
     class ManPartnersViewModel : BaseNotifyPropertyChanged
     {
-        private List<Partner> _partners;
+        private ObservableCollection<Partner> _partners;
         //private QueryParams _paging;
-        private List<PartnerType> _types;
+        private ObservableCollection<PartnerType> _types;
         private Partner _partner;
 
         private bool _isSearch;
@@ -22,41 +26,39 @@ namespace ImportExportDesktopApp.ViewModels
         private PartnerType _selectedType;
         private String _visibility;
         private String _errorMessage;
+        private int _currentPage = 1;
+        private String _cardId;
+        private List<IdentityCard> _listCard;
+        private Account _account = null;
+
+        private PartnerDataTransfer _partnerDataTransfer;
+        private CardDataTransfer _cardDataTransfer;
+        private AccountDataTransfer _accountDataTransfer;
         public Partner TableSelectedItem { get; set; }
-        //private PartnerHttpService HttpService;
         private bool _isLoading;
         public ICommand SearchCommand { get; set; }
         public ICommand AddPartnerCommnand { get; set; }
         public ICommand TableDoubleClickCommand { get; set; }
-        public ICommand GetNextPageCommand { get; set; }
-        public ICommand GetBeforePageCommand { get; set; }
+        public ICommand NextPageCommand { get; set; }
+        public ICommand BeforePageCommand { get; set; }
         public ICommand RefreshCommand { get; set; }
         public ICommand CancelSearchCommand { get; set; }
-
-        private String _txtPageInfo;
-        private bool _isMaxPage;
-        private bool _isFirstPage;
-
-        private readonly IEEntities ie;
-
+        public ICommand AddIdentityCardComment { get; set; }
         public ManPartnersViewModel()
         {
 
-            //HttpService = new PartnerHttpService();
-            ie = new IEEntities();
+            _partnerDataTransfer = new PartnerDataTransfer();
+            _cardDataTransfer = new CardDataTransfer();
+            _accountDataTransfer = new AccountDataTransfer();
+
             Task.Run(() =>
             {
                 Init();
             });
-            _search = "";
             _visibility = "Hidden";
+            _listCard = new List<IdentityCard>();
+
             Partner = new Partner();
-            //GetNextPageCommand = new RelayCommand<QueryParams>((p) => { return true; }, GetNextPage);
-            //GetBeforePageCommand = new RelayCommand<QueryParams>((p) => { return true; }, GetBeforePage);
-            //TableDoubleClickCommand = new RelayCommand<object>((p) => { return true; }, p =>
-            //{
-            //    OpenDialog();
-            //});
             SearchCommand = new RelayCommand<object>((p) => { return true; }, p =>
             {
                 SearchSchedules();
@@ -65,35 +67,45 @@ namespace ImportExportDesktopApp.ViewModels
             {
                 AddPartner();
             });
-            //RefreshCommand = new RelayCommand<object>((p) => { return true; }, p =>
-            //{
-            //    Refresh();
-            //});
-            //CancelSearchCommand = new RelayCommand<object>((p) => { return true; }, p =>
-            //{
-            //    CancelSearch();
-            //});
+            RefreshCommand = new RelayCommand<object>((p) => { return true; }, p =>
+            {
+                Refresh();
+            });
+            CancelSearchCommand = new RelayCommand<object>((p) => { return true; }, p =>
+            {
+                CancelSearch();
+            });
+            NextPageCommand = new RelayCommand<object>(p => { return true; }, p =>
+            {
+                NextPage();
+            });
+            BeforePageCommand = new RelayCommand<object>(p => { return true; }, p =>
+            {
+                BeforePage();
+            });
+            AddIdentityCardComment = new RelayCommand<object>(p => { return true; }, p =>
+            {
+                AddIdentityCard();
+            });
         }
 
         public void Init()
         {
             try
             {
-                Partners = ie.Partners.Where(p => p.PartnerStatus == 0).ToList();
-            }catch(Exception e)
+                Partners = _partnerDataTransfer.GetAllWithPaging(_currentPage);
+            }
+            catch (Exception e)
             {
                 MessageBox.Show(e.Message);
             }
-            Types = ie.PartnerTypes.ToList();
+            Types = _partnerDataTransfer.GetTypes();
 
             IsLoading = false;
             IsSearch = false;
-
+            Search = "";
 
             SelectedType = Types[0];
-
-            TxtPageInfo = String.Format("Page {0} of {1}", 0, 0);
-            CheckPage();
         }
 
         private void OpenDialog()
@@ -110,17 +122,97 @@ namespace ImportExportDesktopApp.ViewModels
             bool check = CheckValid();
             if (check)
             {
-                this.ie.Partners.Add(Partner);
-                this.ie.SaveChangesAsync();
-                MessageBoxResult result = MessageBox.Show("Add Partner Success", "Confirmation");
+                if (ListIdentityCards.Count == 0)
+                {
+                    Visibility = "Visible";
+                    ErrorMessage = "Partner must have at least one identity card";
+                }
+                else
+                {
+                    //add account
+                    bool checkAccount = AddAccount();
+                    if (checkAccount)
+                    {
+                        //add partner
+                        Partner.PartnerType = SelectedType;
+                        Partner.Username = _account.Username;
+                        var partner = _partnerDataTransfer.CreatePartner(Partner);
+                        if (partner != null)
+                        {
+                            //add card
+                            foreach (var item in ListIdentityCards)
+                            {
+                                item.IdentityCardStatus = 0;
+                                item.PartnerId = Partner.PartnerId;
+                            }
+                            Partner.IdentityCards = _cardDataTransfer.InsertCard(ListIdentityCards);
+                        }
+                        MessageBoxResult result = MessageBox.Show("Add Partner Success", "Confirmation");
+                        Partner = null;
+                    }
+                    else
+                    {
+                        Visibility = "Visible";
+                        ErrorMessage = "This name is existed";
+                    }
+                }
             }
+        }
+        private bool AddAccount()
+        {
+            string username = Regex.Replace(Partner.DisplayName, @"\s+", "");
+            string password = RandomPassword();
+            Account account = new Account() { Password = password, Username = username, RoleId = 3, Status = 0};
+            _account = _accountDataTransfer.InsertAccount(account);
+            return _account == null ? false : true;
+        }
+
+        private string RandomPassword()
+        {
+            Random random = new Random();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, 8)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        private void AddIdentityCard()
+        {
+            IdentityCard card = new IdentityCard();
+            card.IdentityCardStatus = 0;
+            card.IdentityCardId = CardId;
+            card.PartnerId = 0;
+
+            bool check = true;
+            if(ListIdentityCards.Count != 0)
+            {
+                foreach (var item in ListIdentityCards)
+                {
+                    if (item.IdentityCardId.Equals(CardId))
+                    {
+                        check = false;
+                        break;
+                    }
+                }
+            }
+
+            if (check)
+            {
+                _listCard.Add(card);
+            }
+            else
+            {
+                Visibility = "Visible";
+                ErrorMessage = "Identity card is existed";
+            }
+
+            CardId = "";
         }
 
         private bool CheckValid()
         {
-            if(Partner != null)
+            if (Partner != null)
             {
-                if(Partner.DisplayName == null || Partner.Email == null || Partner.PhoneNumber == null)
+                if (Partner.DisplayName == null || Partner.Email == null || Partner.PhoneNumber == null)
                 {
                     Visibility = "Visible";
                     ErrorMessage = "Some fields can not be null";
@@ -144,138 +236,41 @@ namespace ImportExportDesktopApp.ViewModels
         public void SearchSchedules()
         {
             IsSearch = true;
-            int type = 0;
-            //Paging.Page = 1;
-            //if (SelectedType.PartnerTypeId != 0)
-            //{
-            //    Paging.Type = SelectedType.PartnerTypeName;
-            //}
-            //else
-            //{
-            //    Paging.Type = null;
-            //}
-            //Pagination<Partner> partners = HttpService.SearchPartner(Paging).Result;
-            //RefreshTableAndLabel(partners);
-            Partners = this.ie.Partners.Where( p => p.PartnerTypeId == SelectedType.PartnerTypeId && p.DisplayName.Contains(Search)).ToList();
+            Partners = _partnerDataTransfer.SearchPartner(SelectedType.PartnerTypeId, Search);
         }
 
-        //public void GetNextPage(QueryParams query)
-        //{
-        //    query.Page = query.Page + 1;
-        //    if (SelectedType.PartnerTypeId != 0)
-        //    {
-        //        Paging.Type = SelectedType.PartnerTypeName;
-        //    }
-        //    else
-        //    {
-        //        Paging.Type = null;
-        //    }
-        //    Pagination<Partner> partners = HttpService.SearchPartner(query).Result;
-        //    RefreshTableAndLabel(partners);
-        //}
-
-        //public void GetBeforePage(QueryParams query)
-        //{
-        //    query.Page = query.Page - 1;
-        //    if (SelectedType.PartnerTypeId != 0)
-        //    {
-        //        Paging.Type = SelectedType.PartnerTypeName;
-        //    }
-        //    else
-        //    {
-        //        Paging.Type = null;
-        //    }
-        //    Pagination<Partner> partners = HttpService.SearchPartner(query).Result;
-        //    RefreshTableAndLabel(partners);
-        //}
-        //public async void Refresh()
-        //{
-        //    IsLoading = true;
-        //    Pagination<Partner> partners = await HttpService.SearchPartner(Paging);
-        //    RefreshTableAndLabel(partners);
-        //    IsLoading = false;
-        //}
-
-        public void CheckPage()
+        public void NextPage()
         {
-            //if (Partners.Page >= Partners.TotalPage)
-            //{
-            //    IsMaxPage = true;
-            //}
-            //else
-            //{
-            //    IsMaxPage = false;
-            //}
-
-            //if (Partners.Page <= 1)
-            //{
-            //    IsFirstPage = true;
-            //}
-            //else
-            //{
-            //    IsFirstPage = false;
-            //}
+            CurrentPage++;
+            Partners = _partnerDataTransfer.GetAllWithPaging(CurrentPage);
+        }
+        public void BeforePage()
+        {
+            CurrentPage--;
+            Partners = _partnerDataTransfer.GetAllWithPaging(CurrentPage);
         }
 
-        //public void CancelSearch()
-        //{
-        //    IsSearch = false;
-        //    Paging.Date = "";
-        //    Paging.Search = "";
-        //    Paging.Type = "";
-        //    Paging.Page = 1;
-        //    Paging.Page = 1;
-        //    Pagination<Partner> partners = HttpService.SearchPartner(null).Result;
-        //    RefreshTableAndLabel(partners);
-        //}
-
-        //public void RefreshTableAndLabel(Pagination<Partner> partners)
-        //{
-        //    Clear(partners);
-        //    TxtPageInfo = String.Format("Page {0} of {1}", Partners.Page, Partners.TotalPage);
-        //    CheckPage();
-        //}
-
-        //public void Clear(Pagination<Partner> schedules)
-        //{
-        //    Partners.Page = schedules.Page;
-        //    Partners.Size = schedules.Size;
-        //    Partners.TotalPage = schedules.TotalPage;
-        //    Partners.Data.Clear();
-        //    foreach (var item in schedules.Data)
-        //    {
-        //        Partners.Data.Add(item);
-        //    }
-        //}
-
-        public String TxtPageInfo
+        public void CancelSearch()
         {
-            get { return _txtPageInfo; }
-            set
+            IsSearch = false;
+            CurrentPage = 1;
+            Partners = _partnerDataTransfer.GetAllWithPaging(CurrentPage);
+            Search = "";
+            SelectedType = Types[0];
+        }
+
+        public async void Refresh()
+        {
+            IsLoading = true;
+            CurrentPage = 1;
+            ObservableCollection<Partner> partners = _partnerDataTransfer.GetAllWithPaging(CurrentPage);
+            Partners.Clear();
+            foreach (var item in partners)
             {
-                _txtPageInfo = value;
-                NotifyPropertyChanged();
+                Partners.Add(item);
             }
-        }
+            IsLoading = false;
 
-        public bool IsMaxPage
-        {
-            get { return _isMaxPage; }
-            set
-            {
-                _isMaxPage = value;
-                NotifyPropertyChanged();
-            }
-        }
-
-        public bool IsFirstPage
-        {
-            get { return _isFirstPage; }
-            set
-            {
-                _isFirstPage = value;
-                NotifyPropertyChanged();
-            }
         }
 
         public bool IsLoading
@@ -308,17 +303,17 @@ namespace ImportExportDesktopApp.ViewModels
             }
         }
 
-        //public QueryParams Paging
-        //{
-        //    get { return _paging; }
-        //    set
-        //    {
-        //        _paging = value;
-        //        NotifyPropertyChanged();
-        //    }
-        //}
+        public int CurrentPage
+        {
+            get { return _currentPage; }
+            set
+            {
+                _currentPage = value;
+                NotifyPropertyChanged();
+            }
+        }
 
-        public List<Partner> Partners
+        public ObservableCollection<Partner> Partners
         {
             get { return _partners; }
             set
@@ -328,7 +323,7 @@ namespace ImportExportDesktopApp.ViewModels
             }
         }
 
-        public List<PartnerType> Types
+        public ObservableCollection<PartnerType> Types
         {
             get { return _types; }
             set
@@ -368,12 +363,32 @@ namespace ImportExportDesktopApp.ViewModels
             }
         }
 
+        public String CardId
+        {
+            get { return _cardId; }
+            set
+            {
+                _cardId = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         public Partner Partner
         {
             get { return _partner; }
             set
             {
                 _partner = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public List<IdentityCard> ListIdentityCards
+        {
+            get { return _listCard; }
+            set
+            {
+                _listCard = value;
                 NotifyPropertyChanged();
             }
         }
