@@ -48,5 +48,11 @@ namespace ImportExportDesktopApp.DataTransfers
         {
             return new ObservableCollection<Inventory>(ie.Inventories.Where(i => startDate <= i.RecordedDate && i.RecordedDate <= endDate).Take(10).Skip((page - 1) * 10));
         }
+        public int GetMaxPage(int pageSize)
+        {
+            int count = ie.Inventories.Count();
+            double totalPage = count * (1.0) / pageSize * (1.0);
+            return (int)Math.Ceiling(totalPage);
+        }
     }
 }

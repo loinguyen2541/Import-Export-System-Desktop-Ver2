@@ -29,6 +29,8 @@ namespace ImportExportDesktopApp.ViewModels
         private bool _isLoading;
         private string _autoschedule;
         private int _currentPage = 1;
+        private string _pagingInfo;
+        private int _maxPage;
         private ScheduleDataTransfer _scheduleDataTransfer;
         private SystemConfigDataTransfer _systemDataTransfer;
 
@@ -37,6 +39,8 @@ namespace ImportExportDesktopApp.ViewModels
         {
             _scheduleDataTransfer = new ScheduleDataTransfer();
             _systemDataTransfer = new SystemConfigDataTransfer();
+
+            MaxPage = _scheduleDataTransfer.GetMaxPage(10);
             Task.Run(() => { Init(); });
 
             SearchCommand = new RelayCommand<object>((p) => { return true; }, p =>
@@ -69,6 +73,7 @@ namespace ImportExportDesktopApp.ViewModels
             Types = new List<string>();
             Types.Add("Import");
             Types.Add("Export");
+            SetPagingInfo();
         }
 
         public void SearchSchedules()
@@ -105,13 +110,18 @@ namespace ImportExportDesktopApp.ViewModels
         {
             CurrentPage++;
             Schedules = _scheduleDataTransfer.GetAllSchedule(CurrentPage);
+            SetPagingInfo();
         }
         public void BeforePage()
         {
             CurrentPage--;
             Schedules = _scheduleDataTransfer.GetAllSchedule(CurrentPage);
+            SetPagingInfo();
         }
-
+        private void SetPagingInfo()
+        {
+            PagingInfo = String.Format("Page {0} of {1}", CurrentPage, MaxPage);
+        }
         public ObservableCollection<Schedule> Schedules
         {
             get { return _schedules; }
@@ -197,5 +207,25 @@ namespace ImportExportDesktopApp.ViewModels
                 NotifyPropertyChanged();
             }
         }
+
+        public String PagingInfo
+        {
+            get { return _pagingInfo; }
+            set
+            {
+                _pagingInfo = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public int MaxPage
+        {
+            get { return _maxPage; }
+            set
+            {
+                _maxPage = value;
+                NotifyPropertyChanged();
+            }
+        }
+
     }
 }

@@ -23,6 +23,8 @@ namespace ImportExportDesktopApp.ViewModels
         private bool _isSearch;
         private int _currentPage = 1;
         private bool _isLoading;
+        private string _pagingInfo;
+        private int _maxPage;
         public List<String> Types { get; }
         private String _fromDate;
         private String _toDate;
@@ -42,6 +44,7 @@ namespace ImportExportDesktopApp.ViewModels
             IsSearch = false;
             IsLoading = false;
             _inventoryDataTransfer = new InventoryDataTransfer();
+            MaxPage = _inventoryDataTransfer.GetMaxPage(10);
             Init();
 
             SearchCommand = new RelayCommand<object>((p) => { return true; }, p =>
@@ -85,6 +88,7 @@ namespace ImportExportDesktopApp.ViewModels
                     ListInventory.Add(GetDisplayInventory(item));
                 }
             }
+            SetPagingInfo();
         }
 
         private void SearchInventory()
@@ -165,6 +169,7 @@ namespace ImportExportDesktopApp.ViewModels
                     ListInventory.Add(GetDisplayInventory(item));
                 }
             }
+            SetPagingInfo();
         }
         public void BeforePage()
         {
@@ -179,6 +184,7 @@ namespace ImportExportDesktopApp.ViewModels
                     ListInventory.Add(GetDisplayInventory(item));
                 }
             }
+            SetPagingInfo();
         }
 
         public void CancelSearch()
@@ -213,7 +219,10 @@ namespace ImportExportDesktopApp.ViewModels
             }
             IsLoading = false;
         }
-
+        private void SetPagingInfo()
+        {
+            PagingInfo = String.Format("Page {0} of {1}", CurrentPage, MaxPage);
+        }
         public String FromDate
         {
             get { return _fromDate; }
@@ -268,6 +277,24 @@ namespace ImportExportDesktopApp.ViewModels
             set
             {
                 _currentPage = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public int MaxPage
+        {
+            get { return _maxPage; }
+            set
+            {
+                _maxPage = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public String PagingInfo
+        {
+            get { return _pagingInfo; }
+            set
+            {
+                _pagingInfo = value;
                 NotifyPropertyChanged();
             }
         }

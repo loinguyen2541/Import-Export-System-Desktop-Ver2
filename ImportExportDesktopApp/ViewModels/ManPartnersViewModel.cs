@@ -30,6 +30,8 @@ namespace ImportExportDesktopApp.ViewModels
         private String _cardId;
         private List<IdentityCard> _listCard;
         private Account _account = null;
+        private string _pagingInfo;
+        private int _maxPage;
 
         private PartnerDataTransfer _partnerDataTransfer;
         private CardDataTransfer _cardDataTransfer;
@@ -50,6 +52,8 @@ namespace ImportExportDesktopApp.ViewModels
             _partnerDataTransfer = new PartnerDataTransfer();
             _cardDataTransfer = new CardDataTransfer();
             _accountDataTransfer = new AccountDataTransfer();
+            MaxPage = _partnerDataTransfer.GetMaxPage(10);
+
 
             Task.Run(() =>
             {
@@ -104,8 +108,8 @@ namespace ImportExportDesktopApp.ViewModels
             IsLoading = false;
             IsSearch = false;
             Search = "";
-
             SelectedType = Types[0];
+            SetPagingInfo();
         }
 
         private void OpenDialog()
@@ -238,17 +242,20 @@ namespace ImportExportDesktopApp.ViewModels
         {
             IsSearch = true;
             Partners = _partnerDataTransfer.SearchPartner(SelectedType.PartnerTypeId, Search);
+
         }
 
         public void NextPage()
         {
             CurrentPage++;
             Partners = _partnerDataTransfer.GetAllWithPaging(CurrentPage);
+            SetPagingInfo();
         }
         public void BeforePage()
         {
             CurrentPage--;
             Partners = _partnerDataTransfer.GetAllWithPaging(CurrentPage);
+            SetPagingInfo();
         }
 
         public void CancelSearch()
@@ -272,6 +279,10 @@ namespace ImportExportDesktopApp.ViewModels
             }
             IsLoading = false;
 
+        }
+        private void SetPagingInfo()
+        {
+            PagingInfo = String.Format("Page {0} of {1}", CurrentPage, MaxPage);
         }
 
         public bool IsLoading
@@ -390,6 +401,24 @@ namespace ImportExportDesktopApp.ViewModels
             set
             {
                 _listCard = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public String PagingInfo
+        {
+            get { return _pagingInfo; }
+            set
+            {
+                _pagingInfo = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public int MaxPage
+        {
+            get { return _maxPage; }
+            set
+            {
+                _maxPage = value;
                 NotifyPropertyChanged();
             }
         }

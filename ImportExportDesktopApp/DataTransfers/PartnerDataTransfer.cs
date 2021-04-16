@@ -65,9 +65,12 @@ namespace ImportExportDesktopApp.DataTransfers
             ie.SaveChanges();
             return newpartner;
         }
-        public void Save()
+        public int GetMaxPage(int pageSize)
         {
-            ie.SaveChanges();
+            int count = ie.Partners.Count();
+            double totalPage = count * (1.0) / pageSize * (1.0);
+            return (int)Math.Ceiling(totalPage);
         }
+
     }
 }

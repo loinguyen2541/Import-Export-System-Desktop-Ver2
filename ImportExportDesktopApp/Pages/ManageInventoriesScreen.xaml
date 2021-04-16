@@ -177,11 +177,10 @@
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Column="0">
                         <TextBlock
-                            x:Name="TxtPageInfo"
-                            Margin="0,0,16,0"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Center"
-                            Text="{Binding TxtPageInfo, UpdateSourceTrigger=PropertyChanged}" />
+                                x:Name="TxtPageInfo"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Text="{Binding PagingInfo, UpdateSourceTrigger=PropertyChanged}" />
                     </Grid>
 
                     <Grid Grid.Column="1" HorizontalAlignment="Right">

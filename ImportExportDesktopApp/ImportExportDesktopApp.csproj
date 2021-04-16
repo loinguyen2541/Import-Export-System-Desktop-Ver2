@@ -120,6 +120,7 @@
     <Compile Include="Converters\StatusColorConverter.cs" />
     <Compile Include="Converters\TimeConverter.cs" />
     <Compile Include="Converters\TransactionStatusConverter.cs" />
+    <Compile Include="Converters\TransactionTypeConverter.cs" />
     <Compile Include="DataTransfers\AccountDataTransfer.cs" />
     <Compile Include="DataTransfers\CardDataTransfer.cs" />
     <Compile Include="DataTransfers\DataContext.cs" />

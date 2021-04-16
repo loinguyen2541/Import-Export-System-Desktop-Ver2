@@ -47,8 +47,8 @@ namespace ImportExportDesktopApp
             {
                 proccessingPage = new ProcessingPage();
             }
-            _mainFrame.Navigate(new ManagePartnersScreen());
-            //AppService.Instance.EventAggregator.GetEvent<ScaleExceptionEvent>().Subscribe(HandleScaleEvent);
+            _mainFrame.Navigate(proccessingPage);
+            AppService.Instance.EventAggregator.GetEvent<ScaleExceptionEvent>().Subscribe(HandleScaleEvent);
         }
 
         private void HandleScaleEvent(ScaleExeption scaleExeption)

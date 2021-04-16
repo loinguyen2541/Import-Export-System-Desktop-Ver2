@@ -237,7 +237,7 @@
                                 x:Name="TxtPageInfo"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Center"
-                                Text="{Binding TxtPageInfo, UpdateSourceTrigger=PropertyChanged, IsAsync=True}" />
+                                Text="{Binding PagingInfo, UpdateSourceTrigger=PropertyChanged}" />
                         </Grid>
 
                         <Grid Grid.Column="1" HorizontalAlignment="Right">

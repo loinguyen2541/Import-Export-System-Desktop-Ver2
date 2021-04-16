@@ -39,5 +39,11 @@ namespace ImportExportDesktopApp.DataTransfers
         {
             return new ObservableCollection<Schedule>(ie.Schedules.OrderByDescending(s => s.Partner.DisplayName.Contains(searchName) && s.ScheduleDate >= searchDate));
         }
+        public int GetMaxPage(int pageSize)
+        {
+            int count = ie.Schedules.Count();
+            double totalPage = count * (1.0) / pageSize * (1.0);
+            return (int)Math.Ceiling(totalPage);
+        }
     }
 }

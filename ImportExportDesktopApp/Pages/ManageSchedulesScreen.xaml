@@ -186,13 +186,13 @@
                         HorizontalAlignment="Stretch"
                         materialDesign:DataGridAssist.CellPadding="16 8 16 8"
                         materialDesign:DataGridAssist.ColumnHeaderPadding="16 16 16 16"
-                        AlternationCount="{Binding Schedules.Data.Count}"
+                        AlternationCount="{Binding Schedules.Count}"
                         AutoGenerateColumns="False"
                         CanUserAddRows="False"
                         CanUserSortColumns="True"
                         FontSize="15"
                         IsReadOnly="True"
-                        ItemsSource="{Binding Schedules.Data, IsAsync=True}"
+                        ItemsSource="{Binding Schedules, IsAsync=True}"
                         MouseDoubleClick="DataGrid_MouseDoubleClick"
                         SelectionChanged="ScheduleGrid_SelectionChanged_1">
                         <DataGrid.Columns>
@@ -275,7 +275,7 @@
                                 x:Name="TxtPageInfo"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Center"
-                                Text="{Binding TxtPageInfo, UpdateSourceTrigger=PropertyChanged, IsAsync=True}" />
+                                Text="{Binding PagingInfo, UpdateSourceTrigger=PropertyChanged}" />
                         </Grid>
 
                         <Grid Grid.Column="1" HorizontalAlignment="Right">

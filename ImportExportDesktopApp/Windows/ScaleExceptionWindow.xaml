@@ -118,8 +118,7 @@
                     <StackPanel
                         Grid.Row="2"
                         HorizontalAlignment="Right"
-                        Orientation="Horizontal"
-                        Visibility="{Binding Gate2ButtonVisibility}">
+                        Orientation="Horizontal">
                         <Button
                             Margin="0,0,8,0"
                             BorderBrush="Transparent"

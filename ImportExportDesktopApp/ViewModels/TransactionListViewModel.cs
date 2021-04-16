@@ -22,12 +22,13 @@ namespace ImportExportDesktopApp.ViewModels
         private ObservableCollection<Transaction> _transactions;
         private TransactionDataTransfer _transactionDataTransfer;
         private int _maxPage;
-        private int _currentPage = 1;
+        private int _currentPage;
         private string _pagingInfo;
         public ICommand NextPageCommand { get; set; }
         public ICommand BeforePageCommand { get; set; }
         public TransactionListViewModel()
         {
+            CurrentPage = 1;
             _transactionDataTransfer = new TransactionDataTransfer();
             Transactions = _transactionDataTransfer.GetTransactions(_currentPage, -1);
             MaxPage = _transactionDataTransfer.GetMaxPage(10);
@@ -46,11 +47,16 @@ namespace ImportExportDesktopApp.ViewModels
         {
             CurrentPage++;
             Transactions = _transactionDataTransfer.GetTransactions(CurrentPage, -1);
+            SetPagingInfo();
         }
         public void BeforePage()
         {
-            CurrentPage--;
+            if (CurrentPage > 1)
+            {
+                CurrentPage--;
+            }
             Transactions = _transactionDataTransfer.GetTransactions(CurrentPage, -1);
+            SetPagingInfo();
         }
 
         public ObservableCollection<Transaction> Transactions

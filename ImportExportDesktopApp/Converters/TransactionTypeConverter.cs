@@ -6,24 +6,26 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
+/**
+* @author Loi Nguyen
+*
+* @date - 4/9/2021 8:03:00 AM 
+*/
+
 namespace ImportExportDesktopApp.Converters
 {
-    class TransactionStatusConverter : IValueConverter
+    class TransactionTypeConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            int status = System.Convert.ToInt32(value);
-            if (status == 0)
+            int type = (int)value;
+            if (type == 0)
             {
-                return "Processing";
-            }
-            else if (status == 1)
-            {
-                return "Success";
+                return "Import";
             }
             else
             {
-                return "Disable";
+                return "Export";
             }
         }
 
