@@ -288,12 +288,12 @@
                             Margin="0,8,0,0"
                             materialDesign:DataGridAssist.CellPadding="16 16 16 16"
                             materialDesign:DataGridAssist.ColumnHeaderPadding="16 16 16 16"
-                            CanUserAddRows="False"
+                            CanUserAddRows="True"
                             CanUserSortColumns="True"
                             AutoGenerateColumns="True"
                             FontSize="15"
                             IsReadOnly="True"
-                            ItemsSource="{Binding ListIdentityCards, UpdateSourceTrigger=PropertyChanged}">
+                            ItemsSource="{Binding ListIdentityCards, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                             <DataGrid.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem

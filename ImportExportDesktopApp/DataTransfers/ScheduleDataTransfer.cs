@@ -35,5 +35,9 @@ namespace ImportExportDesktopApp.DataTransfers
         {
             return new ObservableCollection<Schedule>(ie.Schedules.OrderByDescending(s => s.CreatedDate).Take(10).Skip((page - 1) * 10));
         }
+        public ObservableCollection<Schedule> SearchSchedule(DateTime searchDate, string searchName)
+        {
+            return new ObservableCollection<Schedule>(ie.Schedules.OrderByDescending(s => s.Partner.DisplayName.Contains(searchName) && s.ScheduleDate >= searchDate));
+        }
     }
 }

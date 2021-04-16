@@ -180,6 +180,7 @@ namespace ImportExportDesktopApp.ViewModels
             IdentityCard card = new IdentityCard();
             card.IdentityCardStatus = 0;
             card.IdentityCardId = CardId;
+            card.CreatedDate = DateTime.Now;
             card.PartnerId = 0;
 
             bool check = true;
@@ -197,7 +198,7 @@ namespace ImportExportDesktopApp.ViewModels
 
             if (check)
             {
-                _listCard.Add(card);
+                ListIdentityCards.Add(card);
             }
             else
             {
@@ -259,7 +260,7 @@ namespace ImportExportDesktopApp.ViewModels
             SelectedType = Types[0];
         }
 
-        public async void Refresh()
+        public void Refresh()
         {
             IsLoading = true;
             CurrentPage = 1;

@@ -22,9 +22,9 @@ namespace ImportExportDesktopApp.ViewModels
 
         private ObservableCollection<Schedule> _schedules;
         private List<String> _types;
-        private String _txtPageInfo;
-        private bool _isMaxPage;
-        private bool _isFirstPage;
+        private String _searchDate;
+        private String _searchType;
+        private String _searchName;
         private bool _isSearch;
         private bool _isLoading;
         private string _autoschedule;
@@ -39,10 +39,10 @@ namespace ImportExportDesktopApp.ViewModels
             _systemDataTransfer = new SystemConfigDataTransfer();
             Task.Run(() => { Init(); });
 
-            //SearchCommand = new RelayCommand<object>((p) => { return true; }, p =>
-            //{
-            //    SearchSchedules();
-            //});
+            SearchCommand = new RelayCommand<object>((p) => { return true; }, p =>
+            {
+                SearchSchedules();
+            });
             RefreshCommand = new RelayCommand<object>((p) => { return true; }, p =>
             {
                 Refresh();
@@ -71,11 +71,14 @@ namespace ImportExportDesktopApp.ViewModels
             Types.Add("Export");
         }
 
-        public async void SearchSchedules()
+        public void SearchSchedules()
         {
-            //IsSearch = true;
-            //ObservableCollection<Schedule> newSchedules = ie.Schedules.Where(s => s.ScheduleDate);
-            //RefreshTableAndLabel(newSchedules);
+            IsSearch = true;
+            DateTime searchDate;
+            if (DateTime.TryParse(SearchDate, out searchDate))
+            {
+                Schedules = _scheduleDataTransfer.SearchSchedule(searchDate, SearchName);
+            }
         }
 
         public void CancelSearch()
@@ -155,6 +158,33 @@ namespace ImportExportDesktopApp.ViewModels
             set
             {
                 _autoschedule = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public string SearchDate
+        {
+            get { return _searchDate; }
+            set
+            {
+                _searchDate = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public string SelectedType
+        {
+            get { return _searchType; }
+            set
+            {
+                _searchType = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public string SearchName
+        {
+            get { return _searchName; }
+            set
+            {
+                _searchName = value;
                 NotifyPropertyChanged();
             }
         }

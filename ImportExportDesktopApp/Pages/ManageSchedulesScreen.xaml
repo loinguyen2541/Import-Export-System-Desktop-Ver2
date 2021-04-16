@@ -78,7 +78,7 @@
                             HorizontalAlignment="Left"
                             VerticalAlignment="Bottom"
                             materialDesign:HintAssist.Hint="Pick Date"
-                            SelectedDate="{Binding Paging.Date}"
+                            SelectedDate="{Binding SearchDate}"
                             Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
                     </Grid>
                     <Grid Grid.Column="1">
@@ -91,7 +91,7 @@
                             materialDesign:HintAssist.Hint="Type"
                             IsEditable="True"
                             ItemsSource="{Binding Types}"
-                            SelectedValue="{Binding Paging.Type, UpdateSourceTrigger=PropertyChanged}"
+                            SelectedValue="{Binding SelectedType, UpdateSourceTrigger=PropertyChanged}"
                             Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
                     </Grid>
                     <Grid Grid.Column="2">
@@ -102,7 +102,7 @@
                             VerticalAlignment="Bottom"
                             materialDesign:HintAssist.Hint="Partner Name"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                            Text="{Binding Paging.Search}" />
+                            Text="{Binding SearchName}" />
                     </Grid>
 
                     <Grid Grid.Column="3">
