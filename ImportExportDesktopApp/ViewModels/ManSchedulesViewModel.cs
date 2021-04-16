@@ -59,7 +59,7 @@ namespace ImportExportDesktopApp.ViewModels
             Types.Add("Export");
         }
 
-        public async void SearchSchedules()
+        public void SearchSchedules()
         {
             //IsSearch = true;
             //List<Schedule> newSchedules = ie.Schedules.Where(s => s.ScheduleDate);

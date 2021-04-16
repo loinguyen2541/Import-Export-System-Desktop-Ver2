@@ -18,8 +18,9 @@
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     mc:Ignorable="d">
     <Page.Resources>
-        <converter:TransactionStatusConverter x:Key="TransactionTypeConverter" />
+        <converter:TransactionTypeConverter x:Key="TransactionTypeConverter" />
         <converter:RowIndexConverter x:Key="RowIndexConverter" />
+        <converter:TransactionStatusConverter x:Key="StatusConverter" />
     </Page.Resources>
     <Border Padding="16">
         <Grid>
@@ -184,7 +185,7 @@
                             <DataGridTextColumn Binding="{Binding WeightOut}" Header="Weight Out" />
                             <DataGridTextColumn Binding="{Binding Total}" Header="Total" />
                             <DataGridTextColumn Binding="{Binding CreatedDate}" Header="Date Create" />
-                            <DataGridTextColumn Binding="{Binding TransactionStatus}" Header="Status" />
+                            <DataGridTextColumn Binding="{Binding TransactionStatus, Converter={StaticResource StatusConverter}}" Header="Status" />
                         </DataGrid.Columns>
 
                     </DataGrid>

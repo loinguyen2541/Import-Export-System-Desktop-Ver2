@@ -33,14 +33,15 @@ namespace ImportExportDesktopApp.DataTransfers
 
         public ObservableCollection<Transaction> GetSuccessTransaction()
         {
-            return new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == 1).OrderByDescending(t => t.TimeOut).Take(10));
+            DateTime dateTime = DateTime.Now;
+            return new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == 1 && DbFunctions.TruncateTime(t.TimeOut) == dateTime.Date).OrderByDescending(t => t.TimeOut).Take(10));
         }
 
         public ObservableCollection<Transaction> GetProcessingTransactionByPartnerToday(int partnerId)
         {
             var today = DateTime.Now;
 
-            return new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == 0  && t.PartnerId == partnerId && DbFunctions.TruncateTime(t.CreatedDate) == today.Date).OrderByDescending(t => t.TimeIn).ToList());
+            return new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == 0 && t.PartnerId == partnerId && DbFunctions.TruncateTime(t.CreatedDate) == today.Date).OrderByDescending(t => t.TimeIn).ToList());
         }
 
         public ObservableCollection<Transaction> GetSuccessTransactionByPartnerToday(int partnerId)
@@ -85,7 +86,8 @@ namespace ImportExportDesktopApp.DataTransfers
         {
             if (type == -1)
             {
-                return new ObservableCollection<Transaction>(ie.Transactions.OrderByDescending(t => t.CreatedDate).Take(10).Skip((page - 1) * 10));
+                List<Transaction> transactions = ie.Transactions.OrderByDescending(t => t.CreatedDate).Skip((page - 1) * 20).Take(20).ToList();
+                return new ObservableCollection<Transaction>(transactions);
             }
             else
             {

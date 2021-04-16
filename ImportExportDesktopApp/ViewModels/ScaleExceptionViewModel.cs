@@ -406,7 +406,12 @@ namespace ImportExportDesktopApp.ViewModels
         public void Cancel(Window window)
         {
             _eventAggregator.GetEvent<ReslovedScaleExceptionEvent>().Publish(new ScaleExeptionAction(TransactionScaleGate.Gate, EScaleExceptionAction.Cancel));
-            if (ExceptionType != EScaleExceptionType.WrongTransactionType)
+            Transaction transaction = _transactionDataTransfer.IsProcessing(TransactionScaleGate.Indentify);
+            if (transaction != null)
+            {
+                CreateCancelProcessingTransaction(transaction, TransactionScaleGate, PartnerGate, ScheduleGate);
+            }
+            else
             {
                 CreateTransaction(TransactionScaleGate, PartnerGate, ScheduleGate, true);
             }
@@ -414,6 +419,16 @@ namespace ImportExportDesktopApp.ViewModels
             {
                 window.Close();
             }
+        }
+
+        public Transaction CreateCancelProcessingTransaction(Transaction transaction, TransactionScale transactionScale, Partner partner, Schedule schedule)
+        {
+            transaction.WeightOut = transactionScale.Weight;
+            transaction.TimeOut = DateTime.Now;
+            transaction.TransactionStatus = 2;
+            transaction.Gate = transactionScale.Gate.ToString();
+            transaction = _transactionDataTransfer.InsertTransaction(transaction);
+            return transaction;
         }
 
         void NotifyHttpAll(Transaction transaction)

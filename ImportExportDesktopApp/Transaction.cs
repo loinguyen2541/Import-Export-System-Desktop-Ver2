@@ -11,7 +11,7 @@ namespace ImportExportDesktopApp
 {
     using System;
     using System.Collections.Generic;
-    
+
     public partial class Transaction
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -19,7 +19,7 @@ namespace ImportExportDesktopApp
         {
             this.Notifications = new HashSet<Notification>();
         }
-    
+
         public int TransactionId { get; set; }
         public System.DateTime TimeIn { get; set; }
         public System.DateTime TimeOut { get; set; }
@@ -34,10 +34,23 @@ namespace ImportExportDesktopApp
         public string IdentificationCode { get; set; }
         public int GoodsId { get; set; }
         public string Gate { get; set; }
-    
+
         public virtual Good Good { get; set; }
         public virtual Partner Partner { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Notification> Notifications { get; set; }
+
+        public float Total
+        {
+            get
+            {
+                float total = WeightIn - WeightOut;
+                if (total < 0)
+                {
+                    total = total * -1;
+                }
+                return (float)Math.Round(total, 2);
+            }
+        }
     }
 }

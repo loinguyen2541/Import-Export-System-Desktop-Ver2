@@ -19,7 +19,7 @@
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     mc:Ignorable="d">
     <Page.Resources>
-        <converter:TransactionStatusConverter x:Key="TransactionTypeConverter" />
+        <converter:TransactionTypeConverter x:Key="TransactionTypeConverter" />
         <converter:RowIndexConverter x:Key="RowIndexConverter" />
         <converter:TimeConverter x:Key="TimeConverter" />
         <converter:DateConverter x:Key="DateConverter" />
