@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,6 +30,10 @@ namespace ImportExportDesktopApp.DataTransfers
         public void UpdateSchedule(Schedule schedule)
         {
             ie.Entry(schedule).State = System.Data.Entity.EntityState.Modified;
+        }
+        public ObservableCollection<Schedule> GetAllSchedule(int page)
+        {
+            return new ObservableCollection<Schedule>(ie.Schedules.OrderByDescending(s => s.CreatedDate).Take(10).Skip((page - 1) * 10));
         }
     }
 }

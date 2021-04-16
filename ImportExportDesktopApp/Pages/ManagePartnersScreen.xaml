@@ -247,7 +247,7 @@
                                 Width="35"
                                 Height="35"
                                 HorizontalAlignment="Left"
-                                Command="{Binding GetBeforePageCommand}"
+                                Command="{Binding BeforePageCommand}"
                                 CommandParameter="{Binding Paging}"
                                 ToolTip="MaterialDesignFloatingActionMiniButton">
                                 <materialDesign:PackIcon
@@ -275,7 +275,7 @@
                                 Width="35"
                                 Height="35"
                                 HorizontalAlignment="Right"
-                                Command="{Binding GetNextPageCommand}"
+                                Command="{Binding NextPageCommand}"
                                 CommandParameter="{Binding Paging}"
                                 ToolTip="MaterialDesignFloatingActionMiniButton">
                                 <materialDesign:PackIcon

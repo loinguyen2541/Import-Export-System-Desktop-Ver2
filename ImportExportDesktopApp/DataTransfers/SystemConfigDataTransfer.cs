@@ -26,5 +26,10 @@ namespace ImportExportDesktopApp.DataTransfers
             String storageCapacityString = ie.SystemConfigs.Where(s => s.AttributeKey.Contains("StorageCapacity")).Select(s => s.AttributeValue).FirstOrDefault();
             return int.Parse(storageCapacityString);
         }
+
+        public SystemConfig GetTimeSchedule()
+        {
+            return ie.SystemConfigs.Where(s => s.AttributeKey == "AutoSchedule").SingleOrDefault() ;
+        }
     }
 }

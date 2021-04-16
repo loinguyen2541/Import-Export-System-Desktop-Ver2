@@ -1,10 +1,12 @@
 ﻿using ImportExportDesktopApp.Commands;
+using ImportExportDesktopApp.DataTransfers;
 using ImportExportDesktopApp.DisplayModel;
 using ImportExportDesktopApp.HttpServices;
 using ImportExportDesktopApp.Pages;
 using ImportExportDesktopApp.Utils;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,23 +21,18 @@ namespace ImportExportDesktopApp.ViewModels
         public List<InventoryDisplay> ListInventory { get; set; }
 
         private bool _isSearch;
-
+        private int _currentPage = 1;
         private bool _isLoading;
-
-        //public QueryParams Paging { get; set; }
         public List<String> Types { get; }
         private String _fromDate;
         private String _toDate;
+        private InventoryDataTransfer _inventoryDataTransfer;
         public ICommand SearchCommand { get; set; }
         public ICommand DoubleClickCommand { get; set; }
-        public ICommand GetNextPageCommand { get; set; }
-        public ICommand GetBeforePageCommand { get; set; }
+        public ICommand NextPageCommand { get; set; }
+        public ICommand BeforePageCommand { get; set; }
         public ICommand RefreshCommand { get; set; }
         public ICommand CancelSearchCommand { get; set; }
-
-        private String _txtPageInfo;
-        private bool _isMaxPage;
-        private bool _isFirstPage;
         public int transactionID { get; set; }
         private readonly IEEntities ie;
 
@@ -44,17 +41,8 @@ namespace ImportExportDesktopApp.ViewModels
         {
             IsSearch = false;
             IsLoading = false;
-            ie = new IEEntities();
+            _inventoryDataTransfer = new InventoryDataTransfer();
             Init();
-            //inventoryService = new InventoryHttpService();
-            //ListInventory = inventoryService.GetInventory(1, 8, null, null).Result;
-            //formatDateRecord(ListInventory);
-            ////Paging = new QueryParams();
-            ////Paging.Size = ListInventory.Size;
-            ////Paging.Page = ListInventory.Page;
-
-            //_txtPageInfo = String.Format("Page {0} of {1}", ListInventory.Page, ListInventory.TotalPage);
-            //CheckPage();
 
             SearchCommand = new RelayCommand<object>((p) => { return true; }, p =>
             {
@@ -66,23 +54,28 @@ namespace ImportExportDesktopApp.ViewModels
                 if (p != null)
                     SearchInventoryDetailByInventory(p);
             });
-            //GetNextPageCommand = new RelayCommand<QueryParams>((p) => { return true; }, GetNextPage);
-
-            //GetBeforePageCommand = new RelayCommand<QueryParams>((p) => { return true; }, GetBeforePage);
-            //CancelSearchCommand = new RelayCommand<Object>((p) => { return true; }, p =>
-            //{
-            //    CancelSearch();
-            //});
-            //RefreshCommand = new RelayCommand<Object>((p) => { return true; }, p =>
-            //{
-            //    Refresh();
-            //});
+            NextPageCommand = new RelayCommand<object>(p => { return true; }, p =>
+            {
+                NextPage();
+            });
+            BeforePageCommand = new RelayCommand<object>(p => { return true; }, p =>
+            {
+                BeforePage();
+            });
+            CancelSearchCommand = new RelayCommand<Object>((p) => { return true; }, p =>
+            {
+                CancelSearch();
+            });
+            RefreshCommand = new RelayCommand<Object>((p) => { return true; }, p =>
+            {
+                Refresh();
+            });
 
         }
 
         private void Init()
         {
-            List<Inventory> inventory = ie.Inventories.ToList();
+            ObservableCollection<Inventory> inventory = _inventoryDataTransfer.GetAllInventory(CurrentPage);
             ListInventory = new List<InventoryDisplay>();
             if (inventory != null)
             {
@@ -97,9 +90,10 @@ namespace ImportExportDesktopApp.ViewModels
         private void SearchInventory()
         {
             DateTime startDate, endDate;
+            CurrentPage = 1;
             if (DateTime.TryParse(FromDate, out startDate) && DateTime.TryParse(ToDate, out endDate))
             {
-                List<Inventory> inventory = this.ie.Inventories.Where(i => startDate <= i.RecordedDate && i.RecordedDate <= endDate).ToList();
+                ObservableCollection<Inventory> inventory = _inventoryDataTransfer.SearchInventory(startDate, endDate, CurrentPage);
                 if (inventory != null && inventory.Count!=0)
                 {
                     foreach (var item in inventory)
@@ -158,118 +152,68 @@ namespace ImportExportDesktopApp.ViewModels
             detailTransactinoWindow.ShowDialog();
         }
 
-        //public void SearchInventory()
-        //{
-        //    IsSearch = true;
-        //    List<Inventory> newInventory = inventoryService.GetInventory(Paging.Page, Paging.Size, FromDate, ToDate).Result;
-        //    formatDateRecord(newInventory);
-        //    RefreshTableAndLabel(newInventory);
-        //}
-
-        //public void GetNextPage(QueryParams query)
-        //{
-        //    query.Page = query.Page + 1;
-        //    List<Inventory> inventory = inventoryService.GetInventory(query.Page, query.Size, FromDate, ToDate).Result;
-        //    RefreshTableAndLabel(inventory);
-        //}
-
-        //public void GetBeforePage(QueryParams query)
-        //{
-        //    query.Page = query.Page - 1;
-        //    List<Inventory> inventory = inventoryService.GetInventory(query.Page, query.Size, FromDate, ToDate).Result;
-        //    RefreshTableAndLabel(inventory);
-        //}
-        //public void formatDateRecord(List<Inventory> inventories)
-        //{
-        //    String[] temp;
-        //    if (inventories != null && inventories.Data != null)
-        //    {
-        //        foreach (var item in inventories.Data)
-        //        {
-        //            temp = item.RecordedDate.Split('T');
-        //            item.RecordedDate = temp[0];
-        //        }
-        //    }
-        //}
-
-        //public void CancelSearch()
-        //{
-        //    IsSearch = false;
-        //    Paging.Date = "";
-        //    Paging.Search = "";
-        //    Paging.Type = "";
-        //    Paging.Page = 1;
-        //    FromDate = "";
-        //    ToDate = "";
-        //    List<Inventory> inventories = inventoryService.GetInventory(Paging.Page, Paging.Size, null, null).Result;
-        //    RefreshTableAndLabel(inventories);
-        //}
-
-        //public async void Refresh()
-        //{
-        //    IsLoading = true;
-        //    List<Inventory> inventories = await inventoryService.GetInventory(Paging.Page, Paging.Size, FromDate, ToDate);
-        //    RefreshTableAndLabel(inventories);
-        //    IsLoading = false;
-        //}
-
-        //public void RefreshTableAndLabel(List<Inventory> inventories)
-        //{
-        //    Clear(inventories);
-        //    TxtPageInfo = String.Format("Page {0} of {1}", inventories.Page, inventories.TotalPage);
-        //    CheckPage();
-        //}
-
-        //public void CheckPage()
-        //{
-        //    if (ListInventory.Page >= ListInventory.TotalPage)
-        //    {
-        //        IsMaxPage = true;
-        //    }
-        //    else
-        //    {
-        //        IsMaxPage = false;
-        //    }
-
-        //    if (ListInventory.Page <= 1)
-        //    {
-        //        IsFirstPage = true;
-        //    }
-        //    else
-        //    {
-        //        IsFirstPage = false;
-        //    }
-        //}
-
-        public String TxtPageInfo
+        public void NextPage()
         {
-            get { return _txtPageInfo; }
-            set
+            CurrentPage++;
+            ObservableCollection<Inventory> inventory = _inventoryDataTransfer.GetAllInventory(CurrentPage);
+            ListInventory = new List<InventoryDisplay>();
+            if (inventory != null)
             {
-                _txtPageInfo = value;
-                NotifyPropertyChanged();
+                foreach (var item in inventory)
+                {
+
+                    ListInventory.Add(GetDisplayInventory(item));
+                }
+            }
+        }
+        public void BeforePage()
+        {
+            CurrentPage--;
+            ObservableCollection<Inventory> inventory = _inventoryDataTransfer.GetAllInventory(CurrentPage);
+            ListInventory = new List<InventoryDisplay>();
+            if (inventory != null)
+            {
+                foreach (var item in inventory)
+                {
+
+                    ListInventory.Add(GetDisplayInventory(item));
+                }
             }
         }
 
-        public bool IsMaxPage
+        public void CancelSearch()
         {
-            get { return _isMaxPage; }
-            set
+            IsSearch = false;
+            CurrentPage = 1;
+            ObservableCollection<Inventory> inventory = _inventoryDataTransfer.GetAllInventory(CurrentPage);
+            ListInventory = new List<InventoryDisplay>();
+            if (inventory != null)
             {
-                _isMaxPage = value;
-                NotifyPropertyChanged();
+                foreach (var item in inventory)
+                {
+
+                    ListInventory.Add(GetDisplayInventory(item));
+                }
             }
         }
 
-        public bool IsFirstPage
+        public void Refresh()
         {
-            get { return _isFirstPage; }
-            set
+            IsLoading = true;
+            CurrentPage = 1;
+            ObservableCollection<Inventory> inventory = _inventoryDataTransfer.GetAllInventory(CurrentPage);
+            ListInventory = new List<InventoryDisplay>();
+            if (inventory != null)
             {
-                _isFirstPage = value;
-                NotifyPropertyChanged();
+                foreach (var item in inventory)
+                {
+
+                    ListInventory.Add(GetDisplayInventory(item));
+                }
             }
+            IsLoading = false;
         }
+
         public String FromDate
         {
             get { return _fromDate; }
@@ -289,18 +233,6 @@ namespace ImportExportDesktopApp.ViewModels
                 NotifyPropertyChanged();
             }
         }
-
-        //public void Clear(List<Inventory> inventories)
-        //{
-        //    ListInventory.Page = inventories.Page;
-        //    ListInventory.Size = inventories.Size;
-        //    ListInventory.TotalPage = inventories.TotalPage;
-        //    ListInventory.Data.Clear();
-        //    foreach (var item in inventories.Data)
-        //    {
-        //        ListInventory.Data.Add(item);
-        //    }
-        //}
 
         public bool IsSearch
         {
@@ -327,6 +259,15 @@ namespace ImportExportDesktopApp.ViewModels
             set
             {
                 _selectedInventory = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public int CurrentPage
+        {
+            get { return _currentPage; }
+            set
+            {
+                _currentPage = value;
                 NotifyPropertyChanged();
             }
         }

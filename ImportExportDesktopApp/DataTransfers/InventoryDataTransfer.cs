@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
@@ -37,6 +38,15 @@ namespace ImportExportDesktopApp.DataTransfers
             inventory = ie.Inventories.Add(inventory);
             ie.SaveChanges();
             return inventory;
+        }
+
+        public ObservableCollection<Inventory> GetAllInventory(int page)
+        {
+            return new ObservableCollection<Inventory>(ie.Inventories.OrderByDescending(i => i.RecordedDate).Take(10).Skip((page - 1) * 10));
+        }
+        public ObservableCollection<Inventory> SearchInventory(DateTime startDate, DateTime endDate, int page)
+        {
+            return new ObservableCollection<Inventory>(ie.Inventories.Where(i => startDate <= i.RecordedDate && i.RecordedDate <= endDate).Take(10).Skip((page - 1) * 10));
         }
     }
 }
