@@ -116,5 +116,26 @@ namespace ImportExportDesktopApp.DataTransfers
         {
             ie.SaveChanges();
         }
+        public ObservableCollection<Transaction> SearchTransaction(int type, string searchPartner, DateTime searchDate)
+        {
+            List<Transaction> transactions = new List<Transaction>();
+            if (type == -1)
+            {
+                transactions = ie.Transactions.OrderByDescending(t=> t.CreatedDate).ToList();
+            }
+            else
+            {
+                transactions = ie.Transactions.OrderByDescending(t => t.CreatedDate).Where(t => t.TransactionType == type).ToList();
+            }
+            ObservableCollection<Transaction> temp = new ObservableCollection<Transaction>();
+            foreach (var item in transactions)
+            {
+                if(item.Partner.DisplayName.ToLower().Contains(searchPartner.ToLower()) && item.CreatedDate.Date >= searchDate.Date)
+                {
+                    temp.Add(item);
+                }
+            }
+            return temp;
+        }
     }
 }

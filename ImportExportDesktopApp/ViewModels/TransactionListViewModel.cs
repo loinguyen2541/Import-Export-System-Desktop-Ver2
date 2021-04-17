@@ -24,14 +24,20 @@ namespace ImportExportDesktopApp.ViewModels
         private int _maxPage;
         private int _currentPage;
         private string _pagingInfo;
+        private string _searchType;
+        private string _searchPartner;
+        private string _searchDate;
         public ICommand NextPageCommand { get; set; }
         public ICommand BeforePageCommand { get; set; }
+        public ICommand SearchCommand { get; set; }
+        public ICommand CancelSearchCommand { get; set; }
         public TransactionListViewModel()
         {
             CurrentPage = 1;
             _transactionDataTransfer = new TransactionDataTransfer();
             Transactions = _transactionDataTransfer.GetTransactions(_currentPage, -1);
             MaxPage = _transactionDataTransfer.GetMaxPage(10);
+            SearchPartner = "";
             SetPagingInfo();
             NextPageCommand = new RelayCommand<object>(p => { return true; }, p =>
             {
@@ -41,8 +47,53 @@ namespace ImportExportDesktopApp.ViewModels
             {
                 BeforePage();
             });
+            SearchCommand = new RelayCommand<object>(p => { return true; }, p =>
+            {
+                SearchTransaction();
+            });
+            CancelSearchCommand = new RelayCommand<object>(p => { return true; }, p =>
+            {
+                CancelSearch();
+            });
         }
+        public void SearchTransaction()
+        {
+            int type = -1;
+            if(SearchType == null)
+            {
+                type = -1;
+            }
+            else
+            {
+                if (SearchType.Equals("Import"))
+            {
+                type = 0;
+            }
+            if (SearchType.Equals("Export"))
+            {
+                type = 1;
+            }
+            }
+            DateTime searchDate;
+            if (DateTime.TryParse(SearchDate, out searchDate))
+            {
+                Transactions = _transactionDataTransfer.SearchTransaction(type, SearchPartner, searchDate);
+            }
+            else
+            {
+                searchDate = DateTime.MinValue;
+                Transactions = _transactionDataTransfer.SearchTransaction(type, SearchPartner, searchDate);
+            }
 
+        }
+        private void CancelSearch()
+        {
+            CurrentPage = 1;
+            Transactions = _transactionDataTransfer.GetTransactions(_currentPage, -1);
+            SearchDate = "";
+            SearchPartner = "";
+            SearchType = "";
+        }
         public void NextPage()
         {
             CurrentPage++;
@@ -100,6 +151,33 @@ namespace ImportExportDesktopApp.ViewModels
             set
             {
                 _currentPage = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public String SearchType
+        {
+            get { return _searchType; }
+            set
+            {
+                _searchType = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public String SearchDate
+        {
+            get { return _searchDate; }
+            set
+            {
+                _searchDate = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public String SearchPartner
+        {
+            get { return _searchPartner; }
+            set
+            {
+                _searchPartner = value;
                 NotifyPropertyChanged();
             }
         }
