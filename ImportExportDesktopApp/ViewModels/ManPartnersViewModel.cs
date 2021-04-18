@@ -36,6 +36,7 @@ namespace ImportExportDesktopApp.ViewModels
         private PartnerDataTransfer _partnerDataTransfer;
         private CardDataTransfer _cardDataTransfer;
         private AccountDataTransfer _accountDataTransfer;
+        private AccountApiService _accountService;
         public Partner TableSelectedItem { get; set; }
         private bool _isLoading;
         public ICommand SearchCommand { get; set; }
@@ -52,6 +53,7 @@ namespace ImportExportDesktopApp.ViewModels
             _partnerDataTransfer = new PartnerDataTransfer();
             _cardDataTransfer = new CardDataTransfer();
             _accountDataTransfer = new AccountDataTransfer();
+            _accountService = new AccountApiService();
             MaxPage = _partnerDataTransfer.GetMaxPage(10);
 
 
@@ -151,8 +153,11 @@ namespace ImportExportDesktopApp.ViewModels
                             }
                             Partner.IdentityCards = _cardDataTransfer.InsertCard(ListIdentityCards);
                         }
+                        _accountService.SendPassword(account: _account, partner);
                         MessageBoxResult result = MessageBox.Show("Add Partner Success", "Confirmation");
                         Partner = null;
+                        _account = null;
+                        ErrorMessage = "";
                     }
                     else
                     {

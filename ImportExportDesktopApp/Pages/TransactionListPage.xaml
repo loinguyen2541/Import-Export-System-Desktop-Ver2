@@ -95,13 +95,13 @@
                     VerticalAlignment="Bottom"
                     materialDesign:HintAssist.Hint="Partner Name"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                    Text="{Binding Paging.Search}" />
+                    Text="{Binding SearchPartner}" />
                 <ComboBox
                     Grid.Column="1"
                     Margin="16,0,0,16"
                     VerticalAlignment="Bottom"
                     materialDesign:HintAssist.Hint="Type"
-                    SelectedItem="{Binding Paging.Type}"
+                    SelectedItem="{Binding SearchType}"
                     Style="{StaticResource MaterialDesignFloatingHintComboBox}">
                     <ComboBoxItem>
                         Import
@@ -118,8 +118,14 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Bottom"
                     materialDesign:HintAssist.Hint="Date create"
-                    SelectedDate="{Binding Paging.Date}"
-                    Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+                    SelectedDate="{Binding SearchDate}"
+                    Focusable="False">
+                    <DatePicker.Resources>
+                        <Style TargetType="DatePickerTextBox">
+                            <Setter Property="IsReadOnly" Value="True" />
+                        </Style>
+                    </DatePicker.Resources>
+                </DatePicker>
                 <StackPanel Grid.Column="3" Orientation="Horizontal">
                     <Button
                         Width="100"
@@ -138,7 +144,7 @@
                         Height="30"
                         Margin="0,16"
                         VerticalAlignment="Bottom"
-                        Command="{Binding CloseSearchCommand}"
+                        Command="{Binding CancelSearchCommand}"
                         Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
                         ToolTip="MaterialDesignFloatingActionMiniDarkButton"
                         Visibility="{Binding CloseSearchVisibility, UpdateSourceTrigger=PropertyChanged}">
