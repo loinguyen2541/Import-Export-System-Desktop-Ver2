@@ -851,7 +851,14 @@ namespace ImportExportDesktopApp.ViewModels
                     SuccessTransactionSearch = _transactionDataTransfer.GetSuccessTransactionByPartnerToday(SelectedPartner.PartnerId);
                     ProcessingTransactionSearch = _transactionDataTransfer.GetProcessingTransactionByPartnerToday(SelectedPartner.PartnerId);
                     FailTransactionSearch = _transactionDataTransfer.GetFailTransactionByPartnerToday(SelectedPartner.PartnerId);
-                    SuccessHeader = String.Format("Success({0})", SuccessTransactionSearch.Count);
+
+                    float totalWeight = 0;
+                    foreach (var item in SuccessTransaction)
+                    {
+                        totalWeight += item.Total;
+                    }
+
+                    SuccessHeader = String.Format("Success({0}) - Total {1} kg", SuccessTransactionSearch.Count, totalWeight);
                     FailHeader = String.Format("Fail({0})", FailTransactionSearch.Count);
                     ProcessingHeader = String.Format("Processing({0})", ProcessingTransactionSearch.Count);
                 }

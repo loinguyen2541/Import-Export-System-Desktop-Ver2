@@ -19,7 +19,7 @@ namespace ImportExportDesktopApp.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             DateTime dateTime = System.Convert.ToDateTime(value);
-            return dateTime.Hour + ":" + dateTime.Minute;
+            return dateTime.Hour + "h" + dateTime.Minute;
 
         }
 
