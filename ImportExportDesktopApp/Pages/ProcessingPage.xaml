@@ -88,6 +88,11 @@
                             <Button
                                 Margin="0,0,8,0"
                                 BorderBrush="Transparent"
+                                Content="Import"
+                                Visibility="{Binding ImportButtonVisibilityGate1}" />
+                            <Button
+                                Margin="0,0,8,0"
+                                BorderBrush="Transparent"
                                 Command="{Binding DisableGate1Command}"
                                 Content="Disable"
                                 Visibility="{Binding DisableButtonVisibilityGate1}" />
@@ -282,6 +287,12 @@
                             HorizontalAlignment="Right"
                             Orientation="Horizontal"
                             Visibility="{Binding Gate2ButtonVisibility}">
+                            <Button
+                                Margin="0,0,8,0"
+                                BorderBrush="Transparent"
+                                Click="Button_Click_1"
+                                Content="Import"
+                                Visibility="{Binding ImportButtonVisibilityGate2}" />
                             <Button
                                 Margin="0,0,8,0"
                                 BorderBrush="Transparent"

@@ -12,6 +12,7 @@
     <viewmodel:ProcessingViewModel x:Key="ProcessingVM" />
     <viewmodel:TransactionListViewModel x:Key="TransactionListVM" />
     <viewmodel:ScaleExceptionViewModel x:Key="ScaleExceptionVM" />
+    <viewmodel:CreateTransactionViewModel x:Key="CreateTransactionVM" />
     <!--  Colors  -->
     <Brush x:Key="Red">#F44336</Brush>
     <Brush x:Key="Blue">#2196F3</Brush>

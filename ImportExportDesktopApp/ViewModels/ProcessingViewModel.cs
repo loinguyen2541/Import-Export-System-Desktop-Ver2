@@ -99,11 +99,13 @@ namespace ImportExportDesktopApp.ViewModels
         private EScaleExceptionType _exceptionTypeGate2;
         private String _disableButtonVisibilityGate1;
         private String _disableButtonVisibilityGate2;
+        private String _importButtonVisibilityGate1;
+        private String _importButtonVisibilityGate2;
 
 
         public ProcessingViewModel(IEventAggregator ea)
         {
-            _cancelSearchVisibility = EVisibility.Hidden.ToString();
+            _cancelSearchVisibility = EVisibility.Collapsed.ToString();
 
             Gate1Bg = GREEN_BG;
             Gate2Bg = GREEN_BG;
@@ -111,14 +113,17 @@ namespace ImportExportDesktopApp.ViewModels
             BtnHanldeContentGate1 = EBtnHandleContent.Accept.ToString();
             BtnHanldeContentGate2 = EBtnHandleContent.Accept.ToString();
 
-            DisableButtonVisibilityGate1 = EVisibility.Hidden.ToString();
-            DisableButtonVisibilityGate2 = EVisibility.Hidden.ToString();
+            DisableButtonVisibilityGate1 = EVisibility.Collapsed.ToString();
+            DisableButtonVisibilityGate2 = EVisibility.Collapsed.ToString();
+
+            ImportButtonVisibilityGate1 = EVisibility.Collapsed.ToString();
+            ImportButtonVisibilityGate2 = EVisibility.Collapsed.ToString();
 
             _isSlovingExeptionGate1 = false;
             _isSlovingExeptionGate2 = false;
 
-            Gate1ButtonVisibility = EVisibility.Hidden.ToString();
-            Gate2ButtonVisibility = EVisibility.Hidden.ToString();
+            Gate1ButtonVisibility = EVisibility.Collapsed.ToString();
+            Gate2ButtonVisibility = EVisibility.Collapsed.ToString();
 
             _transactionDataTransfer = new TransactionDataTransfer();
             _cardDataTransfer = new CardDataTransfer();
@@ -348,6 +353,10 @@ namespace ImportExportDesktopApp.ViewModels
                     BtnHanldeContentGate2 = EBtnHandleContent.Edit.ToString();
                     DisableButtonVisibilityGate2 = EVisibility.Visible.ToString();
                 }
+                else if (exceptionType == EScaleExceptionType.OverWeightExport)
+                {
+                    ImportButtonVisibilityGate2 = EVisibility.Visible.ToString();
+                }
                 ScaleExeption scaleExeption = new ScaleExeption(transactionScale, partner, schedule, exceptionType, MessageGate2);
                 _eventAggregator.GetEvent<ScaleExceptionEvent>().Publish(scaleExeption);
                 Gate2Bg = YELLOW_BG;
@@ -371,6 +380,10 @@ namespace ImportExportDesktopApp.ViewModels
                 {
                     BtnHanldeContentGate1 = EBtnHandleContent.Edit.ToString();
                     DisableButtonVisibilityGate1 = EVisibility.Visible.ToString();
+                }
+                else if (exceptionType == EScaleExceptionType.OverWeightExport)
+                {
+                    ImportButtonVisibilityGate1 = EVisibility.Visible.ToString();
                 }
                 ScaleExeption scaleExeption = new ScaleExeption(transactionScale, partner, schedule, exceptionType, MessageGate1);
                 _eventAggregator.GetEvent<ScaleExceptionEvent>().Publish(scaleExeption);
@@ -542,35 +555,37 @@ namespace ImportExportDesktopApp.ViewModels
             {
                 if (exeptionAction.Action == EScaleExceptionAction.Accept)
                 {
-                    Gate2ButtonVisibility = EVisibility.Hidden.ToString();
+                    Gate2ButtonVisibility = EVisibility.Collapsed.ToString();
                     _isSlovingExeptionGate2 = false;
                 }
                 else if (exeptionAction.Action == EScaleExceptionAction.Cancel)
                 {
-                    Gate2ButtonVisibility = EVisibility.Hidden.ToString();
+                    Gate2ButtonVisibility = EVisibility.Collapsed.ToString();
                     _isSlovingExeptionGate2 = false;
                 }
                 Gate2Bg = GREEN_BG;
                 MessageGate2 = "";
                 BtnHanldeContentGate2 = EBtnHandleContent.Accept.ToString();
-                DisableButtonVisibilityGate2 = EVisibility.Hidden.ToString();
+                DisableButtonVisibilityGate2 = EVisibility.Collapsed.ToString();
+                ImportButtonVisibilityGate2 = EVisibility.Collapsed.ToString();
             }
             else if (exeptionAction.Gate == EGate.Gate1)
             {
                 if (exeptionAction.Action == EScaleExceptionAction.Accept)
                 {
-                    Gate1ButtonVisibility = EVisibility.Hidden.ToString();
+                    Gate1ButtonVisibility = EVisibility.Collapsed.ToString();
                     _isSlovingExeptionGate1 = false;
                 }
                 else if (exeptionAction.Action == EScaleExceptionAction.Cancel)
                 {
-                    Gate1ButtonVisibility = EVisibility.Hidden.ToString();
+                    Gate1ButtonVisibility = EVisibility.Collapsed.ToString();
                     _isSlovingExeptionGate1 = false;
                 }
                 Gate1Bg = GREEN_BG;
                 MessageGate1 = "";
                 BtnHanldeContentGate1 = EBtnHandleContent.Accept.ToString();
-                DisableButtonVisibilityGate1 = EVisibility.Hidden.ToString();
+                DisableButtonVisibilityGate1 = EVisibility.Collapsed.ToString();
+                ImportButtonVisibilityGate1 = EVisibility.Collapsed.ToString();
             }
             UpdateTable();
         }
@@ -774,7 +789,7 @@ namespace ImportExportDesktopApp.ViewModels
 
         public void CloseSearch()
         {
-            CancelSearchVisibility = EVisibility.Hidden.ToString();
+            CancelSearchVisibility = EVisibility.Collapsed.ToString();
             SelectedPartner = null;
         }
 
@@ -1222,6 +1237,26 @@ namespace ImportExportDesktopApp.ViewModels
             set
             {
                 _failHeader = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public String ImportButtonVisibilityGate1
+        {
+            get { return _importButtonVisibilityGate1; }
+            set
+            {
+                _importButtonVisibilityGate1 = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public String ImportButtonVisibilityGate2
+        {
+            get { return _importButtonVisibilityGate2; }
+            set
+            {
+                _importButtonVisibilityGate2 = value;
                 NotifyPropertyChanged();
             }
         }

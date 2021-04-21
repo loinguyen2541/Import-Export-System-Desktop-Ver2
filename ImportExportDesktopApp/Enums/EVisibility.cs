@@ -15,6 +15,6 @@ namespace ImportExportDesktopApp.Enums
 {
     enum EVisibility
     {
-        Visible, Hidden
+        Visible, Hidden, Collapsed
     }
 }

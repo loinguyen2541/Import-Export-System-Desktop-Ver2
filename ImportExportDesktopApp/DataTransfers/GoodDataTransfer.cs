@@ -25,12 +25,13 @@ namespace ImportExportDesktopApp.DataTransfers
 
         public float getInventory()
         {
-            return ie.Goods.Where(p => p.GoodsStatus == 0).FirstOrDefault().QuantityOfInventory;
+            return ie.Goods.AsNoTracking().Where(p => p.GoodsStatus == 0).FirstOrDefault().QuantityOfInventory;
         }
 
         public Good UpdateInventory(int partnerTypeId, float weight, int capacity)
         {
             Good good = ie.Goods.Where(p => p.GoodsStatus == 0).FirstOrDefault();
+            ie.Entry(good).Reload();
             if (partnerTypeId == 1)
             {
                 good.QuantityOfInventory -= weight;

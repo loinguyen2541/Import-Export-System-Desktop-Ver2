@@ -177,5 +177,10 @@ namespace ImportExportDesktopApp.Pages
         {
 
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            this.NavigationService.Navigate(new CreateTransactionPage());
+        }
     }
 }

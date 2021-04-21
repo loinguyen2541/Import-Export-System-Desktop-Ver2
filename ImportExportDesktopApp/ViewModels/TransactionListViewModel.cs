@@ -1,5 +1,6 @@
 ﻿using ImportExportDesktopApp.Commands;
 using ImportExportDesktopApp.DataTransfers;
+using ImportExportDesktopApp.Enums;
 using ImportExportDesktopApp.Utils;
 using System;
 using System.Collections.Generic;
@@ -27,12 +28,22 @@ namespace ImportExportDesktopApp.ViewModels
         private string _searchType;
         private string _searchPartner;
         private string _searchDate;
+        private string _btnSearchVisibility;
+
+        public List<String> TransactionTypes { get; set; }
+
         public ICommand NextPageCommand { get; set; }
         public ICommand BeforePageCommand { get; set; }
         public ICommand SearchCommand { get; set; }
         public ICommand CancelSearchCommand { get; set; }
         public TransactionListViewModel()
         {
+            TransactionTypes = new List<string>();
+            TransactionTypes.Add(ETransactionType.Import.ToString());
+            TransactionTypes.Add(ETransactionType.Export.ToString());
+
+            BtnSearchVisibility = EVisibility.Hidden.ToString();
+
             CurrentPage = 1;
             _transactionDataTransfer = new TransactionDataTransfer();
             Transactions = _transactionDataTransfer.GetTransactions(_currentPage, -1);
@@ -58,32 +69,22 @@ namespace ImportExportDesktopApp.ViewModels
         }
         public void SearchTransaction()
         {
+            BtnSearchVisibility = EVisibility.Visible.ToString();
+
             int type = -1;
-            if(SearchType == null)
+            if (SearchType != null)
             {
-                type = -1;
+                if (SearchType.Equals(ETransactionType.Import.ToString()))
+                {
+                    type = 0;
+                }
+                if (SearchType.Equals(ETransactionType.Export.ToString()))
+                {
+                    type = 1;
+                }
             }
-            else
-            {
-                if (SearchType.Equals("Import"))
-            {
-                type = 0;
-            }
-            if (SearchType.Equals("Export"))
-            {
-                type = 1;
-            }
-            }
-            DateTime searchDate;
-            if (DateTime.TryParse(SearchDate, out searchDate))
-            {
-                Transactions = _transactionDataTransfer.SearchTransaction(type, SearchPartner, searchDate);
-            }
-            else
-            {
-                searchDate = DateTime.MinValue;
-                Transactions = _transactionDataTransfer.SearchTransaction(type, SearchPartner, searchDate);
-            }
+
+            Transactions = _transactionDataTransfer.SearchTransaction(type, SearchPartner, SearchDate);
 
         }
         private void CancelSearch()
@@ -93,6 +94,7 @@ namespace ImportExportDesktopApp.ViewModels
             SearchDate = "";
             SearchPartner = "";
             SearchType = "";
+            BtnSearchVisibility = EVisibility.Hidden.ToString();
         }
         public void NextPage()
         {
@@ -178,6 +180,16 @@ namespace ImportExportDesktopApp.ViewModels
             set
             {
                 _searchPartner = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public String BtnSearchVisibility
+        {
+            get { return _btnSearchVisibility; }
+            set
+            {
+                _btnSearchVisibility = value;
                 NotifyPropertyChanged();
             }
         }

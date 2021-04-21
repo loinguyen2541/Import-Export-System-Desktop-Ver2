@@ -24,6 +24,7 @@ namespace ImportExportDesktopApp.HttpServices
             try
             {
                 var response = Client.PostAsync("https://iesystem-api.azurewebsites.net/api/notifications", content).Result;
+                Console.WriteLine(json);
                 if (response.IsSuccessStatusCode)
                 {
                     return true;

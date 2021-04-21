@@ -101,15 +101,9 @@
                     Margin="16,0,0,16"
                     VerticalAlignment="Bottom"
                     materialDesign:HintAssist.Hint="Type"
-                    SelectedItem="{Binding SearchType}"
-                    Style="{StaticResource MaterialDesignFloatingHintComboBox}">
-                    <ComboBoxItem>
-                        Import
-                    </ComboBoxItem>
-                    <ComboBoxItem>
-                        Export
-                    </ComboBoxItem>
-                </ComboBox>
+                    ItemsSource="{Binding TransactionTypes}"
+                    SelectedValue="{Binding SearchType}"
+                    Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
 
                 <DatePicker
                     Grid.Column="2"
@@ -118,8 +112,8 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Bottom"
                     materialDesign:HintAssist.Hint="Date create"
-                    SelectedDate="{Binding SearchDate}"
-                    Focusable="False">
+                    Focusable="False"
+                    SelectedDate="{Binding SearchDate}">
                     <DatePicker.Resources>
                         <Style TargetType="DatePickerTextBox">
                             <Setter Property="IsReadOnly" Value="True" />
@@ -147,7 +141,7 @@
                         Command="{Binding CancelSearchCommand}"
                         Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
                         ToolTip="MaterialDesignFloatingActionMiniDarkButton"
-                        Visibility="{Binding CloseSearchVisibility, UpdateSourceTrigger=PropertyChanged}">
+                        Visibility="{Binding BtnSearchVisibility}">
                         <materialDesign:PackIcon
                             Width="20"
                             Height="20"

@@ -62,6 +62,7 @@ namespace ImportExportDesktopApp.DataTransfers
             ie.SaveChanges();
             return newTransaction;
         }
+
         public Transaction UpdateTransactionNotSaveChanges(Transaction transaction)
         {
             ie.Entry(transaction).State = EntityState.Modified;
@@ -112,30 +113,30 @@ namespace ImportExportDesktopApp.DataTransfers
             double totalPage = count * (1.0) / pageSize * (1.0);
             return (int)Math.Ceiling(totalPage);
         }
+
         public void Save()
         {
             ie.SaveChanges();
         }
-        public ObservableCollection<Transaction> SearchTransaction(int type, string searchPartner, DateTime searchDate)
+
+        public ObservableCollection<Transaction> SearchTransaction(int type, string searchPartner, String searchDate)
         {
-            List<Transaction> transactions = new List<Transaction>();
-            if (type == -1)
+            IQueryable<Transaction> queryable = ie.Transactions;
+            if (type > -1)
             {
-                transactions = ie.Transactions.OrderByDescending(t=> t.CreatedDate).ToList();
+                queryable = queryable.Where(t => t.TransactionType == type);
             }
-            else
+            if (searchPartner != null && searchPartner.Length > 0)
             {
-                transactions = ie.Transactions.OrderByDescending(t => t.CreatedDate).Where(t => t.TransactionType == type).ToList();
+                queryable = queryable.Where(t => t.Partner.DisplayName.ToLower().Contains(searchPartner.ToLower()));
             }
-            ObservableCollection<Transaction> temp = new ObservableCollection<Transaction>();
-            foreach (var item in transactions)
+            DateTime dateTime;
+            if (DateTime.TryParse(searchDate, out dateTime))
             {
-                if(item.Partner.DisplayName.ToLower().Contains(searchPartner.ToLower()) && item.CreatedDate.Date >= searchDate.Date)
-                {
-                    temp.Add(item);
-                }
+                queryable = queryable.Where(t => DbFunctions.TruncateTime(t.CreatedDate) == dateTime.Date);
             }
-            return temp;
+            queryable = queryable.OrderByDescending(t => t.CreatedDate);
+            return new ObservableCollection<Transaction>(queryable);
         }
     }
 }

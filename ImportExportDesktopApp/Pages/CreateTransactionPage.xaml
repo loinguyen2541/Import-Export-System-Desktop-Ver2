@@ -10,6 +10,7 @@
     d:DesignHeight="720"
     d:DesignWidth="980"
     Background="{DynamicResource MaterialDesignPaper}"
+    DataContext="{DynamicResource CreateTransactionVM}"
     FontFamily="{DynamicResource MaterialDesignFont}"
     TextElement.FontSize="15"
     TextElement.FontWeight="Regular"
@@ -28,7 +29,7 @@
                     Width="35"
                     Height="35"
                     Margin="0,0,16,0"
-                    Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}">
+                    Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Click="btnBack_Click">
                     <materialDesign:PackIcon
                         Width="20"
                         Height="20"
@@ -117,8 +118,9 @@
                         <StackPanel Width="560" Margin="10,0,10,0">
                             <ComboBox
                                 Name="cbxPartnerId"
-                                ItemsSource="{Binding ListPartner}"
-                                SelectedItem="{Binding selectedItemCbxPartner}">
+                                ItemsSource="{Binding Partners}"
+                                SelectedValue="{Binding Transaction.PartnerId}"
+                                SelectedValuePath="PartnerId">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding DisplayName}" />
@@ -133,67 +135,19 @@
                         <ColumnDefinition Width="2*" />
                         <ColumnDefinition Width="6*" />
                     </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="0">
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            FontSize="15"
-                            FontWeight="Bold"
-                            Foreground="#647094"
-                            Text="Transaction status" />
-                    </Grid>
-                    <Grid
-                        Grid.Column="1"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center">
-                        <StackPanel Width="560" Margin="10">
-                            <ComboBox
-                                Name="cbxStatus"
-                                ItemsSource="{Binding ListStatus}"
-                                SelectedItem="{Binding selectedItemCbxStatus}"
-                                Text="{Binding Transaction.TransactionStatus}" />
-                        </StackPanel>
-                    </Grid>
+                    <Grid Grid.Column="0" />
                 </Grid>
                 <Grid Grid.Row="3" Margin="15,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="2*" />
                         <ColumnDefinition Width="6*" />
                     </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="0">
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            FontSize="15"
-                            FontWeight="Bold"
-                            Foreground="#647094"
-                            Text="Weight in" />
-                    </Grid>
+                    <Grid Grid.Column="0" />
                     <Grid Grid.Column="1" VerticalAlignment="Top">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="110*" />
                             <ColumnDefinition Width="603*" />
                         </Grid.ColumnDefinitions>
-                        <TextBox
-                            x:Name="txtWeightIn"
-                            Grid.ColumnSpan="2"
-                            Width="560"
-                            Height="50"
-                            Margin="10,0,0,0"
-                            Padding="4,1,0,0"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center"
-                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                            Text="{Binding Transaction.WeightIn, Mode=TwoWay}">
-                            <!--<TextBox.Text>
-                            <Binding NotifyOnValidationError="True"
-                             Path="Transaction.WeightIn" Mode="TwoWay"
-                             UpdateSourceTrigger="PropertyChanged"
-                             ValidatesOnExceptions="True">
-                                <Binding.ValidationRules>
-                                    <domain1:FloatValidationRule xmlns:domain1="clr-namespace:Import_Export_Management_Desktop.Validations" ValidatesOnTargetUpdated="True" />
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </TextBox.Text>-->
-                        </TextBox>
                     </Grid>
                 </Grid>
                 <Grid Grid.Row="4" Margin="15,0">
@@ -206,32 +160,62 @@
                             <ColumnDefinition Width="5*" />
                             <ColumnDefinition Width="5*" />
                         </Grid.ColumnDefinitions>
-                        <Grid Grid.Column="0">
-                            <TextBlock
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                FontSize="15"
-                                FontWeight="Bold"
-                                Foreground="#647094"
-                                Text="Date in" />
-                        </Grid>
+                        <Grid Grid.Column="0" />
                         <Grid
                             Grid.Column="1"
                             Margin="10"
-                            VerticalAlignment="Center">
-                            <DatePicker
-                                Name="txtDateIn"
-                                Focusable="False"
-                                SelectedDate="{Binding Transaction.TimeIn}">
-                                <DatePicker.Resources>
-                                    <Style TargetType="DatePickerTextBox">
-                                        <Setter Property="IsReadOnly" Value="True" />
-                                    </Style>
-                                </DatePicker.Resources>
-                            </DatePicker>
-                        </Grid>
+                            VerticalAlignment="Center" />
                     </Grid>
                     <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="2*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0" />
+                        <Grid
+                            Grid.Column="1"
+                            Margin="10"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center" />
+                    </Grid>
+                </Grid>
+                <Grid Grid.Row="2" Margin="15,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="237*" />
+                        <ColumnDefinition Width="497*" />
+                        <ColumnDefinition Width="23*" />
+                        <ColumnDefinition Width="193*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0" Margin="0,0,0.667,0.333">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="15"
+                            FontWeight="Bold"
+                            Foreground="#647094"><Run Text="Weight" /><LineBreak /><Run /></TextBlock>
+                    </Grid>
+                    <Grid
+                        Grid.Column="1"
+                        Grid.ColumnSpan="3"
+                        Margin="0.333,0,0,0"
+                        VerticalAlignment="Top">
+                        <TextBox
+                            Name="txtWeightOut"
+                            Width="560"
+                            Height="50"
+                            Margin="10,0,10,0"
+                            Padding="4,1,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="{Binding Transaction.WeightOut}" />
+                    </Grid>
+                </Grid>
+                <Grid Grid.Row="3" Margin="15,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*" />
+                        <ColumnDefinition Width="5*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*" />
                             <ColumnDefinition Width="2*" />
@@ -253,93 +237,13 @@
                             <materialDesign:TimePicker
                                 Name="txtTimeIn"
                                 Focusable="False"
-                                SelectedTime="{Binding timeIn}">
+                                SelectedTime="{Binding Transaction.TimeIn}">
                                 <materialDesign:TimePicker.Resources>
                                     <Style TargetType="materialDesign:TimePickerTextBox">
                                         <Setter Property="IsReadOnly" Value="True" />
                                     </Style>
                                 </materialDesign:TimePicker.Resources>
                             </materialDesign:TimePicker>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid Grid.Row="5" Margin="15,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="237*" />
-                        <ColumnDefinition Width="497*" />
-                        <ColumnDefinition Width="23*" />
-                        <ColumnDefinition Width="193*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="0" Margin="0,0,0.667,0.333">
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            FontSize="15"
-                            FontWeight="Bold"
-                            Foreground="#647094"
-                            Text="Weight out" />
-                    </Grid>
-                    <Grid
-                        Grid.Column="1"
-                        Grid.ColumnSpan="3"
-                        Margin="0.333,0,0,0"
-                        VerticalAlignment="Top">
-                        <TextBox
-                            Name="txtWeightOut"
-                            Width="560"
-                            Height="50"
-                            Margin="10,0,10,0"
-                            Padding="4,1,0,0"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center"
-                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                            Text="{Binding Transaction.WeightOut, Mode=TwoWay}">
-                            <!--<TextBox.Text>
-                            <Binding NotifyOnValidationError="True"
-                             Path="Transaction.WeightOut"
-                                      Mode="TwoWay"
-                             UpdateSourceTrigger="PropertyChanged"
-                             ValidatesOnExceptions="True">
-                                <Binding.ValidationRules>
-                                    <domain1:FloatValidationRule xmlns:domain1="clr-namespace:Import_Export_Management_Desktop.Validations" ValidatesOnTargetUpdated="True" />
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </TextBox.Text>-->
-                        </TextBox>
-                    </Grid>
-                </Grid>
-                <Grid Grid.Row="6" Margin="15,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="5*" />
-                        <ColumnDefinition Width="5*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="5*" />
-                            <ColumnDefinition Width="5*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid Grid.Column="0">
-                            <TextBlock
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                FontSize="15"
-                                FontWeight="Bold"
-                                Foreground="#647094"
-                                Text="Date out" />
-                        </Grid>
-                        <Grid
-                            Grid.Column="1"
-                            Margin="10"
-                            VerticalAlignment="Center">
-                            <DatePicker
-                                Name="txtDateOut"
-                                Focusable="False"
-                                SelectedDate="{Binding Transaction.TimeOut}">
-                                <DatePicker.Resources>
-                                    <Style TargetType="DatePickerTextBox">
-                                        <Setter Property="IsReadOnly" Value="True" />
-                                    </Style>
-                                </DatePicker.Resources>
-                            </DatePicker>
                         </Grid>
                     </Grid>
                     <Grid Grid.Column="1">
@@ -364,7 +268,7 @@
                             <materialDesign:TimePicker
                                 Name="txtTimeOut"
                                 Focusable="False"
-                                SelectedTime="{Binding timeOut}">
+                                SelectedTime="{Binding Transaction.TimeOut}">
                                 <materialDesign:TimePicker.Resources>
                                     <Style TargetType="materialDesign:TimePickerTextBox">
                                         <Setter Property="IsReadOnly" Value="True" />
@@ -374,7 +278,7 @@
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid Grid.Row="7" Margin="15,0">
+                <Grid Grid.Row="4" Margin="15,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="2*" />
                         <ColumnDefinition Width="6*" />
@@ -406,7 +310,7 @@
                                 <Binding
                                     Mode="TwoWay"
                                     NotifyOnValidationError="True"
-                                    Path="Transaction.Note"
+                                    Path="Transaction.Description"
                                     UpdateSourceTrigger="PropertyChanged"
                                     ValidatesOnExceptions="True" />
                             </TextBox.Text>
@@ -418,8 +322,7 @@
                         Height="35"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Command="{Binding AddTransactionComman}"
-                        CommandParameter="{Binding Transaction}"
+                        Command="{Binding InsertTransactionCommnad}"
                         Style="{StaticResource MaterialDesignRaisedButton}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock FontSize="15">Add Transaction</TextBlock>

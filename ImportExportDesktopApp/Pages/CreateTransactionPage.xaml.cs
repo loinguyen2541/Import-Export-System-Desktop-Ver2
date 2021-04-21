@@ -30,5 +30,10 @@ namespace ImportExportDesktopApp.Pages
         {
             InitializeComponent();
         }
+
+        private void btnBack_Click(object sender, RoutedEventArgs e)
+        {
+            this.NavigationService.GoBack();
+        }
     }
 }
