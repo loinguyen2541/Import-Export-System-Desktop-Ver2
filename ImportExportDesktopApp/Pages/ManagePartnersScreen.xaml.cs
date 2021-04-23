@@ -33,7 +33,7 @@ namespace ImportExportDesktopApp.Pages
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            this.NavigationService.Navigate(new CreatePartner());
+            this.NavigationService.Navigate(new CreatePartnerPage());
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)

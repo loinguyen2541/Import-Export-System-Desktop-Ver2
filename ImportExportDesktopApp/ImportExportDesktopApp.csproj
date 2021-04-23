@@ -178,8 +178,8 @@
     <Compile Include="InventoryDetail.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Pages\CreatePartner.xaml.cs">
-      <DependentUpon>CreatePartner.xaml</DependentUpon>
+    <Compile Include="Pages\CreatePartnerPage.xaml.cs">
+      <DependentUpon>CreatePartnerPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Notification.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
@@ -240,16 +240,24 @@
     </Compile>
     <Compile Include="DataTransfers\TransactionDataTransfer.cs" />
     <Compile Include="Utils\BaseNotifyPropertyChanged.cs" />
+    <Compile Include="Validations\EmailValidationRule.cs" />
+    <Compile Include="Validations\FloatValidationRule.cs" />
+    <Compile Include="Validations\NotEmptyValidationRule.cs" />
+    <Compile Include="Validations\PhoneValidationRule.cs" />
+    <Compile Include="ViewModels\CreatePartnerViewModel.cs" />
     <Compile Include="ViewModels\CreateTransactionViewModel.cs" />
     <Compile Include="ViewModels\InventoryDetailViewModel.cs" />
     <Compile Include="ViewModels\ManGoods.cs" />
     <Compile Include="ViewModels\ManInventoriesViewModel.cs" />
-    <Compile Include="ViewModels\ManPartnersViewModel.cs" />
+    <Compile Include="ViewModels\PartnerListViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ManSchedulesViewModel.cs" />
     <Compile Include="ViewModels\ProcessingViewModel.cs" />
     <Compile Include="ViewModels\ScaleExceptionViewModel.cs" />
     <Compile Include="ViewModels\TransactionListViewModel.cs" />
+    <Compile Include="Windows\CreateTransactionWindow.xaml.cs">
+      <DependentUpon>CreateTransactionWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\EditExceptionTransactionWindow.xaml.cs">
       <DependentUpon>EditExceptionTransactionWindow.xaml</DependentUpon>
     </Compile>
@@ -268,7 +276,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Pages\CreatePartner.xaml">
+    <Page Include="Pages\CreatePartnerPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -305,6 +313,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\MainSource.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\CreateTransactionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -18,9 +18,9 @@ namespace ImportExportDesktopApp.Pages
     /// <summary>
     /// Interaction logic for CreatePartner.xaml
     /// </summary>
-    public partial class CreatePartner : Page
+    public partial class CreatePartnerPage : Page
     {
-        public CreatePartner()
+        public CreatePartnerPage()
         {
             InitializeComponent();
         }

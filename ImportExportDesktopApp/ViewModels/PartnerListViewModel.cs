@@ -14,7 +14,7 @@ using System.Windows.Input;
 
 namespace ImportExportDesktopApp.ViewModels
 {
-    class ManPartnersViewModel : BaseNotifyPropertyChanged
+    class PartnerListViewModel : BaseNotifyPropertyChanged
     {
         private ObservableCollection<Partner> _partners;
         //private QueryParams _paging;
@@ -40,14 +40,13 @@ namespace ImportExportDesktopApp.ViewModels
         public Partner TableSelectedItem { get; set; }
         private bool _isLoading;
         public ICommand SearchCommand { get; set; }
-        public ICommand AddPartnerCommnand { get; set; }
         public ICommand TableDoubleClickCommand { get; set; }
         public ICommand NextPageCommand { get; set; }
         public ICommand BeforePageCommand { get; set; }
         public ICommand RefreshCommand { get; set; }
         public ICommand CancelSearchCommand { get; set; }
-        public ICommand AddIdentityCardComment { get; set; }
-        public ManPartnersViewModel()
+
+        public PartnerListViewModel()
         {
 
             _partnerDataTransfer = new PartnerDataTransfer();
@@ -69,10 +68,6 @@ namespace ImportExportDesktopApp.ViewModels
             {
                 SearchSchedules();
             });
-            AddPartnerCommnand = new RelayCommand<object>((p) => { return true; }, p =>
-            {
-                AddPartner();
-            });
             RefreshCommand = new RelayCommand<object>((p) => { return true; }, p =>
             {
                 Refresh();
@@ -88,10 +83,6 @@ namespace ImportExportDesktopApp.ViewModels
             BeforePageCommand = new RelayCommand<object>(p => { return true; }, p =>
             {
                 BeforePage();
-            });
-            AddIdentityCardComment = new RelayCommand<object>(p => { return true; }, p =>
-            {
-                AddIdentityCard();
             });
         }
 
@@ -142,17 +133,15 @@ namespace ImportExportDesktopApp.ViewModels
                         //add partner
                         Partner.PartnerType = SelectedType;
                         Partner.Username = _account.Username;
-                        var partner = _partnerDataTransfer.CreatePartner(Partner);
-                        if (partner != null)
+                        //add card
+                        foreach (var item in ListIdentityCards)
                         {
-                            //add card
-                            foreach (var item in ListIdentityCards)
-                            {
-                                item.IdentityCardStatus = 0;
-                                item.PartnerId = Partner.PartnerId;
-                            }
-                            Partner.IdentityCards = _cardDataTransfer.InsertCard(ListIdentityCards);
+                            item.IdentityCardStatus = 0;
+                            item.PartnerId = Partner.PartnerId;
                         }
+                        Partner.IdentityCards = ListIdentityCards;
+                        var partner = _partnerDataTransfer.CreatePartner(Partner);
+
                         _accountService.SendPassword(account: _account, partner);
                         MessageBoxResult result = MessageBox.Show("Add Partner Success", "Confirmation");
                         Partner = null;
@@ -171,7 +160,7 @@ namespace ImportExportDesktopApp.ViewModels
         {
             string username = Regex.Replace(Partner.DisplayName, @"\s+", "");
             string password = RandomPassword();
-            Account account = new Account() { Password = password, Username = username, RoleId = 3, Status = 0};
+            Account account = new Account() { Password = password, Username = username, RoleId = 3, Status = 0 };
             _account = _accountDataTransfer.InsertAccount(account);
             return _account == null ? false : true;
         }
@@ -182,40 +171,6 @@ namespace ImportExportDesktopApp.ViewModels
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return new string(Enumerable.Repeat(chars, 8)
               .Select(s => s[random.Next(s.Length)]).ToArray());
-        }
-
-        private void AddIdentityCard()
-        {
-            IdentityCard card = new IdentityCard();
-            card.IdentityCardStatus = 0;
-            card.IdentityCardId = CardId;
-            card.CreatedDate = DateTime.Now;
-            card.PartnerId = 0;
-
-            bool check = true;
-            if(ListIdentityCards.Count != 0)
-            {
-                foreach (var item in ListIdentityCards)
-                {
-                    if (item.IdentityCardId.Equals(CardId))
-                    {
-                        check = false;
-                        break;
-                    }
-                }
-            }
-
-            if (check)
-            {
-                ListIdentityCards.Add(card);
-            }
-            else
-            {
-                Visibility = "Visible";
-                ErrorMessage = "Identity card is existed";
-            }
-
-            CardId = "";
         }
 
         private bool CheckValid()
@@ -258,7 +213,11 @@ namespace ImportExportDesktopApp.ViewModels
         }
         public void BeforePage()
         {
-            CurrentPage--;
+
+            if (CurrentPage > 1)
+            {
+                CurrentPage--;
+            }
             Partners = _partnerDataTransfer.GetAllWithPaging(CurrentPage);
             SetPagingInfo();
         }
@@ -277,11 +236,7 @@ namespace ImportExportDesktopApp.ViewModels
             IsLoading = true;
             CurrentPage = 1;
             ObservableCollection<Partner> partners = _partnerDataTransfer.GetAllWithPaging(CurrentPage);
-            Partners.Clear();
-            foreach (var item in partners)
-            {
-                Partners.Add(item);
-            }
+            Partners = partners;
             IsLoading = false;
 
         }

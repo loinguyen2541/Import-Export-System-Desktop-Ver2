@@ -1,5 +1,6 @@
 ﻿using ImportExportDesktopApp.ScaleModels;
 using ImportExportDesktopApp.ViewModels;
+using ImportExportDesktopApp.Windows;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -176,11 +177,6 @@ namespace ImportExportDesktopApp.Pages
         private void TabablzControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            this.NavigationService.Navigate(new CreateTransactionPage());
         }
     }
 }

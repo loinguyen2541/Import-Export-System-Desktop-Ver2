@@ -88,6 +88,7 @@
                             <Button
                                 Margin="0,0,8,0"
                                 BorderBrush="Transparent"
+                                Command="{Binding}"
                                 Content="Import"
                                 Visibility="{Binding ImportButtonVisibilityGate1}" />
                             <Button
@@ -95,7 +96,7 @@
                                 BorderBrush="Transparent"
                                 Command="{Binding DisableGate1Command}"
                                 Content="Disable"
-                                Visibility="{Binding DisableButtonVisibilityGate1}" />
+                                Visibility="Collapsed" />
                             <Button
                                 Margin="0,0,8,0"
                                 BorderBrush="Transparent"
@@ -114,47 +115,67 @@
                         <RowDefinition Height="45" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <StackPanel
-                        Grid.Row="0"
-                        Margin="16,0,0,8"
-                        HorizontalAlignment="Right"
-                        Orientation="Horizontal">
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
                         <Button
+                            Grid.Column="0"
                             Width="30"
                             Height="30"
-                            Margin="8,0,8,0"
+                            Margin="16,0,0,8"
                             VerticalAlignment="Bottom"
-                            Command="{Binding CloseSearchCommand}"
-                            Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
-                            ToolTip="MaterialDesignFloatingActionMiniDarkButton"
-                            Visibility="{Binding CancelSearchVisibility}">
-                            <materialDesign:PackIcon
-                                Width="20"
-                                Height="20"
-                                Kind="Close" />
-                        </Button>
-                        <ComboBox
-                            Width="250"
-                            materialDesign:HintAssist.Hint="Partner Name"
-                            DisplayMemberPath="DisplayName"
-                            IsEditable="True"
-                            ItemsSource="{Binding Partners}"
-                            SelectedValue="{Binding SelectedPartner}"
-                            Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
-                        <Button
-                            Width="30"
-                            Height="30"
-                            Margin="8,0,0,0"
-                            VerticalAlignment="Bottom"
-                            Command="{Binding SearchByPartnerCommand}"
+                            Command="{Binding RefreshCommand}"
                             Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
                             ToolTip="MaterialDesignFloatingActionMiniDarkButton">
                             <materialDesign:PackIcon
                                 Width="20"
                                 Height="20"
-                                Kind="Search" />
+                                Kind="Sync" />
                         </Button>
-                    </StackPanel>
+                        <StackPanel
+                            Grid.Column="1"
+                            Margin="16,0,0,8"
+                            HorizontalAlignment="Right"
+                            Orientation="Horizontal">
+                            <Button
+                                Width="30"
+                                Height="30"
+                                Margin="8,0,8,0"
+                                VerticalAlignment="Bottom"
+                                Command="{Binding CloseSearchCommand}"
+                                Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                                ToolTip="MaterialDesignFloatingActionMiniDarkButton"
+                                Visibility="{Binding CancelSearchVisibility}">
+                                <materialDesign:PackIcon
+                                    Width="20"
+                                    Height="20"
+                                    Kind="Close" />
+                            </Button>
+                            <ComboBox
+                                Width="250"
+                                materialDesign:HintAssist.Hint="Partner Name"
+                                DisplayMemberPath="DisplayName"
+                                IsEditable="True"
+                                ItemsSource="{Binding Partners}"
+                                SelectedValue="{Binding SelectedPartner}"
+                                Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+                            <Button
+                                Width="30"
+                                Height="30"
+                                Margin="8,0,0,0"
+                                VerticalAlignment="Bottom"
+                                Command="{Binding SearchByPartnerCommand}"
+                                Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                                ToolTip="MaterialDesignFloatingActionMiniDarkButton">
+                                <materialDesign:PackIcon
+                                    Width="20"
+                                    Height="20"
+                                    Kind="Search" />
+                            </Button>
+                        </StackPanel>
+                    </Grid>
                     <materialDesign:Card
                         Grid.Row="1"
                         Margin="16,0,0,8"
@@ -290,7 +311,7 @@
                             <Button
                                 Margin="0,0,8,0"
                                 BorderBrush="Transparent"
-                                Click="Button_Click_1"
+                                Command="{Binding OpenImportGate2Command}"
                                 Content="Import"
                                 Visibility="{Binding ImportButtonVisibilityGate2}" />
                             <Button
@@ -298,7 +319,7 @@
                                 BorderBrush="Transparent"
                                 Command="{Binding DisableGate2Command}"
                                 Content="Disable"
-                                Visibility="{Binding DisableButtonVisibilityGate2}" />
+                                Visibility="Collapsed" />
                             <Button
                                 Margin="0,0,8,0"
                                 BorderBrush="Transparent"

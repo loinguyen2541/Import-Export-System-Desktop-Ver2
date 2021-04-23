@@ -70,6 +70,7 @@ namespace ImportExportDesktopApp.ViewModels
         private String _messageGate2;
 
         //Command
+        public ICommand RefreshCommand { get; set; }
         public ICommand CreateTransactionGate2Command { get; set; }
         public ICommand CancelGate2Command { get; set; }
         public ICommand CreateTransactionGate1Command { get; set; }
@@ -78,7 +79,8 @@ namespace ImportExportDesktopApp.ViewModels
         public ICommand CloseSearchCommand { get; set; }
         public ICommand DisableGate1Command { get; set; }
         public ICommand DisableGate2Command { get; set; }
-
+        public ICommand OpenImportGate1Command { get; set; }
+        public ICommand OpenImportGate2Command { get; set; }
 
         //Gate Exception handle
         private String _gate1ButtonVisibility;
@@ -177,6 +179,19 @@ namespace ImportExportDesktopApp.ViewModels
             DisableGate2Command = new RelayCommand<object>(p => { return true; }, p =>
             {
                 Disable(EGate.Gate2);
+            });
+            OpenImportGate1Command = new RelayCommand<object>(p => { return true; }, p =>
+            {
+                OpenImport(EGate.Gate1);
+            });
+            OpenImportGate2Command = new RelayCommand<object>(p => { return true; }, p =>
+            {
+                OpenImport(EGate.Gate2);
+            });
+            RefreshCommand = new RelayCommand<object>(p => { return true; }, p =>
+            {
+                ProcessingTransaction = _transactionDataTransfer.GetProcessingTransaction();
+                SuccessTransaction = _transactionDataTransfer.GetSuccessTransaction();
             });
 
             //Set event
@@ -398,8 +413,6 @@ namespace ImportExportDesktopApp.ViewModels
                 Transaction transaction = _transactionDataTransfer.IsProcessing(TransactionScaleGate1.Indentify);
                 EditExceptionTransactionWindow editExceptionTransactionWindow = new EditExceptionTransactionWindow(transaction, TransactionScaleGate1);
                 var point = Mouse.GetPosition(Application.Current.MainWindow);
-                //Application curApp = Application.Current;
-                //Window mainWindow = curApp.MainWindow;
                 editExceptionTransactionWindow.Left = point.X;
                 editExceptionTransactionWindow.Top = point.Y - 150;
                 editExceptionTransactionWindow.ShowDialog();
@@ -785,6 +798,32 @@ namespace ImportExportDesktopApp.ViewModels
             }
             _transactionDataTransfer.Save();
             ResetAcceptContent(new ScaleExeptionAction(EGate.Gate2, EScaleExceptionAction.Accept));
+        }
+
+        public void OpenImport(EGate gate)
+        {
+            if (gate == EGate.Gate1)
+            {
+                Transaction transaction = _transactionDataTransfer.IsProcessing(TransactionScaleGate1.Indentify);
+                double weight = TransactionScaleGate1.Weight - transaction.WeightIn;
+                CreateTransactionWindow createTransactionWindow = new CreateTransactionWindow((float)Math.Round(weight));
+                createTransactionWindow.ShowDialog();
+                if (!createTransactionWindow.IsCancel)
+                {
+                    CreateTransactionGate1Command.Execute(null);
+                }
+            }
+            else if (gate == EGate.Gate2)
+            {
+                Transaction transaction = _transactionDataTransfer.IsProcessing(TransactionScaleGate2.Indentify);
+                double weight = TransactionScaleGate2.Weight - transaction.WeightIn;
+                CreateTransactionWindow createTransactionWindow = new CreateTransactionWindow((float)Math.Round(weight));
+                createTransactionWindow.ShowDialog();
+                if (!createTransactionWindow.IsCancel)
+                {
+                    CreateTransactionGate2Command.Execute(null);
+                }
+            }
         }
 
         public void CloseSearch()

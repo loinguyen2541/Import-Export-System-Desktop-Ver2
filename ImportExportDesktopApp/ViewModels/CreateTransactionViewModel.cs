@@ -20,6 +20,7 @@ namespace ImportExportDesktopApp.ViewModels
 
         private Transaction _transaction;
         private ObservableCollection<Partner> _partners;
+        private String _weight;
 
         private PartnerDataTransfer _partnerDataTransfer;
         private TransactionDataTransfer _transactionDataTransfer;
@@ -48,25 +49,26 @@ namespace ImportExportDesktopApp.ViewModels
 
             Partners = _partnerDataTransfer.GetAll();
 
-            InsertTransactionCommnad = new RelayCommand<object>(p => { return true; }, p =>
+            InsertTransactionCommnad = new RelayCommand<Window>(p => { return true; }, p =>
             {
-                InsertTransaction();
+                InsertTransaction(p);
             });
 
             _eventAggregator = AppService.Instance.EventAggregator;
         }
 
-        private void InsertTransaction()
+        private void InsertTransaction(Window window)
         {
             int storageCapacity = _systemCongifDataTransfer.GetStorageCappacity();
 
+            Transaction.WeightOut = float.Parse(Weight);
             Transaction.GoodsId = 1;
             Transaction.TransactionStatus = 1;
             int partnerTypeId = GetPartnerTypeId();
             Transaction.TransactionType = partnerTypeId == 1 ? 1 : 0;
             if (Transaction.TransactionType == 0)
             {
-                Transaction.WeightIn = Transaction.WeightOut;
+                Transaction.WeightIn = float.Parse(Weight);
                 Transaction.WeightOut = 0;
             }
             _transactionDataTransfer.InsertTransaction(Transaction);
@@ -84,6 +86,12 @@ namespace ImportExportDesktopApp.ViewModels
             Good good = _goodDataTransfer.UpdateInventory(partnerTypeId, totalWeight, storageCapacity);
             _eventAggregator.GetEvent<UpdateInventoryEvent>().Publish(good.QuantityOfInventory + "");
             MessageBox.Show("Success!!");
+
+            if (window != null)
+            {
+                window.Close();
+            }
+
         }
 
         public float getTotalWeight(int partnerTypeId, float weightIn, float weightOut)
@@ -127,6 +135,16 @@ namespace ImportExportDesktopApp.ViewModels
             set
             {
                 _partners = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public String Weight
+        {
+            get { return _weight; }
+            set
+            {
+                _weight = value;
                 NotifyPropertyChanged();
             }
         }
