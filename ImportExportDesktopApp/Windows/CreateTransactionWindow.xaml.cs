@@ -22,13 +22,15 @@ namespace ImportExportDesktopApp.Windows
     {
         public bool IsCancel { get; set; }
         private CreateTransactionViewModel _viewModel;
-        public CreateTransactionWindow(float Weight)
+        public CreateTransactionWindow(float weight)
         {
             InitializeComponent();
             WindowStartupLocation = WindowStartupLocation.CenterOwner;
             Owner = Application.Current.MainWindow;
             _viewModel = DataContext as CreateTransactionViewModel;
-            _viewModel.Weight = Weight + "";
+            _viewModel.Weight = weight + 1 + "";
+            _viewModel.ExpectedWeight = weight + 1;
+            _viewModel.GetPartner(true);
             IsCancel = false;
         }
 

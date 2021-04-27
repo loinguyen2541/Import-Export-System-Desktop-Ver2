@@ -29,7 +29,8 @@
                     Width="35"
                     Height="35"
                     Margin="0,0,16,0"
-                    Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Click="btnBack_Click">
+                    Click="btnBack_Click"
+                    Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}">
                     <materialDesign:PackIcon
                         Width="20"
                         Height="20"
@@ -207,7 +208,7 @@
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                            Text="{Binding Transaction.WeightOut}" />
+                            Text="{Binding Weight}" />
                     </Grid>
                 </Grid>
                 <Grid Grid.Row="3" Margin="15,0">

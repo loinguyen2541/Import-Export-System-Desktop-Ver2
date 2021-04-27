@@ -907,7 +907,7 @@ namespace ImportExportDesktopApp.ViewModels
                     FailTransactionSearch = _transactionDataTransfer.GetFailTransactionByPartnerToday(SelectedPartner.PartnerId);
 
                     float totalWeight = 0;
-                    foreach (var item in SuccessTransaction)
+                    foreach (var item in SuccessTransactionSearch)
                     {
                         totalWeight += item.Total;
                     }

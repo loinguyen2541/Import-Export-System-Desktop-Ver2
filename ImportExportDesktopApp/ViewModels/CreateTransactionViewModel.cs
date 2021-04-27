@@ -21,6 +21,7 @@ namespace ImportExportDesktopApp.ViewModels
         private Transaction _transaction;
         private ObservableCollection<Partner> _partners;
         private String _weight;
+        public float ExpectedWeight { get; set; }
 
         private PartnerDataTransfer _partnerDataTransfer;
         private TransactionDataTransfer _transactionDataTransfer;
@@ -47,7 +48,7 @@ namespace ImportExportDesktopApp.ViewModels
             _inventoryDetailDataTransfer = new InventoryDetailDataTransfer();
             _timeTemplateItemDataTransfer = new TimeTemplateItemDataTransfer();
 
-            Partners = _partnerDataTransfer.GetAll();
+            GetPartner(false);
 
             InsertTransactionCommnad = new RelayCommand<Window>(p => { return true; }, p =>
             {
@@ -57,10 +58,22 @@ namespace ImportExportDesktopApp.ViewModels
             _eventAggregator = AppService.Instance.EventAggregator;
         }
 
+        public void GetPartner(bool isException)
+        {
+            if (isException)
+            {
+                int partnertypeId = Transaction.TransactionType == 0 ? 2 : 1;
+                Partners = _partnerDataTransfer.GetAllByType(partnertypeId);
+            }
+            else
+            {
+                Partners = _partnerDataTransfer.GetAll();
+            }
+        }
+
         private void InsertTransaction(Window window)
         {
             int storageCapacity = _systemCongifDataTransfer.GetStorageCappacity();
-
             Transaction.WeightOut = float.Parse(Weight);
             Transaction.GoodsId = 1;
             Transaction.TransactionStatus = 1;
@@ -74,24 +87,30 @@ namespace ImportExportDesktopApp.ViewModels
             _transactionDataTransfer.InsertTransaction(Transaction);
 
             float goodInventory = _goodDataTransfer.getInventory();
-            Inventory inventory = _inventoryDataTransfer.CheckExist();
-            if (inventory == null)
+            if (float.Parse(Weight) <= 0 || float.Parse(Weight) < ExpectedWeight - goodInventory || float.Parse(Weight) > (storageCapacity - goodInventory))
             {
-                inventory = _inventoryDataTransfer.CreateInventoryToday(goodInventory);
+                MessageBox.Show("Invalid weight");
             }
-            float totalWeight = getTotalWeight(partnerTypeId, Transaction.WeightIn, Transaction.WeightOut);
-            _inventoryDetailDataTransfer.InsertInventoryDetailNotSaveChanges(1, Transaction.PartnerId, partnerTypeId, totalWeight, inventory.InventoryId);
-            _timeTemplateItemDataTransfer.updateTimetemplateItemWeight(Transaction.TimeOut, totalWeight, partnerTypeId);
-            _transactionDataTransfer.Save();
-            Good good = _goodDataTransfer.UpdateInventory(partnerTypeId, totalWeight, storageCapacity);
-            _eventAggregator.GetEvent<UpdateInventoryEvent>().Publish(good.QuantityOfInventory + "");
-            MessageBox.Show("Success!!");
-
-            if (window != null)
+            else
             {
-                window.Close();
-            }
+                Inventory inventory = _inventoryDataTransfer.CheckExist();
+                if (inventory == null)
+                {
+                    inventory = _inventoryDataTransfer.CreateInventoryToday(goodInventory);
+                }
+                float totalWeight = getTotalWeight(partnerTypeId, Transaction.WeightIn, Transaction.WeightOut);
+                _inventoryDetailDataTransfer.InsertInventoryDetailNotSaveChanges(1, Transaction.PartnerId, partnerTypeId, totalWeight, inventory.InventoryId);
+                _timeTemplateItemDataTransfer.updateTimetemplateItemWeight(Transaction.TimeOut, totalWeight, partnerTypeId);
+                _transactionDataTransfer.Save();
+                Good good = _goodDataTransfer.UpdateInventory(partnerTypeId, totalWeight, storageCapacity);
+                _eventAggregator.GetEvent<UpdateInventoryEvent>().Publish(good.QuantityOfInventory + "");
+                MessageBox.Show("Success!!");
 
+                if (window != null)
+                {
+                    window.Close();
+                }
+            }
         }
 
         public float getTotalWeight(int partnerTypeId, float weightIn, float weightOut)
