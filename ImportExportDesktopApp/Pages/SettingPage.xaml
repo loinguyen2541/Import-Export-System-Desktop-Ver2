@@ -1,0 +1,113 @@
+﻿<Page
+    x:Class="ImportExportDesktopApp.Pages.SettingPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ImportExportDesktopApp.Pages"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="SettingPage"
+    d:DesignHeight="720"
+    d:DesignWidth="980"
+    Background="{DynamicResource MaterialDesignPaper}"
+    DataContext="{DynamicResource CreateTransactionVM}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    TextElement.FontSize="15"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    mc:Ignorable="d">
+    <Border Padding="16">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0" Margin="8">
+                    <StackPanel
+                        Background="Red"
+                        MouseLeftButtonUp="StackPanel_MouseLeftButtonUp"
+                        Orientation="Horizontal">
+                        <materialDesign:PackIcon
+                            Width="70"
+                            Height="70"
+                            VerticalAlignment="Center"
+                            Foreground="Wheat"
+                            Kind="AbugidaDevanagari" />
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Text="Schedule time" />
+                    </StackPanel>
+                </Grid>
+                <Grid Grid.Column="1" Margin="8">
+                    <StackPanel
+                        Background="Red"
+                        MouseLeftButtonUp="StackPanel_MouseLeftButtonUp"
+                        Orientation="Horizontal">
+                        <materialDesign:PackIcon
+                            Width="70"
+                            Height="70"
+                            VerticalAlignment="Center"
+                            Foreground="Wheat"
+                            Kind="AbugidaDevanagari" />
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Text="Schedule time" />
+                    </StackPanel>
+
+                </Grid>
+                <Grid Grid.Column="2" Margin="8">
+                    <StackPanel
+                        Background="Red"
+                        MouseLeftButtonUp="StackPanel_MouseLeftButtonUp"
+                        Orientation="Horizontal">
+                        <materialDesign:PackIcon
+                            Width="70"
+                            Height="70"
+                            VerticalAlignment="Center"
+                            Foreground="Wheat"
+                            Kind="AbugidaDevanagari" />
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Text="Schedule time" />
+                    </StackPanel>
+
+                </Grid>
+                <Grid Grid.Column="3" Margin="8">
+                    <StackPanel
+                        Background="Red"
+                        MouseLeftButtonUp="StackPanel_MouseLeftButtonUp"
+                        Orientation="Horizontal">
+                        <materialDesign:PackIcon
+                            Width="70"
+                            Height="70"
+                            VerticalAlignment="Center"
+                            Foreground="Wheat"
+                            Kind="AbugidaDevanagari" />
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Text="Schedule time" />
+                    </StackPanel>
+
+                </Grid>
+            </Grid>
+        </Grid>
+    </Border>
+</Page>

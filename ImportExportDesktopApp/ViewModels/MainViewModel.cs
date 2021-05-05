@@ -39,6 +39,7 @@ namespace ImportExportDesktopApp.ViewModels
             PageNameList.Add("Schedules", "schedule");
             PageNameList.Add("Inventory", "PackageVariantClosed");
             PageNameList.Add("Goods", "Gift");
+            PageNameList.Add("Settings", "cog");
             SelectedItem = PageNameList.First();
             _systemCongifDataTransfer = new SystemConfigDataTransfer();
             _goodDataTransfer = new GoodDataTransfer();

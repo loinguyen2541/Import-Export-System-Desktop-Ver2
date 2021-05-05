@@ -35,6 +35,7 @@ namespace ImportExportDesktopApp
         private ManageSchedulesScreen manScheduleScreen;
         private ManageGoods manGoodsScreen;
         private ProcessingPage proccessingPage;
+        private SettingPage settingPage;
         public MainWindow()
         {
             InitializeComponent();
@@ -102,6 +103,13 @@ namespace ImportExportDesktopApp
                         manGoodsScreen = new ManageGoods();
                     }
                     _mainFrame.Navigate(manGoodsScreen);
+                    break;
+                case "cog":
+                    if (settingPage == null)
+                    {
+                        settingPage = new SettingPage();
+                    }
+                    _mainFrame.Navigate(settingPage);
                     break;
                 default:
                     break;
