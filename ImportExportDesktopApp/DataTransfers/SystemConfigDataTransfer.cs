@@ -29,7 +29,41 @@ namespace ImportExportDesktopApp.DataTransfers
 
         public SystemConfig GetTimeSchedule()
         {
-            return ie.SystemConfigs.Where(s => s.AttributeKey == "AutoSchedule").SingleOrDefault() ;
+            return ie.SystemConfigs.Where(s => s.AttributeKey == "AutoSchedule").SingleOrDefault();
+        }
+
+        public SystemConfig GetStartWorking()
+        {
+            return ie.SystemConfigs.Where(s => s.AttributeKey == "StartWorking").SingleOrDefault();
+        }
+
+        public SystemConfig GetFinishWorking()
+        {
+            return ie.SystemConfigs.Where(s => s.AttributeKey == "FinishWorking").SingleOrDefault();
+        }
+        public SystemConfig GetStartBreak()
+        {
+            return ie.SystemConfigs.Where(s => s.AttributeKey == "StartBreak").SingleOrDefault();
+        }
+
+        public SystemConfig GetFinishBreak()
+        {
+            return ie.SystemConfigs.Where(s => s.AttributeKey == "FinishBreak").SingleOrDefault();
+        }
+
+        public SystemConfig GetTimeBetweenSlot()
+        {
+            return ie.SystemConfigs.Where(s => s.AttributeKey == "TimeBetweenSlot").SingleOrDefault();
+        }
+
+        public void Update(SystemConfig systemConfig)
+        {
+            ie.Entry(systemConfig).State = System.Data.Entity.EntityState.Modified;
+        }
+
+        public void Save()
+        {
+            ie.SaveChanges();
         }
     }
 }

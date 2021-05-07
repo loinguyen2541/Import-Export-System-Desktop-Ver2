@@ -52,6 +52,7 @@
                     </Button>
                     <TextBlock
                         Padding="0,2,0,0"
+                        VerticalAlignment="Center"
                         FontSize="24"
                         FontWeight="Bold"
                         Text="Transactions" />

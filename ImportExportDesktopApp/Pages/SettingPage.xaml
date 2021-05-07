@@ -9,7 +9,7 @@
     Title="SettingPage"
     d:DesignHeight="720"
     d:DesignWidth="980"
-    Background="{DynamicResource MaterialDesignPaper}"
+    Background="White"
     DataContext="{DynamicResource CreateTransactionVM}"
     FontFamily="{DynamicResource MaterialDesignFont}"
     TextElement.FontSize="15"
@@ -19,13 +19,20 @@
     <Border Padding="16">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition />
+                <RowDefinition Height="40" />
                 <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
+                <TextBlock
+                    FontSize="24"
+                    FontWeight="Bold"
+                    Foreground="Black"
+                    Text="Settings" />
+            </Grid>
+            <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition />
@@ -33,79 +40,86 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="0" Margin="8">
-                    <StackPanel
-                        Background="Red"
-                        MouseLeftButtonUp="StackPanel_MouseLeftButtonUp"
-                        Orientation="Horizontal">
-                        <materialDesign:PackIcon
-                            Width="70"
-                            Height="70"
-                            VerticalAlignment="Center"
-                            Foreground="Wheat"
-                            Kind="AbugidaDevanagari" />
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            FontSize="18"
-                            FontWeight="Bold"
-                            Text="Schedule time" />
-                    </StackPanel>
+                    <Border Background="Gainsboro" CornerRadius="10">
+                        <StackPanel
+                            Background="Transparent"
+                            MouseLeftButtonUp="StackPanel_MouseLeftButtonUp"
+                            Orientation="Horizontal">
+                            <materialDesign:PackIcon
+                                Margin="16"
+                                Width="70"
+                                Height="70"
+                                VerticalAlignment="Center"
+                                Foreground="White"
+                                Kind="Schedule" />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontSize="18"
+                                FontWeight="Bold"
+                                Text="Schedule" />
+                        </StackPanel>
+                    </Border>
                 </Grid>
                 <Grid Grid.Column="1" Margin="8">
-                    <StackPanel
-                        Background="Red"
-                        MouseLeftButtonUp="StackPanel_MouseLeftButtonUp"
-                        Orientation="Horizontal">
-                        <materialDesign:PackIcon
-                            Width="70"
-                            Height="70"
-                            VerticalAlignment="Center"
-                            Foreground="Wheat"
-                            Kind="AbugidaDevanagari" />
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            FontSize="18"
-                            FontWeight="Bold"
-                            Text="Schedule time" />
-                    </StackPanel>
-
+                    <Border Background="Gainsboro" CornerRadius="10">
+                        <StackPanel
+                            Background="Transparent"
+                            MouseLeftButtonUp="StackPanel_MouseLeftButtonUp"
+                            Orientation="Horizontal">
+                            <materialDesign:PackIcon
+                                Margin="16"
+                                Width="70"
+                                Height="70"
+                                VerticalAlignment="Center"
+                                Foreground="White"
+                                Kind="ClockCheck" />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontSize="18"
+                                FontWeight="Bold"
+                                Text="Timework" />
+                        </StackPanel>
+                    </Border>
                 </Grid>
                 <Grid Grid.Column="2" Margin="8">
-                    <StackPanel
-                        Background="Red"
-                        MouseLeftButtonUp="StackPanel_MouseLeftButtonUp"
-                        Orientation="Horizontal">
-                        <materialDesign:PackIcon
-                            Width="70"
-                            Height="70"
-                            VerticalAlignment="Center"
-                            Foreground="Wheat"
-                            Kind="AbugidaDevanagari" />
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            FontSize="18"
-                            FontWeight="Bold"
-                            Text="Schedule time" />
-                    </StackPanel>
-
+                    <Border Background="Gainsboro" CornerRadius="10">
+                        <StackPanel
+                            Background="Transparent"
+                            MouseLeftButtonUp="StackPanel_MouseLeftButtonUp"
+                            Orientation="Horizontal">
+                            <materialDesign:PackIcon
+                                Width="70"
+                                Height="70"
+                                VerticalAlignment="Center"
+                                Foreground="Wheat"
+                                Kind="AbugidaDevanagari" />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontSize="18"
+                                FontWeight="Bold"
+                                Text="Schedule time" />
+                        </StackPanel>
+                    </Border>
                 </Grid>
                 <Grid Grid.Column="3" Margin="8">
-                    <StackPanel
-                        Background="Red"
-                        MouseLeftButtonUp="StackPanel_MouseLeftButtonUp"
-                        Orientation="Horizontal">
-                        <materialDesign:PackIcon
-                            Width="70"
-                            Height="70"
-                            VerticalAlignment="Center"
-                            Foreground="Wheat"
-                            Kind="AbugidaDevanagari" />
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            FontSize="18"
-                            FontWeight="Bold"
-                            Text="Schedule time" />
-                    </StackPanel>
-
+                    <Border Background="Gainsboro" CornerRadius="10">
+                        <StackPanel
+                            Background="Transparent"
+                            MouseLeftButtonUp="StackPanel_MouseLeftButtonUp"
+                            Orientation="Horizontal">
+                            <materialDesign:PackIcon
+                                Width="70"
+                                Height="70"
+                                VerticalAlignment="Center"
+                                Foreground="Wheat"
+                                Kind="AbugidaDevanagari" />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontSize="18"
+                                FontWeight="Bold"
+                                Text="Schedule time" />
+                        </StackPanel>
+                    </Border>
                 </Grid>
             </Grid>
         </Grid>
