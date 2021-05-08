@@ -18,7 +18,7 @@ namespace ImportExportDesktopApp.DataTransfers
         IEEntities ie;
         public SystemConfigDataTransfer()
         {
-            ie = new IEEntities();
+            ie = DataContext.GetInstance().DB;
         }
 
         public int GetStorageCappacity()

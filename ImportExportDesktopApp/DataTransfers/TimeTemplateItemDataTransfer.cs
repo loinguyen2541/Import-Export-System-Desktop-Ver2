@@ -43,5 +43,50 @@ namespace ImportExportDesktopApp.DataTransfers
                 ie.Entry(item).State = System.Data.Entity.EntityState.Modified;
             }
         }
+
+        public bool CreateListTimeTemplateItem(String startWorking, String finishWorking, String startBreaking, String finishBreaking, String timeBetweenSlot)
+        {
+            TimeSpan startWorkingTime;
+            TimeSpan finishWorkingTime;
+            TimeSpan startBreakingTime;
+            TimeSpan finishBreakingTime;
+            int timeBetweenSlotInt = int.Parse(timeBetweenSlot);
+
+            if (!TimeSpan.TryParse(startWorking, out startWorkingTime))
+            {
+                return false;
+            }
+            if (!TimeSpan.TryParse(finishWorking, out finishWorkingTime))
+            {
+                return false;
+            }
+            if (!TimeSpan.TryParse(startBreaking, out startBreakingTime))
+            {
+                return false;
+            }
+            if (!TimeSpan.TryParse(finishBreaking, out finishBreakingTime))
+            {
+                return false;
+            }
+
+            TimeSpan TimeSpanBetweenSlot = new TimeSpan(0, timeBetweenSlotInt, 0);
+
+            TimeTemplate timeTemplate = ie.TimeTemplates.Where(i => i.TimeTemplateStatus == 0).SingleOrDefault();
+
+            for (TimeSpan i = startWorkingTime; i <= finishWorkingTime; i = i + TimeSpanBetweenSlot)
+            {
+
+                if (i < startBreakingTime || i >= finishBreakingTime)
+                {
+                    TimeTemplateItem timeTemplateItem = new TimeTemplateItem();
+                    timeTemplateItem.TimeTemplateId = timeTemplate.TimeTemplateId;
+                    timeTemplateItem.Inventory = 0;
+                    timeTemplateItem.ScheduleTime = i;
+                    ie.TimeTemplateItems.Add(timeTemplateItem);
+                }
+            }
+
+            return true;
+        }
     }
 }

@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:ImportExportDesktopApp.Windows"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Name="CreateTransactionWindowN"
+    Name="ChangeScheduleTimeW"
     Title="Create Transaction Window"
     Width="450"
     Height="450"
@@ -172,7 +172,7 @@
                                 <Button
                                     BorderBrush="Transparent"
                                     Command="{Binding SaveChangesCommand}"
-                                    CommandParameter="{Binding ElementName=CreateTransactionWindowN}"
+                                    CommandParameter="{Binding ElementName=ChangeScheduleTimeW}"
                                     Content="Lưu" />
                                 <Button
                                     Margin="8,0,0,0"
