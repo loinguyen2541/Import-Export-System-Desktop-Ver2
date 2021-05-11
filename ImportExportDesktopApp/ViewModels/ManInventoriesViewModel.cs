@@ -18,13 +18,17 @@ namespace ImportExportDesktopApp.ViewModels
     {
         private Transaction _trans;
         private InventoryDisplay _selectedInventory;
-        public List<InventoryDisplay> ListInventory { get; set; }
+        public ObservableCollection<InventoryDisplay> _listInventory { get; set; }
 
         private bool _isSearch;
         private int _currentPage = 1;
         private bool _isLoading;
         private string _pagingInfo;
         private int _maxPage;
+
+        private bool _isMaxPage;
+        private bool _isFirstPage;
+
         public List<String> Types { get; }
         private String _fromDate;
         private String _toDate;
@@ -45,6 +49,17 @@ namespace ImportExportDesktopApp.ViewModels
             IsLoading = false;
             _inventoryDataTransfer = new InventoryDataTransfer();
             MaxPage = _inventoryDataTransfer.GetMaxPage(10);
+
+            IsFirstPage = true;
+            if (CurrentPage == MaxPage)
+            {
+                IsMaxPage = true;
+            }
+            else
+            {
+                IsMaxPage = false;
+            }
+
             Init();
 
             SearchCommand = new RelayCommand<object>((p) => { return true; }, p =>
@@ -79,12 +94,12 @@ namespace ImportExportDesktopApp.ViewModels
         private void Init()
         {
             ObservableCollection<Inventory> inventory = _inventoryDataTransfer.GetAllInventory(CurrentPage);
-            ListInventory = new List<InventoryDisplay>();
+            ListInventory = new ObservableCollection<InventoryDisplay>();
             if (inventory != null)
             {
+                ListInventory.Clear();
                 foreach (var item in inventory)
                 {
-
                     ListInventory.Add(GetDisplayInventory(item));
                 }
             }
@@ -93,20 +108,17 @@ namespace ImportExportDesktopApp.ViewModels
 
         private void SearchInventory()
         {
-            DateTime startDate, endDate;
             CurrentPage = 1;
-            if (DateTime.TryParse(FromDate, out startDate) && DateTime.TryParse(ToDate, out endDate))
+            ObservableCollection<Inventory> inventory = _inventoryDataTransfer.SearchInventory(FromDate, ToDate, CurrentPage);
+            if (inventory != null)
             {
-                ObservableCollection<Inventory> inventory = _inventoryDataTransfer.SearchInventory(startDate, endDate, CurrentPage);
-                if (inventory != null && inventory.Count!=0)
+                ListInventory.Clear();
+                foreach (var item in inventory)
                 {
-                    foreach (var item in inventory)
-                    {
-
-                        ListInventory.Add(GetDisplayInventory(item));
-                    }
+                    ListInventory.Add(GetDisplayInventory(item));
                 }
             }
+
         }
 
         private InventoryDisplay GetDisplayInventory(Inventory item)
@@ -158,14 +170,22 @@ namespace ImportExportDesktopApp.ViewModels
 
         public void NextPage()
         {
-            CurrentPage++;
+            if (CurrentPage < MaxPage)
+            {
+                CurrentPage++;
+                IsFirstPage = false;
+            }
+            else
+            {
+                IsMaxPage = true;
+            }
+
             ObservableCollection<Inventory> inventory = _inventoryDataTransfer.GetAllInventory(CurrentPage);
-            ListInventory = new List<InventoryDisplay>();
             if (inventory != null)
             {
+                ListInventory.Clear();
                 foreach (var item in inventory)
                 {
-
                     ListInventory.Add(GetDisplayInventory(item));
                 }
             }
@@ -173,14 +193,22 @@ namespace ImportExportDesktopApp.ViewModels
         }
         public void BeforePage()
         {
-            CurrentPage--;
+            if (CurrentPage > 1)
+            {
+                CurrentPage--;
+                IsMaxPage = false;
+            }
+            else
+            {
+                IsFirstPage = true;
+            }
+
             ObservableCollection<Inventory> inventory = _inventoryDataTransfer.GetAllInventory(CurrentPage);
-            ListInventory = new List<InventoryDisplay>();
             if (inventory != null)
             {
+                ListInventory.Clear();
                 foreach (var item in inventory)
                 {
-
                     ListInventory.Add(GetDisplayInventory(item));
                 }
             }
@@ -192,12 +220,11 @@ namespace ImportExportDesktopApp.ViewModels
             IsSearch = false;
             CurrentPage = 1;
             ObservableCollection<Inventory> inventory = _inventoryDataTransfer.GetAllInventory(CurrentPage);
-            ListInventory = new List<InventoryDisplay>();
             if (inventory != null)
             {
+                ListInventory.Clear();
                 foreach (var item in inventory)
                 {
-
                     ListInventory.Add(GetDisplayInventory(item));
                 }
             }
@@ -207,13 +234,12 @@ namespace ImportExportDesktopApp.ViewModels
         {
             IsLoading = true;
             CurrentPage = 1;
-            ObservableCollection<Inventory> inventory = _inventoryDataTransfer.GetAllInventory(CurrentPage);
-            ListInventory = new List<InventoryDisplay>();
+            ObservableCollection<Inventory> inventory = _inventoryDataTransfer.SearchInventory(FromDate, ToDate, CurrentPage);
             if (inventory != null)
             {
+                ListInventory.Clear();
                 foreach (var item in inventory)
                 {
-
                     ListInventory.Add(GetDisplayInventory(item));
                 }
             }
@@ -280,6 +306,16 @@ namespace ImportExportDesktopApp.ViewModels
                 NotifyPropertyChanged();
             }
         }
+        public ObservableCollection<InventoryDisplay> ListInventory
+        {
+            get { return _listInventory; }
+            set
+            {
+                _listInventory = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         public int MaxPage
         {
             get { return _maxPage; }
@@ -295,6 +331,26 @@ namespace ImportExportDesktopApp.ViewModels
             set
             {
                 _pagingInfo = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public bool IsMaxPage
+        {
+            get { return _isMaxPage; }
+            set
+            {
+                _isMaxPage = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public bool IsFirstPage
+        {
+            get { return _isFirstPage; }
+            set
+            {
+                _isFirstPage = value;
                 NotifyPropertyChanged();
             }
         }

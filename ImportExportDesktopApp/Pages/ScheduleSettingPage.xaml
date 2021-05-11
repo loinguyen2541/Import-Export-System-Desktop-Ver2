@@ -71,19 +71,20 @@
                     </Grid>
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="60" />
+                            <ColumnDefinition Width="100" />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <Grid Grid.Column="0">
                             <TextBlock
                                 VerticalAlignment="Center"
                                 FontSize="15"
-                                Text="20h00" />
+                                Text="{Binding ResetTime}" />
                         </Grid>
                         <Grid Grid.Column="1">
                             <Button
                                 Width="100"
                                 HorizontalAlignment="Left"
+                                Click="Button_Click_1"
                                 Content="Thay đổi" />
                         </Grid>
                     </Grid>

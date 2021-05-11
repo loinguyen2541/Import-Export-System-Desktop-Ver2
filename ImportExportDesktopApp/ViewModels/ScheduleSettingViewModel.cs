@@ -1,4 +1,5 @@
 ﻿using ImportExportDesktopApp.DataTransfers;
+using ImportExportDesktopApp.HttpServices;
 using ImportExportDesktopApp.Utils;
 using System;
 using System.Collections.Generic;
@@ -12,12 +13,15 @@ namespace ImportExportDesktopApp.ViewModels
     {
         private SystemConfigDataTransfer _systemConfigDataTransfer;
         private TimeTemplateItemDataTransfer _timeTemplateItemDataTransfer;
+        private SystemConfigApiService _systemConfigApiService;
 
         private SystemConfig _startWorkingTime;
         private SystemConfig _finishWorkingTime;
         private SystemConfig _startBreakTime;
         private SystemConfig _finishBreakTime;
         private SystemConfig _timeBetweenSlot;
+
+        private string _resetTime;
         public ScheduleSettingViewModel()
         {
             _systemConfigDataTransfer = new SystemConfigDataTransfer();
@@ -28,6 +32,9 @@ namespace ImportExportDesktopApp.ViewModels
             FinishWorkingTime = _systemConfigDataTransfer.GetFinishWorking();
             StartBreakTime = _systemConfigDataTransfer.GetStartBreak();
             FinishBreakTime = _systemConfigDataTransfer.GetFinishBreak();
+
+            _systemConfigApiService = new SystemConfigApiService();
+            ResetTime = _systemConfigApiService.GetAutoSchedue();
         }
 
         public void ResetData()
@@ -37,6 +44,7 @@ namespace ImportExportDesktopApp.ViewModels
             FinishWorkingTime = _systemConfigDataTransfer.GetFinishWorking();
             StartBreakTime = _systemConfigDataTransfer.GetStartBreak();
             FinishBreakTime = _systemConfigDataTransfer.GetFinishBreak();
+            ResetTime = _systemConfigApiService.GetAutoSchedue();
         }
 
         public SystemConfig StartWorkingTime
@@ -83,6 +91,15 @@ namespace ImportExportDesktopApp.ViewModels
             set
             {
                 _timeBetweenSlot = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public String ResetTime
+        {
+            get { return _resetTime; }
+            set
+            {
+                _resetTime = value;
                 NotifyPropertyChanged();
             }
         }

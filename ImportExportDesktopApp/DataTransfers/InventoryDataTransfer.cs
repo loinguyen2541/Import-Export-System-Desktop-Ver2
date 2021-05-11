@@ -42,11 +42,25 @@ namespace ImportExportDesktopApp.DataTransfers
 
         public ObservableCollection<Inventory> GetAllInventory(int page)
         {
-            return new ObservableCollection<Inventory>(ie.Inventories.OrderByDescending(i => i.RecordedDate).Take(10).Skip((page - 1) * 10));
+            return new ObservableCollection<Inventory>(ie.Inventories.OrderByDescending(i => i.RecordedDate).Skip((page - 1) * 10).Take(10));
         }
-        public ObservableCollection<Inventory> SearchInventory(DateTime startDate, DateTime endDate, int page)
+        public ObservableCollection<Inventory> SearchInventory(string startDate, string endDate, int page)
         {
-            return new ObservableCollection<Inventory>(ie.Inventories.Where(i => startDate <= i.RecordedDate && i.RecordedDate <= endDate).Take(10).Skip((page - 1) * 10));
+            IQueryable<Inventory> queryable = ie.Inventories;
+
+            DateTime fromDatetime;
+            if (DateTime.TryParse(startDate, out fromDatetime))
+            {
+                queryable = queryable.Where(t => DbFunctions.TruncateTime(t.RecordedDate) >= fromDatetime.Date);
+            }
+
+            DateTime toDatetime;
+            if (DateTime.TryParse(endDate, out toDatetime))
+            {
+                queryable = queryable.Where(t => DbFunctions.TruncateTime(t.RecordedDate) <= toDatetime.Date);
+            }
+            queryable = queryable.OrderByDescending(t => t.RecordedDate);
+            return new ObservableCollection<Inventory>(queryable);
         }
         public int GetMaxPage(int pageSize)
         {

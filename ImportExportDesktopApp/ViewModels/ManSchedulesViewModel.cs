@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using ImportExportDesktopApp.DataTransfers;
 using System.Collections.ObjectModel;
+using ImportExportDesktopApp.Enums;
 
 namespace ImportExportDesktopApp.ViewModels
 {
@@ -31,6 +32,10 @@ namespace ImportExportDesktopApp.ViewModels
         private int _currentPage = 1;
         private string _pagingInfo;
         private int _maxPage;
+
+        private bool _isMaxPage;
+        private bool _isFirstPage;
+
         private ScheduleDataTransfer _scheduleDataTransfer;
         private SystemConfigDataTransfer _systemDataTransfer;
 
@@ -41,6 +46,17 @@ namespace ImportExportDesktopApp.ViewModels
             _systemDataTransfer = new SystemConfigDataTransfer();
 
             MaxPage = _scheduleDataTransfer.GetMaxPage(10);
+
+            IsFirstPage = true;
+            if (CurrentPage == MaxPage)
+            {
+                IsMaxPage = true;
+            }
+            else
+            {
+                IsMaxPage = false;
+            }
+
             Task.Run(() => { Init(); });
 
             SearchCommand = new RelayCommand<object>((p) => { return true; }, p =>
@@ -79,11 +95,20 @@ namespace ImportExportDesktopApp.ViewModels
         public void SearchSchedules()
         {
             IsSearch = true;
-            DateTime searchDate;
-            if (DateTime.TryParse(SearchDate, out searchDate))
+            int type = -1;
+            if (SearchType != null)
             {
-                Schedules = _scheduleDataTransfer.SearchSchedule(searchDate, SearchName);
+                if (SearchType.Equals(ETransactionType.Import.ToString()))
+                {
+                    type = 0;
+                }
+                if (SearchType.Equals(ETransactionType.Export.ToString()))
+                {
+                    type = 1;
+                }
             }
+            Schedules = _scheduleDataTransfer.SearchSchedule(SearchDate, SearchName, type);
+
         }
 
         public void CancelSearch()
@@ -97,24 +122,37 @@ namespace ImportExportDesktopApp.ViewModels
         {
             IsLoading = true;
             CurrentPage = 1;
-            ObservableCollection<Schedule> schedule = _scheduleDataTransfer.GetAllSchedule(CurrentPage);
-            Schedules.Clear();
-            foreach (var item in schedule)
-            {
-                Schedules.Add(item);
-            }
+            Schedules = _scheduleDataTransfer.GetAllSchedule(CurrentPage);
             IsLoading = false;
         }
 
         public void NextPage()
         {
-            CurrentPage++;
+            if (CurrentPage < MaxPage)
+            {
+                CurrentPage++;
+                IsFirstPage = false;
+            }
+            else
+            {
+                IsMaxPage = true;
+            }
+
             Schedules = _scheduleDataTransfer.GetAllSchedule(CurrentPage);
             SetPagingInfo();
         }
         public void BeforePage()
         {
-            CurrentPage--;
+            if (CurrentPage > 1)
+            {
+                CurrentPage--;
+                IsMaxPage = false;
+            }
+            else
+            {
+                IsFirstPage = true;
+            }
+
             Schedules = _scheduleDataTransfer.GetAllSchedule(CurrentPage);
             SetPagingInfo();
         }
@@ -180,7 +218,7 @@ namespace ImportExportDesktopApp.ViewModels
                 NotifyPropertyChanged();
             }
         }
-        public string SelectedType
+        public string SearchType
         {
             get { return _searchType; }
             set
@@ -223,6 +261,27 @@ namespace ImportExportDesktopApp.ViewModels
             set
             {
                 _maxPage = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+
+        public bool IsMaxPage
+        {
+            get { return _isMaxPage; }
+            set
+            {
+                _isMaxPage = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public bool IsFirstPage
+        {
+            get { return _isFirstPage; }
+            set
+            {
+                _isFirstPage = value;
                 NotifyPropertyChanged();
             }
         }

@@ -29,6 +29,8 @@ namespace ImportExportDesktopApp.ViewModels
         private string _searchPartner;
         private string _searchDate;
         private string _btnSearchVisibility;
+        private bool _isMaxPage;
+        private bool _isFirstPage;
 
         public List<String> TransactionTypes { get; set; }
 
@@ -38,6 +40,7 @@ namespace ImportExportDesktopApp.ViewModels
         public ICommand CancelSearchCommand { get; set; }
         public TransactionListViewModel()
         {
+
             TransactionTypes = new List<string>();
             TransactionTypes.Add(ETransactionType.Import.ToString());
             TransactionTypes.Add(ETransactionType.Export.ToString());
@@ -50,6 +53,18 @@ namespace ImportExportDesktopApp.ViewModels
             MaxPage = _transactionDataTransfer.GetMaxPage(10);
             SearchPartner = "";
             SetPagingInfo();
+
+
+            IsFirstPage = true;
+            if (CurrentPage == MaxPage)
+            {
+                IsMaxPage = true;
+            }
+            else
+            {
+                IsMaxPage = false;
+            }
+
             NextPageCommand = new RelayCommand<object>(p => { return true; }, p =>
             {
                 NextPage();
@@ -98,7 +113,15 @@ namespace ImportExportDesktopApp.ViewModels
         }
         public void NextPage()
         {
-            CurrentPage++;
+            if (CurrentPage < MaxPage)
+            {
+                CurrentPage++;
+                IsFirstPage = false;
+            }
+            else
+            {
+                IsMaxPage = true;
+            }
             Transactions = _transactionDataTransfer.GetTransactions(CurrentPage, -1);
             SetPagingInfo();
         }
@@ -107,6 +130,11 @@ namespace ImportExportDesktopApp.ViewModels
             if (CurrentPage > 1)
             {
                 CurrentPage--;
+                IsMaxPage = false;
+            }
+            else
+            {
+                IsFirstPage = true;
             }
             Transactions = _transactionDataTransfer.GetTransactions(CurrentPage, -1);
             SetPagingInfo();
@@ -190,6 +218,26 @@ namespace ImportExportDesktopApp.ViewModels
             set
             {
                 _btnSearchVisibility = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public bool IsMaxPage
+        {
+            get { return _isMaxPage; }
+            set
+            {
+                _isMaxPage = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public bool IsFirstPage
+        {
+            get { return _isFirstPage; }
+            set
+            {
+                _isFirstPage = value;
                 NotifyPropertyChanged();
             }
         }

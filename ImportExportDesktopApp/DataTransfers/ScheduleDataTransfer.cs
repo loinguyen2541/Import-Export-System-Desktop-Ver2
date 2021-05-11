@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,16 +34,32 @@ namespace ImportExportDesktopApp.DataTransfers
         }
         public ObservableCollection<Schedule> GetAllSchedule(int page)
         {
-            return new ObservableCollection<Schedule>(ie.Schedules.OrderByDescending(s => s.CreatedDate).Take(10).Skip((page - 1) * 10));
+            return new ObservableCollection<Schedule>(ie.Schedules.OrderByDescending(s => s.CreatedDate).Skip((page - 1) * 10).Take(10));
         }
-        public ObservableCollection<Schedule> SearchSchedule(DateTime searchDate, string searchName)
+        public ObservableCollection<Schedule> SearchSchedule(String searchDate, string searchName, int type)
         {
-            return new ObservableCollection<Schedule>(ie.Schedules.OrderByDescending(s => s.Partner.DisplayName.Contains(searchName) && s.ScheduleDate >= searchDate));
+            IQueryable<Schedule> queryable = ie.Schedules;
+            if (type > -1)
+            {
+                queryable = queryable.Where(t => t.TransactionType == type);
+            }
+            if (searchName != null && searchName.Length > 0)
+            {
+                queryable = queryable.Where(t => t.Partner.DisplayName.ToLower().Contains(searchName.ToLower()));
+            }
+            DateTime dateTime;
+            if (DateTime.TryParse(searchDate, out dateTime))
+            {
+                queryable = queryable.Where(t => DbFunctions.TruncateTime(t.CreatedDate) == dateTime.Date);
+            }
+            queryable = queryable.OrderByDescending(t => t.CreatedDate);
+            return new ObservableCollection<Schedule>(queryable);
         }
+
         public int GetMaxPage(int pageSize)
         {
             int count = ie.Schedules.Count();
-            double totalPage = count * (1.0) / pageSize * (1.0);
+            double totalPage = (count * (1.0)) / (pageSize * (1.0));
             return (int)Math.Ceiling(totalPage);
         }
     }

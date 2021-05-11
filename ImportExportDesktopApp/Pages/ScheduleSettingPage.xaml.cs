@@ -41,5 +41,13 @@ namespace ImportExportDesktopApp.Pages
             changeScheduleTimeWindow.ShowDialog();
             _viewModel.ResetData();
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            ChangeAutoResetTimeWindow changeAutoResetTimeWindow = new ChangeAutoResetTimeWindow();
+            changeAutoResetTimeWindow.time.SelectedTime = DateTime.Parse(_viewModel.ResetTime);
+            changeAutoResetTimeWindow.ShowDialog();
+            _viewModel.ResetData();
+        }
     }
 }

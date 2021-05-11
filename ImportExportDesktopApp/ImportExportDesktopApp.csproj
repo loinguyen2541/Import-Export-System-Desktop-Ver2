@@ -157,6 +157,7 @@
     <Compile Include="HttpServices\AccountApiService.cs" />
     <Compile Include="HttpServices\NotificationApiService.cs" />
     <Compile Include="HttpServices\NotifyService.cs" />
+    <Compile Include="HttpServices\SystemConfigApiService.cs" />
     <Compile Include="IdentityCard.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
     </Compile>
@@ -266,6 +267,9 @@
     <Compile Include="ViewModels\ScaleExceptionViewModel.cs" />
     <Compile Include="ViewModels\ScheduleSettingViewModel.cs" />
     <Compile Include="ViewModels\TransactionListViewModel.cs" />
+    <Compile Include="Windows\ChangeAutoResetTimeWindow.xaml.cs">
+      <DependentUpon>ChangeAutoResetTimeWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ChangeScheduleTimeWindow.xaml.cs">
       <DependentUpon>ChangeScheduleTimeWindow.xaml</DependentUpon>
     </Compile>
@@ -335,6 +339,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\MainSource.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ChangeAutoResetTimeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

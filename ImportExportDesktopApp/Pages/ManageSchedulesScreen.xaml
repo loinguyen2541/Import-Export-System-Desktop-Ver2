@@ -1,15 +1,17 @@
-﻿<Page x:Class="ImportExportDesktopApp.Pages.ManageSchedulesScreen"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:ImportExportDesktopApp.Converters"
-      xmlns:converter="clr-namespace:ImportExportDesktopApp.Converters"
-      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      DataContext="{StaticResource ManSchedule}"
-      Title="ManageSchedules">
+﻿<Page
+    x:Class="ImportExportDesktopApp.Pages.ManageSchedulesScreen"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converter="clr-namespace:ImportExportDesktopApp.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ImportExportDesktopApp.Converters"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="ManageSchedules"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    DataContext="{StaticResource ManSchedule}"
+    mc:Ignorable="d">
     <Page.Resources>
         <local:StatusColorConverter x:Key="StatusColor" />
         <converter:RowIndexConverter x:Key="RowIndex" />
@@ -51,7 +53,8 @@
                         Margin="16,0,0,0"
                         Background="{DynamicResource Green}"
                         BorderBrush="{StaticResource Green}"
-                        Content="Edit" Click="Button_Click" />
+                        Click="Button_Click"
+                        Content="Edit" />
                 </StackPanel>
             </Grid>
 
@@ -285,7 +288,7 @@
                                 Width="35"
                                 Height="35"
                                 HorizontalAlignment="Left"
-                                Command="{Binding GetBeforePageCommand}"
+                                Command="{Binding BeforePageCommand}"
                                 CommandParameter="{Binding Paging}"
                                 ToolTip="MaterialDesignFloatingActionMiniButton">
                                 <materialDesign:PackIcon
@@ -313,7 +316,7 @@
                                 Width="35"
                                 Height="35"
                                 HorizontalAlignment="Left"
-                                Command="{Binding GetNextPageCommand}"
+                                Command="{Binding NextPageCommand}"
                                 CommandParameter="{Binding Paging}"
                                 ToolTip="MaterialDesignFloatingActionMiniButton">
                                 <materialDesign:PackIcon

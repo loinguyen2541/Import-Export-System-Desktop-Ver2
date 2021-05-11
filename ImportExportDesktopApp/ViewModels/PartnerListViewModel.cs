@@ -32,6 +32,8 @@ namespace ImportExportDesktopApp.ViewModels
         private Account _account = null;
         private string _pagingInfo;
         private int _maxPage;
+        private bool _isMaxPage;
+        private bool _isFirstPage;
 
         private PartnerDataTransfer _partnerDataTransfer;
         private CardDataTransfer _cardDataTransfer;
@@ -55,6 +57,15 @@ namespace ImportExportDesktopApp.ViewModels
             _accountService = new AccountApiService();
             MaxPage = _partnerDataTransfer.GetMaxPage(10);
 
+            IsFirstPage = true;
+            if (CurrentPage == MaxPage)
+            {
+                IsMaxPage = true;
+            }
+            else
+            {
+                IsMaxPage = false;
+            }
 
             Task.Run(() =>
             {
@@ -207,7 +218,15 @@ namespace ImportExportDesktopApp.ViewModels
 
         public void NextPage()
         {
-            CurrentPage++;
+            if (CurrentPage < MaxPage)
+            {
+                CurrentPage++;
+                IsFirstPage = false;
+            }
+            else
+            {
+                IsMaxPage = true;
+            }
             Partners = _partnerDataTransfer.GetAllWithPaging(CurrentPage);
             SetPagingInfo();
         }
@@ -217,6 +236,11 @@ namespace ImportExportDesktopApp.ViewModels
             if (CurrentPage > 1)
             {
                 CurrentPage--;
+                IsMaxPage = false;
+            }
+            else
+            {
+                IsFirstPage = true;
             }
             Partners = _partnerDataTransfer.GetAllWithPaging(CurrentPage);
             SetPagingInfo();
@@ -379,6 +403,26 @@ namespace ImportExportDesktopApp.ViewModels
             set
             {
                 _maxPage = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public bool IsMaxPage
+        {
+            get { return _isMaxPage; }
+            set
+            {
+                _isMaxPage = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public bool IsFirstPage
+        {
+            get { return _isFirstPage; }
+            set
+            {
+                _isFirstPage = value;
                 NotifyPropertyChanged();
             }
         }

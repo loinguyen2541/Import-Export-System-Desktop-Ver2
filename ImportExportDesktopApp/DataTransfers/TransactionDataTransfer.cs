@@ -92,7 +92,7 @@ namespace ImportExportDesktopApp.DataTransfers
             }
             else
             {
-                return new ObservableCollection<Transaction>(ie.Transactions.OrderByDescending(t => t.CreatedDate).Where(t => t.TransactionType == type).Take(10).Skip((page - 1) * 10));
+                return new ObservableCollection<Transaction>(ie.Transactions.OrderByDescending(t => t.CreatedDate).Where(t => t.TransactionType == type).Skip((page - 1) * 10).Take(10));
             }
         }
 
