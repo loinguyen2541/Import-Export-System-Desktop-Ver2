@@ -12,12 +12,14 @@ namespace ImportExportDesktopApp
     using System;
     using System.Collections.Generic;
     
-    public partial class sysdiagram
+    public partial class ActivityLog
     {
-        public string name { get; set; }
-        public int principal_id { get; set; }
-        public int diagram_id { get; set; }
-        public Nullable<int> version { get; set; }
-        public byte[] definition { get; set; }
+        public int ActivityLogId { get; set; }
+        public string Username { get; set; }
+        public System.DateTime RecordDate { get; set; }
+        public string Description { get; set; }
+        public string AccountUsername { get; set; }
+    
+        public virtual Account Account { get; set; }
     }
 }

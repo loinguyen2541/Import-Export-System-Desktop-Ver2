@@ -69,6 +69,8 @@ namespace ImportExportDesktopApp.DataTransfers
                 return false;
             }
 
+            Disable(GetPendingList());
+
             TimeSpan TimeSpanBetweenSlot = new TimeSpan(0, timeBetweenSlotInt, 0);
 
             TimeTemplate timeTemplate = ie.TimeTemplates.Where(i => i.TimeTemplateStatus == 0).SingleOrDefault();
@@ -81,12 +83,27 @@ namespace ImportExportDesktopApp.DataTransfers
                     TimeTemplateItem timeTemplateItem = new TimeTemplateItem();
                     timeTemplateItem.TimeTemplateId = timeTemplate.TimeTemplateId;
                     timeTemplateItem.Inventory = 0;
+                    timeTemplateItem.Status = 1;
                     timeTemplateItem.ScheduleTime = i;
                     ie.TimeTemplateItems.Add(timeTemplateItem);
                 }
             }
 
             return true;
+        }
+
+        private List<TimeTemplateItem> GetPendingList()
+        {
+            return ie.TimeTemplateItems.Where(t => t.Status == 1).ToList();
+        }
+
+        private void Disable(List<TimeTemplateItem> timeTemplateItems)
+        {
+            foreach (var item in timeTemplateItems)
+            {
+                item.Status = 2;
+                ie.Entry(item).State = System.Data.Entity.EntityState.Modified;
+            }
         }
     }
 }

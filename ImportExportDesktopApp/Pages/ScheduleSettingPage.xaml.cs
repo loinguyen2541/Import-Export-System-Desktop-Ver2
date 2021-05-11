@@ -1,4 +1,5 @@
-﻿using ImportExportDesktopApp.Windows;
+﻿using ImportExportDesktopApp.ViewModels;
+using ImportExportDesktopApp.Windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,10 +22,13 @@ namespace ImportExportDesktopApp.Pages
     /// </summary>
     public partial class ScheduleSettingPage : Page
     {
+        ScheduleSettingViewModel _viewModel;
         public ScheduleSettingPage()
         {
             InitializeComponent();
+            _viewModel = this.DataContext as ScheduleSettingViewModel;
         }
+
 
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
@@ -35,6 +39,7 @@ namespace ImportExportDesktopApp.Pages
         {
             ChangeScheduleTimeWindow changeScheduleTimeWindow = new ChangeScheduleTimeWindow();
             changeScheduleTimeWindow.ShowDialog();
+            _viewModel.ResetData();
         }
     }
 }

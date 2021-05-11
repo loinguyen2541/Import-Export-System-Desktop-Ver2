@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:ImportExportDesktopApp.Windows"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:validation="clr-namespace:ImportExportDesktopApp.Validations"
     Name="ChangeScheduleTimeW"
     Title="Create Transaction Window"
     Width="450"
@@ -19,6 +20,12 @@
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     WindowStyle="None"
     mc:Ignorable="d">
+    <Window.Resources>
+        <validation:TimeValidationRuleRange x:Key="StartWorkingValidation" MaxLength="{Binding FinishWorkingTime.AttributeValue}" />
+        <validation:TimeValidationRuleRange x:Key="FinishworkingValidation" MinLength="{Binding StartWorkingTime.AttributeValue}" />
+        <validation:TimeValidationRuleRange x:Key="StartBreakingValidation" MaxLength="{Binding FinishBreakTime.AttributeValue}" />
+        <validation:TimeValidationRuleRange x:Key="FinishBreakingValidation" MinLength="{Binding StartBreakTime.AttributeValue}" />
+    </Window.Resources>
     <Grid>
         <materialDesign:Card
             Margin="16"
@@ -61,13 +68,23 @@
                                 Grid.Column="1"
                                 Width="100"
                                 HorizontalAlignment="Left"
-                                Focusable="False"
-                                SelectedTime="{Binding StartWorkingTime.AttributeValue}">
+                                Focusable="False">
                                 <materialDesign:TimePicker.Resources>
                                     <Style TargetType="materialDesign:TimePickerTextBox">
                                         <Setter Property="IsReadOnly" Value="True" />
                                     </Style>
                                 </materialDesign:TimePicker.Resources>
+                                <materialDesign:TimePicker.Text>
+                                    <Binding
+                                        NotifyOnValidationError="True"
+                                        Path="StartWorkingTime.AttributeValue"
+                                        UpdateSourceTrigger="PropertyChanged"
+                                        ValidatesOnExceptions="True">
+                                        <Binding.ValidationRules>
+                                            <validation:TimeValidationRule Range="{StaticResource StartWorkingValidation}" ValidatesOnTargetUpdated="True" />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </materialDesign:TimePicker.Text>
                             </materialDesign:TimePicker>
                         </Grid>
                         <Grid Grid.Row="1">
@@ -83,13 +100,23 @@
                                 Grid.Column="1"
                                 Width="100"
                                 HorizontalAlignment="Left"
-                                Focusable="False"
-                                SelectedTime="{Binding FinishWorkingTime.AttributeValue}">
+                                Focusable="False">
                                 <materialDesign:TimePicker.Resources>
                                     <Style TargetType="materialDesign:TimePickerTextBox">
                                         <Setter Property="IsReadOnly" Value="True" />
                                     </Style>
                                 </materialDesign:TimePicker.Resources>
+                                <materialDesign:TimePicker.Text>
+                                    <Binding
+                                        NotifyOnValidationError="True"
+                                        Path="FinishWorkingTime.AttributeValue"
+                                        UpdateSourceTrigger="PropertyChanged"
+                                        ValidatesOnExceptions="True">
+                                        <Binding.ValidationRules>
+                                            <validation:TimeValidationRule Range="{StaticResource FinishworkingValidation}" ValidatesOnTargetUpdated="True" />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </materialDesign:TimePicker.Text>
                             </materialDesign:TimePicker>
                         </Grid>
                         <Grid Grid.Row="2">
@@ -105,13 +132,23 @@
                                 Grid.Column="1"
                                 Width="100"
                                 HorizontalAlignment="Left"
-                                Focusable="False"
-                                SelectedTime="{Binding StartBreakTime.AttributeValue}">
+                                Focusable="False">
                                 <materialDesign:TimePicker.Resources>
                                     <Style TargetType="materialDesign:TimePickerTextBox">
                                         <Setter Property="IsReadOnly" Value="True" />
                                     </Style>
                                 </materialDesign:TimePicker.Resources>
+                                <materialDesign:TimePicker.Text>
+                                    <Binding
+                                        NotifyOnValidationError="True"
+                                        Path="StartBreakTime.AttributeValue"
+                                        UpdateSourceTrigger="PropertyChanged"
+                                        ValidatesOnExceptions="True">
+                                        <Binding.ValidationRules>
+                                            <validation:TimeValidationRule Range="{StaticResource StartBreakingValidation}" ValidatesOnTargetUpdated="True" />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </materialDesign:TimePicker.Text>
                             </materialDesign:TimePicker>
                         </Grid>
                         <Grid Grid.Row="3">
@@ -127,13 +164,23 @@
                                 Grid.Column="1"
                                 Width="100"
                                 HorizontalAlignment="Left"
-                                Focusable="False"
-                                SelectedTime="{Binding FinishBreakTime.AttributeValue}">
+                                Focusable="False">
                                 <materialDesign:TimePicker.Resources>
                                     <Style TargetType="materialDesign:TimePickerTextBox">
                                         <Setter Property="IsReadOnly" Value="True" />
                                     </Style>
                                 </materialDesign:TimePicker.Resources>
+                                <materialDesign:TimePicker.Text>
+                                    <Binding
+                                        NotifyOnValidationError="True"
+                                        Path="FinishBreakTime.AttributeValue"
+                                        UpdateSourceTrigger="PropertyChanged"
+                                        ValidatesOnExceptions="True">
+                                        <Binding.ValidationRules>
+                                            <validation:TimeValidationRule Range="{StaticResource FinishBreakingValidation}" ValidatesOnTargetUpdated="True" />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </materialDesign:TimePicker.Text>
                             </materialDesign:TimePicker>
                         </Grid>
                         <Grid Grid.Row="4">
@@ -150,8 +197,22 @@
                                     Width="65"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
-                                    Text="{Binding TimeBetweenSlot.AttributeValue}"
-                                    TextAlignment="Left" />
+                                    TextAlignment="Left">
+                                    <TextBox.Text>
+                                        <Binding
+                                            NotifyOnValidationError="True"
+                                            Path="TimeBetweenSlot.AttributeValue"
+                                            UpdateSourceTrigger="PropertyChanged"
+                                            ValidatesOnExceptions="True">
+                                            <Binding.ValidationRules>
+                                                <validation:MinutesValidationRule
+                                                    Max="120"
+                                                    Min="15"
+                                                    ValidatesOnTargetUpdated="True" />
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </TextBox.Text>
+                                </TextBox>
                                 <TextBlock
                                     Margin="8,0,0,0"
                                     VerticalAlignment="Center"

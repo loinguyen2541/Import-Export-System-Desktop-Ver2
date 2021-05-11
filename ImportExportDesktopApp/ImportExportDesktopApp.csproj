@@ -114,6 +114,9 @@
     <Compile Include="Account.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ActivityLog.cs">
+      <DependentUpon>IEModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="AppServices.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Converters\DateConverter.cs" />
@@ -229,9 +232,6 @@
     <Compile Include="Schedule.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="sysdiagram.cs">
-      <DependentUpon>IEModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="SystemConfig.cs">
       <DependentUpon>IEModel.tt</DependentUpon>
     </Compile>
@@ -248,8 +248,11 @@
     <Compile Include="Utils\BaseNotifyPropertyChanged.cs" />
     <Compile Include="Validations\EmailValidationRule.cs" />
     <Compile Include="Validations\FloatValidationRule.cs" />
+    <Compile Include="Validations\MinutesValidationRule.cs" />
     <Compile Include="Validations\NotEmptyValidationRule.cs" />
     <Compile Include="Validations\PhoneValidationRule.cs" />
+    <Compile Include="Validations\TimeValidationRule.cs" />
+    <Compile Include="Validations\TimeValidationRuleRange.cs" />
     <Compile Include="ViewModels\ChangeScheduleTimeViewModel.cs" />
     <Compile Include="ViewModels\CreatePartnerViewModel.cs" />
     <Compile Include="ViewModels\CreateTransactionViewModel.cs" />
@@ -261,6 +264,7 @@
     <Compile Include="ViewModels\ManSchedulesViewModel.cs" />
     <Compile Include="ViewModels\ProcessingViewModel.cs" />
     <Compile Include="ViewModels\ScaleExceptionViewModel.cs" />
+    <Compile Include="ViewModels\ScheduleSettingViewModel.cs" />
     <Compile Include="ViewModels\TransactionListViewModel.cs" />
     <Compile Include="Windows\ChangeScheduleTimeWindow.xaml.cs">
       <DependentUpon>ChangeScheduleTimeWindow.xaml</DependentUpon>

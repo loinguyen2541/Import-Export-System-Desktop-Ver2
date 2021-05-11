@@ -4,37 +4,38 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="ebf876bb3b7a4c36be267d26f89c474c" Name="Diagram1" ZoomLevel="64">
-        <EntityTypeShape EntityType="IEModel.Account" Width="1.5" PointX="3" PointY="8.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="IEModel.Good" Width="1.5" PointX="5.25" PointY="3" IsExpanded="true" />
-        <EntityTypeShape EntityType="IEModel.IdentityCard" Width="1.5" PointX="7.5" PointY="8.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="IEModel.Inventory" Width="1.5" PointX="8.25" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="IEModel.InventoryDetail" Width="1.5" PointX="10.5" PointY="8.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="IEModel.Partner" Width="1.5" PointX="5.25" PointY="7.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="IEModel.PartnerType" Width="1.5" PointX="3" PointY="5.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="IEModel.Role" Width="1.5" PointX="0.75" PointY="8.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="IEModel.Schedule" Width="1.5" PointX="7.5" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="IEModel.sysdiagram" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="IEModel.SystemConfig" Width="1.5" PointX="9.75" PointY="3.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="IEModel.TimeTemplate" Width="1.5" PointX="3" PointY="14.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="IEModel.TimeTemplateItem" Width="1.5" PointX="5.25" PointY="14.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="IEModel.Transaction" Width="1.5" PointX="7.5" PointY="11.75" IsExpanded="true" />
-        <AssociationConnector Association="IEModel.FK_Account_Role" ManuallyRouted="false" />
-        <AssociationConnector Association="IEModel.FK_Partner_Account" ManuallyRouted="false" />
-        <AssociationConnector Association="IEModel.FK_InventoryDetail_Goods" ManuallyRouted="false" />
-        <AssociationConnector Association="IEModel.FK_Schedule_Goods" ManuallyRouted="false" />
-        <AssociationConnector Association="IEModel.FK_Transaction_Goods" ManuallyRouted="false" />
-        <AssociationConnector Association="IEModel.FK_IdentityCard_Partner" ManuallyRouted="false" />
-        <AssociationConnector Association="IEModel.FK_InventoryDetail_Inventory" ManuallyRouted="false" />
-        <AssociationConnector Association="IEModel.FK_InventoryDetail_Partner" ManuallyRouted="false" />
-        <AssociationConnector Association="IEModel.FK_Partner_PartnerType" ManuallyRouted="false" />
-        <AssociationConnector Association="IEModel.FK_Schedule_Partner" ManuallyRouted="false" />
-        <AssociationConnector Association="IEModel.FK_Transaction_Partner" ManuallyRouted="false" />
-        <AssociationConnector Association="IEModel.FK_Schedule_TimeTemplateItem" ManuallyRouted="false" />
-        <AssociationConnector Association="IEModel.FK_TimeTemplateItem_TimeTemplate" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="IEModel.Notification" Width="1.5" PointX="9.75" PointY="12.375" />
+      <Diagram DiagramId="ebf876bb3b7a4c36be267d26f89c474c" Name="Diagram1" ZoomLevel="44">
+        <EntityTypeShape EntityType="IEModel.Account" Width="1.5" PointX="3" PointY="11.25" />
+        <EntityTypeShape EntityType="IEModel.ActivityLog" Width="1.5" PointX="5.25" PointY="19.875" />
+        <EntityTypeShape EntityType="IEModel.Good" Width="1.5" PointX="5.25" PointY="4.875" />
+        <EntityTypeShape EntityType="IEModel.IdentityCard" Width="1.5" PointX="7.5" PointY="24.375" />
+        <EntityTypeShape EntityType="IEModel.Inventory" Width="1.5" PointX="5.25" PointY="15.75" />
+        <EntityTypeShape EntityType="IEModel.InventoryDetail" Width="1.5" PointX="7.5" PointY="15.25" />
+        <EntityTypeShape EntityType="IEModel.Notification" Width="1.5" PointX="7.5" PointY="11.125" />
+        <EntityTypeShape EntityType="IEModel.Partner" Width="1.5" PointX="5.25" PointY="10.625" />
+        <EntityTypeShape EntityType="IEModel.PartnerType" Width="1.5" PointX="3" PointY="8.75" />
+        <EntityTypeShape EntityType="IEModel.Role" Width="1.5" PointX="0.75" PointY="11.75" />
+        <EntityTypeShape EntityType="IEModel.Schedule" Width="1.5" PointX="7.5" PointY="5.75" />
+        <EntityTypeShape EntityType="IEModel.SystemConfig" Width="1.5" PointX="0.75" PointY="4.75" />
+        <EntityTypeShape EntityType="IEModel.TimeTemplate" Width="1.5" PointX="3" PointY="1.125" />
+        <EntityTypeShape EntityType="IEModel.TimeTemplateItem" Width="1.5" PointX="5.25" PointY="1" />
+        <EntityTypeShape EntityType="IEModel.Transaction" Width="1.5" PointX="10.5" PointY="10.5" />
+        <AssociationConnector Association="IEModel.FK_Account_Role_RoleId" />
+        <AssociationConnector Association="IEModel.FK_ActivityLog_Account_AccountUsername" />
+        <AssociationConnector Association="IEModel.FK_Notification_Account_Username" />
+        <AssociationConnector Association="IEModel.FK_Partner_Account_Username" />
+        <AssociationConnector Association="IEModel.FK_InventoryDetail_Goods_GoodsId" />
+        <AssociationConnector Association="IEModel.FK_Schedule_Goods_GoodsId" />
+        <AssociationConnector Association="IEModel.FK_Transaction_Goods_GoodsId" />
+        <AssociationConnector Association="IEModel.FK_IdentityCard_Partner_PartnerId" />
+        <AssociationConnector Association="IEModel.FK_InventoryDetail_Inventory_InventoryId" />
+        <AssociationConnector Association="IEModel.FK_InventoryDetail_Partner_PartnerId" />
         <AssociationConnector Association="IEModel.FK_Notification_Partner_PartnerId" />
-        <AssociationConnector Association="IEModel.FK_Notification_Transaction_TransactionId" />
+        <AssociationConnector Association="IEModel.FK_Partner_PartnerType_PartnerTypeId" />
+        <AssociationConnector Association="IEModel.FK_Schedule_Partner_PartnerId" />
+        <AssociationConnector Association="IEModel.FK_Transaction_Partner_PartnerId" />
+        <AssociationConnector Association="IEModel.FK_Schedule_TimeTemplateItem_TimeTemplateItemId" />
+        <AssociationConnector Association="IEModel.FK_TimeTemplateItem_TimeTemplate_TimeTemplateId" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

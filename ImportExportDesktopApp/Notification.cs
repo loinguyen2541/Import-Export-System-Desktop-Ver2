@@ -16,15 +16,14 @@ namespace ImportExportDesktopApp
     {
         public int NotificationId { get; set; }
         public int NotificationType { get; set; }
-        public int StatusAdmin { get; set; }
-        public int StatusPartner { get; set; }
-        public string ContentForAdmin { get; set; }
-        public string ContentForPartner { get; set; }
-        public int PartnerId { get; set; }
-        public int TransactionId { get; set; }
+        public int Status { get; set; }
+        public string Content { get; set; }
+        public string Title { get; set; }
         public System.DateTime CreatedDate { get; set; }
+        public Nullable<int> PartnerId { get; set; }
+        public string Username { get; set; }
     
+        public virtual Account Account { get; set; }
         public virtual Partner Partner { get; set; }
-        public virtual Transaction Transaction { get; set; }
     }
 }

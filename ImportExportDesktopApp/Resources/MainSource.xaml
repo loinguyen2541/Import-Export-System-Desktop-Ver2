@@ -15,6 +15,7 @@
     <viewmodel:ScaleExceptionViewModel x:Key="ScaleExceptionVM" />
     <viewmodel:CreateTransactionViewModel x:Key="CreateTransactionVM" />
     <viewmodel:ChangeScheduleTimeViewModel x:Key="ChangeScheduleVM" />
+    <viewmodel:ScheduleSettingViewModel x:Key="ScheduleSettingVM" />
 
     <!--  Colors  -->
     <Brush x:Key="Red">#F44336</Brush>

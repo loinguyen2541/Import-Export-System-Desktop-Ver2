@@ -93,7 +93,7 @@ namespace ImportExportDesktopApp.ViewModels
             Schedules = _scheduleDataTransfer.GetAllSchedule(CurrentPage);
         }
 
-        public async void Refresh()
+        public void Refresh()
         {
             IsLoading = true;
             CurrentPage = 1;

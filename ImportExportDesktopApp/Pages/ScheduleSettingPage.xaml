@@ -10,7 +10,7 @@
     d:DesignHeight="720"
     d:DesignWidth="980"
     Background="{DynamicResource MaterialDesignPaper}"
-    DataContext="{DynamicResource CreateTransactionVM}"
+    DataContext="{DynamicResource ScheduleSettingVM}"
     FontFamily="{DynamicResource MaterialDesignFont}"
     TextElement.FontSize="15"
     TextElement.FontWeight="Regular"
@@ -146,7 +146,7 @@
                                     VerticalAlignment="Center"
                                     FontSize="15"
                                     FontWeight="Bold"
-                                    Text="7h" />
+                                    Text="{Binding StartWorkingTime.AttributeValue}" />
                                 <TextBlock
                                     Padding="0,0,0,0"
                                     VerticalAlignment="Center"
@@ -155,7 +155,7 @@
                                     VerticalAlignment="Center"
                                     FontSize="15"
                                     FontWeight="Bold"
-                                    Text="18h" />
+                                    Text="{Binding FinishWorkingTime.AttributeValue}" />
                             </StackPanel>
                         </Grid>
                     </Grid>
@@ -171,13 +171,13 @@
                                     VerticalAlignment="Center"
                                     FontSize="15"
                                     FontWeight="Bold"
-                                    Text="11h" />
+                                    Text="{Binding StartBreakTime.AttributeValue}" />
                                 <TextBlock VerticalAlignment="Center" Text=" đến " />
                                 <TextBlock
                                     VerticalAlignment="Center"
                                     FontSize="15"
                                     FontWeight="Bold"
-                                    Text="13h" />
+                                    Text="{Binding FinishBreakTime.AttributeValue}" />
                             </StackPanel>
                         </Grid>
                     </Grid>
@@ -193,14 +193,20 @@
                                     VerticalAlignment="Center"
                                     FontSize="15"
                                     FontWeight="Bold"
-                                    Text="60 phút" />
+                                    Text="{Binding TimeBetweenSlot.AttributeValue}" />
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontSize="15"
+                                    FontWeight="Bold"
+                                    Text=" phút" />
                             </StackPanel>
                         </Grid>
                         <Grid Grid.Column="1">
                             <Button
                                 Width="100"
                                 HorizontalAlignment="Left"
-                                Content="Thay đổi" Click="Button_Click" />
+                                Click="Button_Click"
+                                Content="Thay đổi" />
                         </Grid>
                     </Grid>
                 </Grid>

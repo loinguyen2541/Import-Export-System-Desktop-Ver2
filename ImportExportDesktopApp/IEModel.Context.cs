@@ -26,19 +26,19 @@ namespace ImportExportDesktopApp
         }
     
         public virtual DbSet<Account> Accounts { get; set; }
+        public virtual DbSet<ActivityLog> ActivityLogs { get; set; }
         public virtual DbSet<Good> Goods { get; set; }
         public virtual DbSet<IdentityCard> IdentityCards { get; set; }
         public virtual DbSet<Inventory> Inventories { get; set; }
         public virtual DbSet<InventoryDetail> InventoryDetails { get; set; }
+        public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<Partner> Partners { get; set; }
         public virtual DbSet<PartnerType> PartnerTypes { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Schedule> Schedules { get; set; }
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<SystemConfig> SystemConfigs { get; set; }
         public virtual DbSet<TimeTemplate> TimeTemplates { get; set; }
         public virtual DbSet<TimeTemplateItem> TimeTemplateItems { get; set; }
         public virtual DbSet<Transaction> Transactions { get; set; }
-        public virtual DbSet<Notification> Notifications { get; set; }
     }
 }

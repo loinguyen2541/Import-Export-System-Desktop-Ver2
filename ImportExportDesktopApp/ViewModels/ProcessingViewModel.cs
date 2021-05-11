@@ -332,11 +332,11 @@ namespace ImportExportDesktopApp.ViewModels
                 _notifyService.NotifyAndroid();
             }
             Notification notification = new Notification();
-            notification.ContentForAdmin = "the partner " + partner.DisplayName + " has just completed a transaction!";
-            notification.ContentForPartner = "You have just completed a transaction!";
-            notification.CreatedDate = transaction.CreatedDate;
-            notification.TransactionId = transaction.TransactionId;
-            notification.PartnerId = partner.PartnerId;
+            //notification.ContentForAdmin = "the partner " + partner.DisplayName + " has just completed a transaction!";
+            //notification.ContentForPartner = "You have just completed a transaction!";
+            //notification.CreatedDate = transaction.CreatedDate;
+            //notification.TransactionId = transaction.TransactionId;
+            //notification.PartnerId = partner.PartnerId;
             notification.NotificationType = partner.PartnerTypeId == 1 ? 1 : 0;
             bool noResult = _notificationApiService.PostNotification(notification);
             if (noResult)

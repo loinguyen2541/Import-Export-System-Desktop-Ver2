@@ -14,12 +14,6 @@ namespace ImportExportDesktopApp
 
     public partial class Transaction
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Transaction()
-        {
-            this.Notifications = new HashSet<Notification>();
-        }
-
         public int TransactionId { get; set; }
         public System.DateTime TimeIn { get; set; }
         public System.DateTime TimeOut { get; set; }
@@ -37,8 +31,6 @@ namespace ImportExportDesktopApp
 
         public virtual Good Good { get; set; }
         public virtual Partner Partner { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Notification> Notifications { get; set; }
 
         public float Total
         {
