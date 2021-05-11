@@ -122,9 +122,11 @@
     <Compile Include="Converters\DateConverter.cs" />
     <Compile Include="Converters\PartnerTypesConverter.cs" />
     <Compile Include="Converters\RowIndexConverter.cs" />
+    <Compile Include="Converters\ScheduleStatusConverter.cs" />
     <Compile Include="Converters\StatusColor.cs" />
     <Compile Include="Converters\StatusColorConverter.cs" />
     <Compile Include="Converters\TimeConverter.cs" />
+    <Compile Include="Converters\TransactionStatusColorConverter.cs" />
     <Compile Include="Converters\TransactionStatusConverter.cs" />
     <Compile Include="Converters\TransactionTypeConverter.cs" />
     <Compile Include="DataTransfers\AccountDataTransfer.cs" />

@@ -8,30 +8,25 @@ using System.Windows.Data;
 
 namespace ImportExportDesktopApp.Converters
 {
-    class StatusColorConverter : IValueConverter
+    class TransactionStatusColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value.Equals("Approved") || value.Equals(0))
+            if (value.Equals(0))
             {
-                return "#ffc107";
+                return "#FFC107";
             }
-            if (value.Equals("Cancel") || value.Equals(2))
-            {
-                return "#c62828";
-            }
-            if (value.Equals("Success") || value.Equals(1))
+            if (value.Equals(1))
             {
                 return "#00c853";
             }
-            if (value.Equals(true))
+            if (value.Equals(2))
             {
                 return "#c62828";
             }
-            else
-            {
-                return "#00c853";
-            }
+
+            return "#00c853";
+
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
