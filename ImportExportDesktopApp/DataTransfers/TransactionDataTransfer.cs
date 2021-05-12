@@ -69,6 +69,10 @@ namespace ImportExportDesktopApp.DataTransfers
             return transaction;
         }
 
+        public ObservableCollection<Transaction> GetAllTransactionByPartner(int page, int partnerId)
+        {
+            return new ObservableCollection<Transaction>(ie.Transactions.Where(t => t.PartnerId == partnerId).OrderByDescending(t => t.CreatedDate).Skip((page - 1) * 10).Take(10));
+        }
 
         public Transaction IsProcessing(String identify)
         {

@@ -34,7 +34,7 @@ namespace ImportExportDesktopApp.DataTransfers
 
         public ObservableCollection<Partner> GetAllWithPaging(int page)
         {
-            return new ObservableCollection<Partner>(ie.Partners.OrderBy(p=>p.PartnerId).Take(10).Skip((page - 1) * 10));
+            return new ObservableCollection<Partner>(ie.Partners.OrderBy(p => p.PartnerId).Take(10).Skip((page - 1) * 10));
         }
 
         public ObservableCollection<PartnerType> GetTypes()
@@ -50,7 +50,7 @@ namespace ImportExportDesktopApp.DataTransfers
         public bool CheckCardPartner(int partnerId, String cardId)
         {
             bool check = true;
-            if(cardId.Length != 0)
+            if (cardId.Length != 0)
             {
                 //check card is exist in system or not
                 var card = ie.IdentityCards.Find(cardId);
@@ -59,6 +59,10 @@ namespace ImportExportDesktopApp.DataTransfers
             return check;
         }
 
+        public Partner GetByID(int id)
+        {
+            return ie.Partners.Find(id);
+        }
         public Partner CreatePartner(Partner partner)
         {
             var newpartner = ie.Partners.Add(partner);

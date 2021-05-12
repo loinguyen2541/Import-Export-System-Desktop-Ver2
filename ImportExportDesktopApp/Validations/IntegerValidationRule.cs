@@ -8,31 +8,29 @@ using System.Windows.Controls;
 
 namespace ImportExportDesktopApp.Validations
 {
-    class MinutesValidationRule : ValidationRule
+    class IntegerValidationRule : ValidationRule
     {
         public int Min { get; set; }
         public int Max { get; set; }
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
-            ValidationResult result = new ValidationResult(true, null);
-            String valueS = value as String;
-            float num;
 
-            if (valueS == null || !float.TryParse(valueS, out num))
+
+            ValidationResult result = new ValidationResult(true, null);
+            int number = -1;
+            if (value != null && value.ToString().Length < 10 && !int.TryParse(value.ToString(), out number)) 
             {
-                String message = "Time must be a integer number!";
+                number = System.Convert.ToInt32(value);
+            }
+            if (number < Min)
+            {
+                String message = "Input must be greater than " + Min;
                 result = new ValidationResult(false, message);
                 return result;
             }
-            if (num < Min)
+            if (number > Max)
             {
-                String message = "Time must be greater than " + Min;
-                result = new ValidationResult(false, message);
-                return result;
-            }
-            if (num > Max)
-            {
-                String message = "Time must be smaller than " + Max;
+                String message = "Input must be smaller than " + Max;
                 result = new ValidationResult(false, message);
                 return result;
             }

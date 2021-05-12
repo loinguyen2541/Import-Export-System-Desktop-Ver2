@@ -217,6 +217,9 @@
     <Compile Include="Pages\SettingPage.xaml.cs">
       <DependentUpon>SettingPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\SystemSettingPage.xaml.cs">
+      <DependentUpon>SystemSettingPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\TransactionListPage.xaml.cs">
       <DependentUpon>TransactionListPage.xaml</DependentUpon>
     </Compile>
@@ -251,23 +254,27 @@
     <Compile Include="Utils\BaseNotifyPropertyChanged.cs" />
     <Compile Include="Validations\EmailValidationRule.cs" />
     <Compile Include="Validations\FloatValidationRule.cs" />
+    <Compile Include="Validations\IntegerValidationRule.cs" />
     <Compile Include="Validations\MinutesValidationRule.cs" />
     <Compile Include="Validations\NotEmptyValidationRule.cs" />
     <Compile Include="Validations\PhoneValidationRule.cs" />
     <Compile Include="Validations\TimeValidationRule.cs" />
     <Compile Include="Validations\TimeValidationRuleRange.cs" />
     <Compile Include="ViewModels\ChangeScheduleTimeViewModel.cs" />
+    <Compile Include="ViewModels\ChangeStorageCapacityViewModel.cs" />
     <Compile Include="ViewModels\CreatePartnerViewModel.cs" />
     <Compile Include="ViewModels\CreateTransactionViewModel.cs" />
     <Compile Include="ViewModels\InventoryDetailViewModel.cs" />
     <Compile Include="ViewModels\ManGoods.cs" />
     <Compile Include="ViewModels\ManInventoriesViewModel.cs" />
+    <Compile Include="ViewModels\PartnerDetailViewModel.cs" />
     <Compile Include="ViewModels\PartnerListViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ManSchedulesViewModel.cs" />
     <Compile Include="ViewModels\ProcessingViewModel.cs" />
     <Compile Include="ViewModels\ScaleExceptionViewModel.cs" />
     <Compile Include="ViewModels\ScheduleSettingViewModel.cs" />
+    <Compile Include="ViewModels\SystemSettingViewModel.cs" />
     <Compile Include="ViewModels\TransactionListViewModel.cs" />
     <Compile Include="Windows\ChangeAutoResetTimeWindow.xaml.cs">
       <DependentUpon>ChangeAutoResetTimeWindow.xaml</DependentUpon>
@@ -275,11 +282,17 @@
     <Compile Include="Windows\ChangeScheduleTimeWindow.xaml.cs">
       <DependentUpon>ChangeScheduleTimeWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\ChangeStorageCapacityWindow.xaml.cs">
+      <DependentUpon>ChangeStorageCapacityWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\CreateTransactionWindow.xaml.cs">
       <DependentUpon>CreateTransactionWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\EditExceptionTransactionWindow.xaml.cs">
       <DependentUpon>EditExceptionTransactionWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\PartnerDetailWindow.xaml.cs">
+      <DependentUpon>PartnerDetailWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ScaleExceptionWindow.xaml.cs">
       <DependentUpon>ScaleExceptionWindow.xaml</DependentUpon>
@@ -336,6 +349,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\SystemSettingPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\TransactionListPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -352,11 +369,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\ChangeStorageCapacityWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\CreateTransactionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\EditExceptionTransactionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\PartnerDetailWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

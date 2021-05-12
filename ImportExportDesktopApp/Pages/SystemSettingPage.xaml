@@ -1,0 +1,98 @@
+﻿<Page
+    x:Class="ImportExportDesktopApp.Pages.SystemSettingPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ImportExportDesktopApp.Pages"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="ScheduleTimeSettingPage"
+    d:DesignHeight="720"
+    d:DesignWidth="980"
+    Background="{DynamicResource MaterialDesignPaper}"
+    DataContext="{DynamicResource SystemSettingVM}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    TextElement.FontSize="15"
+    TextElement.FontWeight="Regular"
+    mc:Ignorable="d">
+    <Border Padding="16">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <Button
+                        x:Name="btnBack"
+                        Width="34"
+                        Height="34"
+                        Margin="0,0,16,0"
+                        Click="btnBack_Click"
+                        RenderTransformOrigin="0.5,0.506"
+                        Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}">
+                        <materialDesign:PackIcon
+                            Width="20"
+                            Height="20"
+                            Kind="ArrowLeft" />
+                    </Button>
+                    <TextBlock
+                        Padding="0,2,0,0"
+                        VerticalAlignment="Center"
+                        FontSize="24"
+                        FontWeight="Bold"
+                        Text="System Setting" />
+                </StackPanel>
+                <Grid Grid.Column="1" />
+            </Grid>
+
+            <!--  SETING OPTIONS  -->
+
+            <Grid Grid.Row="1" Margin="0,16,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="90" />
+                    <RowDefinition Height="90" />
+                    <RowDefinition Height="300" />
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="40" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <TextBlock
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Text="Storage capacity" />
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontSize="15"
+                                Text="{Binding StorageCapacity}" />
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <Button
+                                Width="100"
+                                HorizontalAlignment="Left"
+                                Click="Button_Click"
+                                Content="Thay đổi" />
+                        </Grid>
+                    </Grid>
+                </Grid>
+
+                <!--  Schedule time  -->
+            </Grid>
+        </Grid>
+    </Border>
+</Page>
+

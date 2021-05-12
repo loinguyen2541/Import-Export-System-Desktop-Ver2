@@ -2,6 +2,7 @@
 using ImportExportDesktopApp.ScaleModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
@@ -66,6 +67,11 @@ namespace ImportExportDesktopApp.DataTransfers
                 ie.SaveChanges();
             }
             return tempList;
+        }
+
+        public ObservableCollection<IdentityCard> GetAllCardsByPartnerId(int partnerId)
+        {
+            return new ObservableCollection<IdentityCard>(ie.IdentityCards.Where(i => i.PartnerId == partnerId));
         }
     }
 }

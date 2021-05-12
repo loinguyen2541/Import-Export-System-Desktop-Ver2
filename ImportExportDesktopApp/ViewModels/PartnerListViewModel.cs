@@ -2,6 +2,7 @@
 using ImportExportDesktopApp.DataTransfers;
 using ImportExportDesktopApp.HttpServices;
 using ImportExportDesktopApp.Utils;
+using ImportExportDesktopApp.Windows;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -95,6 +96,10 @@ namespace ImportExportDesktopApp.ViewModels
             {
                 BeforePage();
             });
+            TableDoubleClickCommand = new RelayCommand<object>((p) => { return true; }, p =>
+            {
+                OpenDialog();
+            });
         }
 
         public void Init()
@@ -118,11 +123,9 @@ namespace ImportExportDesktopApp.ViewModels
 
         private void OpenDialog()
         {
-            //Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
-            //Partner newPartner = HttpService.GetPartnerById(TableSelectedItem.PartnerId);
-            //Pagination<Transaction> transactions = HttpService.GetTransactionByPartxnerId(1, 3, TableSelectedItem.PartnerId);
-            //PartnerDetailWindow window = new PartnerDetailWindow(newPartner, transactions);
-            //window.ShowDialog();
+            Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
+            PartnerDetailWindow window = new PartnerDetailWindow(TableSelectedItem.PartnerId);
+            window.ShowDialog();
         }
 
         private void AddPartner()

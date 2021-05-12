@@ -21,7 +21,7 @@ namespace ImportExportDesktopApp.Pages
     public partial class SettingPage : Page
     {
         private ScheduleSettingPage scheduleTimeSettingPage;
-
+        private SystemSettingPage systemSettingPage;
         public SettingPage()
         {
             InitializeComponent();
@@ -34,6 +34,15 @@ namespace ImportExportDesktopApp.Pages
                 scheduleTimeSettingPage = new ScheduleSettingPage();
             }
             this.NavigationService.Navigate(scheduleTimeSettingPage);
+        }
+
+        private void StackPanel_MouseLeftButtonUp_1(object sender, MouseButtonEventArgs e)
+        {
+            if (systemSettingPage == null)
+            {
+                systemSettingPage = new SystemSettingPage();
+            }
+            this.NavigationService.Navigate(systemSettingPage);
         }
     }
 }

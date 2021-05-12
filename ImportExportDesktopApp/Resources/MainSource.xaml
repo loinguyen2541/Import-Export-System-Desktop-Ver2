@@ -16,7 +16,9 @@
     <viewmodel:CreateTransactionViewModel x:Key="CreateTransactionVM" />
     <viewmodel:ChangeScheduleTimeViewModel x:Key="ChangeScheduleVM" />
     <viewmodel:ScheduleSettingViewModel x:Key="ScheduleSettingVM" />
-
+    <viewmodel:PartnerDetailViewModel x:Key="PartnerDetailVM" />
+    <viewmodel:SystemSettingViewModel x:Key="SystemSettingVM" />
+    <viewmodel:ChangeStorageCapacityViewModel x:Key="ChangeStorageCapacityVM" />
     <!--  Colors  -->
     <Brush x:Key="Red">#F44336</Brush>
     <Brush x:Key="Blue">#2196F3</Brush>
