@@ -1,11 +1,14 @@
 ﻿using ImportExportDesktopApp.Commands;
 using ImportExportDesktopApp.DataTransfers;
+using ImportExportDesktopApp.HttpServices;
 using ImportExportDesktopApp.Utils;
+using ImportExportDesktopApp.Windows;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -19,9 +22,11 @@ namespace ImportExportDesktopApp.ViewModels
         private PartnerType _selectedType;
         private ObservableCollection<PartnerType> _types;
         private ObservableCollection<IdentityCard> _identitycards;
-
+        private AccountApiService _accountApiService;
+        private ScanCardWindow _scanCardWindow;
         public ICommand AddIdentityCardCommand { get; set; }
         public ICommand AddPartnerCommnand { get; set; }
+        public ICommand ScanCardCommand { get; set; }
 
         private PartnerDataTransfer _partnerDataTransfer;
 
@@ -30,14 +35,34 @@ namespace ImportExportDesktopApp.ViewModels
             Partner = new Partner();
             Partner.IdentityCards = new List<IdentityCard>();
             IdentityCards = new ObservableCollection<IdentityCard>();
+            _accountApiService = new AccountApiService();
             AddIdentityCardCommand = new RelayCommand<String>(p => { return true; }, AddIdentityCard);
             AddPartnerCommnand = new RelayCommand<Partner>((p) => { return true; }, AddPartner);
+            ScanCardCommand = new RelayCommand<object>((p) => { return true; }, ScanCard);
             _partnerDataTransfer = new PartnerDataTransfer();
             Types = _partnerDataTransfer.GetTypes();
         }
 
+        private void ScanCard(object value)
+        {
+            if (_scanCardWindow == null)
+            {
+                _scanCardWindow = new ScanCardWindow();
+            }
+            _scanCardWindow.ShowDialog();
+            if (_scanCardWindow.CardId != null)
+            {
+                IdentityCardId = _scanCardWindow.CardId.Trim();
+            }
+        }
+
         private void AddPartner(Partner partner)
         {
+            Partner.DisplayName = DisplayName;
+            Partner.Email = Email;
+            Partner.Address = Address;
+            Partner.PhoneNumber = PhoneNumber;
+            Partner.PartnerStatus = 0;
 
             if (IsSelectedType())
             {
@@ -47,16 +72,18 @@ namespace ImportExportDesktopApp.ViewModels
                 }
                 else
                 {
-                    Partner.PartnerTypeId = SelectedType.PartnerTypeId;
                     try
                     {
-                        _partnerDataTransfer.CreatePartner(partner);
+                        Partner.PartnerTypeId = SelectedType.PartnerTypeId;
+                        Partner.Account = AddAccount();
+                        _partnerDataTransfer.CreatePartner(Partner);
+                        _accountApiService.SendPassword(Partner.Account, Partner);
                         MessageBox.Show("Add successfuly!");
                         ResetPartner();
                     }
-                    catch
+                    catch (Exception e)
                     {
-                        MessageBox.Show("Add Error!");
+                        MessageBox.Show("Error!" + e.Message);
                     }
                 }
 
@@ -99,6 +126,22 @@ namespace ImportExportDesktopApp.ViewModels
             Partner.IdentityCards.Remove(identityCard);
         }
 
+        private Account AddAccount()
+        {
+            string username = Partner.Email;
+            string password = RandomPassword();
+            Account account = new Account() { Password = password, Username = username, RoleId = 3, Status = 0 };
+            return account;
+        }
+
+        private string RandomPassword()
+        {
+            Random random = new Random();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, 8)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
         private bool IsSelectedType()
         {
             if (SelectedType == null)
@@ -111,12 +154,13 @@ namespace ImportExportDesktopApp.ViewModels
 
         private void ResetPartner()
         {
-            Partner.Address = "";
-            Partner.DisplayName = "";
-            Partner.Email = "";
-            Partner.PhoneNumber = "";
-            Partner.IdentityCards.Clear();
-            Partner.PartnerType = null;
+            Address = "";
+            DisplayName = "";
+            Email = "";
+            PhoneNumber = "";
+            IdentityCards.Clear();
+            Partner = null;
+            IdentityCards = null;
             SelectedType = null;
         }
 

@@ -68,7 +68,6 @@ namespace ImportExportDesktopApp.ViewModels
         {
             _notificationManager = new NotificationManager();
             _eventAggregator = AppService.Instance.EventAggregator;
-
             _transactionDataTransfer = new TransactionDataTransfer();
             _cardDataTransfer = new CardDataTransfer();
             _systemCongifDataTransfer = new SystemConfigDataTransfer();
@@ -102,6 +101,7 @@ namespace ImportExportDesktopApp.ViewModels
         public void Init(ScaleExeption scaleExeption)
         {
             TransactionScaleGate = scaleExeption.TransactionScale;
+            Gate = TransactionScaleGate.Gate.ToString();
             PartnerGate = scaleExeption.Partner;
             ScheduleGate = scaleExeption.Schedule;
             ExceptionType = scaleExeption.ExceptionType;
@@ -460,6 +460,7 @@ namespace ImportExportDesktopApp.ViewModels
 
             if (schedule != null)
             {
+                transaction.ScheduleId = schedule.ScheduleId;
                 transaction.IsScheduled = true;
             }
             else

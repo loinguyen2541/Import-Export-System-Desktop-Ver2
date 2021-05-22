@@ -14,6 +14,12 @@ namespace ImportExportDesktopApp
     
     public partial class Schedule
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Schedule()
+        {
+            this.Transactions = new HashSet<Transaction>();
+        }
+    
         public int ScheduleId { get; set; }
         public System.DateTime ScheduleDate { get; set; }
         public float RegisteredWeight { get; set; }
@@ -29,5 +35,7 @@ namespace ImportExportDesktopApp
         public virtual Good Good { get; set; }
         public virtual Partner Partner { get; set; }
         public virtual TimeTemplateItem TimeTemplateItem { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Transaction> Transactions { get; set; }
     }
 }

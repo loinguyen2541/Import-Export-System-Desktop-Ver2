@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="ImportExportDesktopApp.Pages.ProcessingPage"
+    x:Class="ImportExportDesktopApp.Pages.TestPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converter="clr-namespace:ImportExportDesktopApp.Converters"
@@ -40,7 +40,7 @@
                     Margin="0,0,0,8"
                     Padding="16,8,16,16"
                     materialDesign:ShadowAssist.ShadowDepth="Depth2"
-                    Background="{Binding Gate1Bg}"
+                    Background="LawnGreen"
                     UniformCornerRadius="10">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -57,33 +57,32 @@
                             Text="Gate 1" />
                         <StackPanel Grid.Row="1">
                             <TextBlock
-                                Margin="0,8,0,8"
+                                Margin="0,8,0,16"
                                 HorizontalAlignment="Left"
-                                FontWeight="Bold"
                                 Foreground="White"
-                                Text="{Binding PartnerNameGate1, UpdateSourceTrigger=PropertyChanged}" />
+                                Text="Coong ty TNNH A" />
                             <TextBlock
-                                Margin="0,8,0,8"
+                                Margin="0,8,0,16"
                                 HorizontalAlignment="Left"
                                 Foreground="White"
-                                Text="{Binding PartnerTypeNameGate1, UpdateSourceTrigger=PropertyChanged}" />
+                                Text="Customer" />
                             <TextBlock
-                                Margin="0,8,0,8"
+                                Margin="0,8,0,16"
                                 HorizontalAlignment="Left"
                                 Foreground="White"
-                                Text="{Binding ScheduleStatusGate1, UpdateSourceTrigger=PropertyChanged}" />
+                                Text="Scheduled! Du kien giao 50 kg" />
                             <TextBlock
                                 Margin="0,8,0,16"
                                 HorizontalAlignment="Center"
                                 FontSize="25"
                                 FontWeight="Bold"
                                 Foreground="White"
-                                Text="{Binding WeightGate1, UpdateSourceTrigger=PropertyChanged}" />
+                                Text="56 kg" />
                             <TextBlock
                                 Margin="0,8,0,16"
                                 HorizontalAlignment="Left"
                                 Foreground="REd"
-                                Text="{Binding MessageGate1}"
+                                Text="Scheduled "
                                 TextWrapping="Wrap" />
                         </StackPanel>
                         <StackPanel
@@ -286,22 +285,15 @@
                             Text="Gate 2" />
                         <StackPanel Grid.Row="1" Orientation="Vertical">
                             <TextBlock
-                                Margin="0,8,0,8"
+                                Margin="0,8,0,16"
                                 HorizontalAlignment="Left"
-                                FontWeight="Bold"
                                 Foreground="White"
                                 Text="{Binding PartnerNameGate2, UpdateSourceTrigger=PropertyChanged}" />
-                            <TextBlock
-                                Margin="0,8,0,8"
-                                HorizontalAlignment="Left"
-                                Foreground="White"
-                                Text="{Binding PartnerTypeNameGate2, UpdateSourceTrigger=PropertyChanged}" />
                             <TextBlock
                                 Margin="0,8,0,16"
                                 HorizontalAlignment="Left"
                                 Foreground="White"
-                                Text="{Binding ScheduleStatusGate2, UpdateSourceTrigger=PropertyChanged}" />
-
+                                Text="{Binding PartnerTypeNameGate2, UpdateSourceTrigger=PropertyChanged}" />
                             <TextBlock
                                 Margin="0,8,0,16"
                                 HorizontalAlignment="Center"

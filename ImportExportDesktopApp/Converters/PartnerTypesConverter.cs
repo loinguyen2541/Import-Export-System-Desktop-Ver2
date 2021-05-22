@@ -12,18 +12,28 @@ namespace ImportExportDesktopApp.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            List<PartnerType> partnerTypes = value as List<PartnerType>;
+            //List<PartnerType> partnerTypes = value as List<PartnerType>;
             String result = "";
-            if (partnerTypes != null)
+            //if (partnerTypes != null)
+            //{
+            //    for (int i = 0; i < partnerTypes.Count; i++)
+            //    {
+            //        if (i > 0)
+            //        {
+            //            result = result + ", ";
+            //        }
+            //        result = result + partnerTypes[i].PartnerTypeName;
+            //    }
+            //}
+
+            int id = System.Convert.ToInt32(value);
+            if (id == 1)
             {
-                for (int i = 0; i < partnerTypes.Count; i++)
-                {
-                    if (i > 0)
-                    {
-                        result = result + ", ";
-                    }
-                    result = result + partnerTypes[i].PartnerTypeName;
-                }
+                result = "Customer";
+            }
+            else if (id == 2)
+            {
+                result = "Provider";
             }
 
             return result;

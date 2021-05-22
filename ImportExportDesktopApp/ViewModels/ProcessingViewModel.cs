@@ -103,6 +103,8 @@ namespace ImportExportDesktopApp.ViewModels
         private String _disableButtonVisibilityGate2;
         private String _importButtonVisibilityGate1;
         private String _importButtonVisibilityGate2;
+        private String _scheduleStatusGate1;
+        private String _scheduleStatusGate2;
 
 
         public ProcessingViewModel(IEventAggregator ea)
@@ -199,6 +201,7 @@ namespace ImportExportDesktopApp.ViewModels
             _eventAggregator.GetEvent<ReslovedScaleExceptionEvent>().Subscribe(ResetAcceptContent);
         }
 
+        // lam sao cho su dung lai duoc
         public bool CheckCardGate2(TransactionScale transactionScale)
         {
             if (transactionScale.Gate == EGate.Gate1 && _isSlovingExeptionGate1)
@@ -220,7 +223,9 @@ namespace ImportExportDesktopApp.ViewModels
 
             if (partner != null)
             {
-                Schedule schedule = _scheduleDataTransfer.CheckSchedule(partner.PartnerId);
+                Transaction transaction = _transactionDataTransfer.IsProcessing(transactionScale.Indentify);
+
+                Schedule schedule = transaction == null ? _scheduleDataTransfer.CheckSchedule(partner.PartnerId) : transaction.Schedule;
 
                 if (transactionScale.Weight >= 300)
                 {
@@ -228,15 +233,37 @@ namespace ImportExportDesktopApp.ViewModels
                     return false;
                 }
 
-                Transaction transaction = _transactionDataTransfer.IsProcessing(transactionScale.Indentify);
-
                 if (transaction == null)
                 {
+                    GenerateScheduleStatus(partner, transactionScale, schedule);
+
                     if (transactionScale.Gate == EGate.Gate2)
                     {
                         AddException(transactionScale, partner, schedule, EScaleExceptionType.WrongProcess);
                         return false;
                     }
+
+                    if (schedule == null)
+                    {
+                        AddException(transactionScale, partner, schedule, EScaleExceptionType.NotScheduled);
+                        return false;
+                    }
+                    else
+                    {
+                        TimeSpan timeBetweenSlot = TimeSpan.Parse(_systemCongifDataTransfer.GetTimeBetweenSlot().AttributeValue);
+                        TimeSpan now = DateTime.Now.TimeOfDay;
+                        if ((schedule.TimeTemplateItem.ScheduleTime + timeBetweenSlot) - now > TimeSpan.FromMinutes(15))
+                        {
+                            AddException(transactionScale, partner, schedule, EScaleExceptionType.Late);
+                            return false;
+                        }
+                        else if ((schedule.TimeTemplateItem.ScheduleTime + timeBetweenSlot) - now < TimeSpan.FromMinutes(5))
+                        {
+                            AddException(transactionScale, partner, schedule, EScaleExceptionType.Soon);
+                            return false;
+                        }
+                    }
+
                     CreateTransaction(transactionScale, partner, schedule, false);
                     Task.Run(new Action(() =>
                     {
@@ -298,6 +325,41 @@ namespace ImportExportDesktopApp.ViewModels
             return false;
         }
 
+        public void GenerateScheduleStatus(Partner partner, TransactionScale transactionScale, Schedule schedule)
+        {
+            if (schedule != null)
+            {
+                String type;
+                if (partner.PartnerTypeId == 1)
+                {
+                    type = "export";
+                }
+                else
+                {
+                    type = "import";
+                }
+
+                if (transactionScale.Gate == EGate.Gate1)
+                {
+                    ScheduleStatusGate1 = "Scheduled! expected to " + type + " " + schedule.RegisteredWeight + " kg";
+                }
+                else
+                {
+                    ScheduleStatusGate2 = "Scheduled! expected to " + type + " " + schedule.RegisteredWeight + " kg";
+                }
+            }
+            else
+            {
+                if (transactionScale.Gate == EGate.Gate1)
+                {
+                    ScheduleStatusGate1 = "Not scheduled yet";
+                }
+                else
+                {
+                    ScheduleStatusGate2 = "Not scheduled yet";
+                }
+            }
+        }
         void SendNotify(float inventory, double storageCapacity20)
         {
             if (_storageCapacity - inventory <= storageCapacity20)
@@ -362,6 +424,9 @@ namespace ImportExportDesktopApp.ViewModels
                               : exceptionType == EScaleExceptionType.OverWeightImport ? "Storage capacity is full!!"
                               : exceptionType == EScaleExceptionType.OverWeightExport ? "Storage is out of stock!!!"
                               : exceptionType == EScaleExceptionType.Overload ? "The scale is overloaded!!"
+                              : exceptionType == EScaleExceptionType.NotScheduled ? "The partner hasn't scheduled yet"
+                              : exceptionType == EScaleExceptionType.Late ? "The partner arrived late!!!"
+                              : exceptionType == EScaleExceptionType.Soon ? "The partner arrived soon!!!"
                               : "Normal";
                 if (exceptionType == EScaleExceptionType.WrongTransactionType)
                 {
@@ -390,6 +455,9 @@ namespace ImportExportDesktopApp.ViewModels
                               : exceptionType == EScaleExceptionType.OverWeightImport ? "Storage capacity is full!!"
                               : exceptionType == EScaleExceptionType.OverWeightExport ? "Storage is out of stock!!!"
                               : exceptionType == EScaleExceptionType.Overload ? "The scale is overloaded!!"
+                              : exceptionType == EScaleExceptionType.NotScheduled ? "The partner hasn't scheduled yet!!!"
+                              : exceptionType == EScaleExceptionType.Late ? "The partner arrived late!!!"
+                              : exceptionType == EScaleExceptionType.Soon ? "The partner arrived soon!!!"
                               : "Normal";
                 if (exceptionType == EScaleExceptionType.WrongTransactionType)
                 {
@@ -638,9 +706,12 @@ namespace ImportExportDesktopApp.ViewModels
         {
             Transaction transaction = new Transaction();
             transaction.PartnerId = partner.PartnerId;
+            transaction.Partner = partner;
+
 
             if (schedule != null)
             {
+                transaction.ScheduleId = schedule.ScheduleId;
                 transaction.IsScheduled = true;
             }
             else
@@ -710,6 +781,26 @@ namespace ImportExportDesktopApp.ViewModels
             {
                 inventory = _inventoryDataTransfer.CreateInventoryToday(goodInventory);
             }
+
+            if (schedule != null)
+            {
+                TimeSpan timeBetweenSlot = TimeSpan.Parse(_systemCongifDataTransfer.GetTimeBetweenSlot().AttributeValue);
+                TimeSpan now = DateTime.Now.TimeOfDay;
+
+                if ((schedule.TimeTemplateItem.ScheduleTime + timeBetweenSlot) - now > TimeSpan.FromMinutes(15))
+                {
+                    schedule.ScheduleStatus = 3;
+                }
+                else if ((schedule.TimeTemplateItem.ScheduleTime + timeBetweenSlot) - now < TimeSpan.FromMinutes(5))
+                {
+                    schedule.ScheduleStatus = 4;
+                }
+                else
+                {
+                    schedule.ScheduleStatus = 1;
+                }
+            }
+
             transaction = _transactionDataTransfer.UpdateTransactionNotSaveChanges(transaction);
             float totalWeight = getTotalWeight(partner.PartnerTypeId, transaction.WeightIn, transaction.WeightOut);
             _inventoryDetailDataTransfer.InsertInventoryDetailNotSaveChanges(1, partner.PartnerId, partner.PartnerTypeId, totalWeight, inventory.InventoryId);
@@ -1296,6 +1387,26 @@ namespace ImportExportDesktopApp.ViewModels
             set
             {
                 _importButtonVisibilityGate2 = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public String ScheduleStatusGate1
+        {
+            get { return _scheduleStatusGate1; }
+            set
+            {
+                _scheduleStatusGate1 = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public String ScheduleStatusGate2
+        {
+            get { return _scheduleStatusGate2; }
+            set
+            {
+                _scheduleStatusGate2 = value;
                 NotifyPropertyChanged();
             }
         }

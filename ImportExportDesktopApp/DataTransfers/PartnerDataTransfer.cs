@@ -34,7 +34,7 @@ namespace ImportExportDesktopApp.DataTransfers
 
         public ObservableCollection<Partner> GetAllWithPaging(int page)
         {
-            return new ObservableCollection<Partner>(ie.Partners.OrderBy(p => p.PartnerId).Take(10).Skip((page - 1) * 10));
+            return new ObservableCollection<Partner>(ie.Partners.AsNoTracking().OrderByDescending(p => p.PartnerId).Take(10).Skip((page - 1) * 10));
         }
 
         public ObservableCollection<PartnerType> GetTypes()
@@ -44,7 +44,8 @@ namespace ImportExportDesktopApp.DataTransfers
 
         public ObservableCollection<Partner> SearchPartner(int type, string search)
         {
-            return new ObservableCollection<Partner>(ie.Partners.Where(p => p.PartnerTypeId == type && p.DisplayName.Contains(search)));
+            List<Partner> partners = ie.Partners.AsNoTracking().Where(p => p.PartnerTypeId == type && p.DisplayName.Contains(search)).ToList();
+            return new ObservableCollection<Partner>(partners);
         }
 
         public bool CheckCardPartner(int partnerId, String cardId)
@@ -61,13 +62,12 @@ namespace ImportExportDesktopApp.DataTransfers
 
         public Partner GetByID(int id)
         {
-            return ie.Partners.Find(id);
+            return ie.Partners.AsNoTracking().Where(t => t.PartnerId == id).SingleOrDefault();
         }
-        public Partner CreatePartner(Partner partner)
+        public void CreatePartner(Partner partner)
         {
-            var newpartner = ie.Partners.Add(partner);
+            ie.Partners.Add(partner);
             ie.SaveChanges();
-            return newpartner;
         }
         public int GetMaxPage(int pageSize)
         {

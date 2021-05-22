@@ -17,11 +17,11 @@ namespace ImportExportDesktopApp
         public int NotificationId { get; set; }
         public int NotificationType { get; set; }
         public int Status { get; set; }
-        public string Content { get; set; }
         public string Title { get; set; }
+        public string Content { get; set; }
         public System.DateTime CreatedDate { get; set; }
-        public Nullable<int> PartnerId { get; set; }
         public string Username { get; set; }
+        public Nullable<int> PartnerId { get; set; }
     
         public virtual Account Account { get; set; }
         public virtual Partner Partner { get; set; }

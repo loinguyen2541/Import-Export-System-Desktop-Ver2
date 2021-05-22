@@ -128,90 +128,6 @@ namespace ImportExportDesktopApp.ViewModels
             window.ShowDialog();
         }
 
-        private void AddPartner()
-        {
-            bool check = CheckValid();
-            if (check)
-            {
-                if (ListIdentityCards.Count == 0)
-                {
-                    Visibility = "Visible";
-                    ErrorMessage = "Partner must have at least one identity card";
-                }
-                else
-                {
-                    //add account
-                    bool checkAccount = AddAccount();
-                    if (checkAccount)
-                    {
-                        //add partner
-                        Partner.PartnerType = SelectedType;
-                        Partner.Username = _account.Username;
-                        //add card
-                        foreach (var item in ListIdentityCards)
-                        {
-                            item.IdentityCardStatus = 0;
-                            item.PartnerId = Partner.PartnerId;
-                        }
-                        Partner.IdentityCards = ListIdentityCards;
-                        var partner = _partnerDataTransfer.CreatePartner(Partner);
-
-                        _accountService.SendPassword(account: _account, partner);
-                        MessageBoxResult result = MessageBox.Show("Add Partner Success", "Confirmation");
-                        Partner = null;
-                        _account = null;
-                        ErrorMessage = "";
-                    }
-                    else
-                    {
-                        Visibility = "Visible";
-                        ErrorMessage = "This name is existed";
-                    }
-                }
-            }
-        }
-        private bool AddAccount()
-        {
-            string username = Regex.Replace(Partner.DisplayName, @"\s+", "");
-            string password = RandomPassword();
-            Account account = new Account() { Password = password, Username = username, RoleId = 3, Status = 0 };
-            _account = _accountDataTransfer.InsertAccount(account);
-            return _account == null ? false : true;
-        }
-
-        private string RandomPassword()
-        {
-            Random random = new Random();
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            return new string(Enumerable.Repeat(chars, 8)
-              .Select(s => s[random.Next(s.Length)]).ToArray());
-        }
-
-        private bool CheckValid()
-        {
-            if (Partner != null)
-            {
-                if (Partner.DisplayName == null || Partner.Email == null || Partner.PhoneNumber == null)
-                {
-                    Visibility = "Visible";
-                    ErrorMessage = "Some fields can not be null";
-                    return false;
-                }
-                if (Partner.DisplayName.Length == 0 || Partner.Email.Length == 0 || Partner.PhoneNumber.Length == 0)
-                {
-                    Visibility = "Visible";
-                    ErrorMessage = "Some fields can not be null";
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
-            }
-            Visibility = "Visible";
-            ErrorMessage = "Some fields can not be null";
-            return false;
-        }
         public void SearchSchedules()
         {
             IsSearch = true;
@@ -263,7 +179,11 @@ namespace ImportExportDesktopApp.ViewModels
             IsLoading = true;
             CurrentPage = 1;
             ObservableCollection<Partner> partners = _partnerDataTransfer.GetAllWithPaging(CurrentPage);
-            Partners = partners;
+            Partners.Clear();
+            foreach (var item in partners)
+            {
+                Partners.Add(item);
+            }
             IsLoading = false;
 
         }

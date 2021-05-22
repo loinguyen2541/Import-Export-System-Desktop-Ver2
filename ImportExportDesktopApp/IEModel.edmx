@@ -9,9 +9,10 @@
           <Key>
             <PropertyRef Name="Username" />
           </Key>
-          <Property Name="Username" Type="nvarchar" MaxLength="25" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Password" Type="nvarchar" MaxLength="25" />
           <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DeviceToken" Type="nvarchar(max)" />
           <Property Name="RoleId" Type="int" Nullable="false" />
           <Property Name="Token" Type="nvarchar(max)" />
         </EntityType>
@@ -23,7 +24,7 @@
           <Property Name="Username" Type="nvarchar(max)" />
           <Property Name="RecordDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="Description" Type="nvarchar(max)" />
-          <Property Name="AccountUsername" Type="nvarchar" MaxLength="25" />
+          <Property Name="AccountUsername" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Goods">
           <Key>
@@ -69,11 +70,11 @@
           <Property Name="NotificationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="NotificationType" Type="int" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
-          <Property Name="Content" Type="nvarchar(max)" />
           <Property Name="Title" Type="nvarchar(max)" />
+          <Property Name="Content" Type="nvarchar(max)" />
           <Property Name="CreatedDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" />
           <Property Name="PartnerId" Type="int" />
-          <Property Name="Username" Type="nvarchar" MaxLength="25" />
         </EntityType>
         <EntityType Name="Partner">
           <Key>
@@ -85,7 +86,7 @@
           <Property Name="PhoneNumber" Type="nvarchar" MaxLength="10" />
           <Property Name="Address" Type="nvarchar" MaxLength="200" />
           <Property Name="PartnerStatus" Type="int" Nullable="false" />
-          <Property Name="Username" Type="nvarchar" MaxLength="25" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" />
           <Property Name="PartnerTypeId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="PartnerType">
@@ -141,8 +142,8 @@
           <Property Name="TimeTemplateItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Inventory" Type="real" Nullable="false" />
           <Property Name="ScheduleTime" Type="time" Precision="7" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="TimeTemplateId" Type="int" Nullable="false" />
-          <Property Name="Status" Type="int" />
         </EntityType>
         <EntityType Name="Transaction">
           <Key>
@@ -161,7 +162,8 @@
           <Property Name="PartnerId" Type="int" Nullable="false" />
           <Property Name="IdentificationCode" Type="nvarchar(max)" />
           <Property Name="GoodsId" Type="int" Nullable="false" />
-          <Property Name="Gate" Type="varchar" MaxLength="50" />
+          <Property Name="ScheduleId" Type="int" />
+          <Property Name="Gate" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <Association Name="FK_Account_Role_RoleId">
           <End Role="Role" Type="Self.Role" Multiplicity="1" />
@@ -355,6 +357,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Transaction_Schedule_ScheduleId">
+          <End Role="Schedule" Type="Self.Schedule" Multiplicity="0..1" />
+          <End Role="Transaction" Type="Self.Transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Schedule">
+              <PropertyRef Name="ScheduleId" />
+            </Principal>
+            <Dependent Role="Transaction">
+              <PropertyRef Name="ScheduleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="IEModelStoreContainer">
           <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ActivityLog" EntityType="Self.ActivityLog" Schema="dbo" store:Type="Tables" />
@@ -433,6 +447,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_Transaction_Partner_PartnerId" Association="Self.FK_Transaction_Partner_PartnerId">
             <End Role="Partner" EntitySet="Partner" />
+            <End Role="Transaction" EntitySet="Transaction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transaction_Schedule_ScheduleId" Association="Self.FK_Transaction_Schedule_ScheduleId">
+            <End Role="Schedule" EntitySet="Schedule" />
             <End Role="Transaction" EntitySet="Transaction" />
           </AssociationSet>
         </EntityContainer>
@@ -516,6 +534,10 @@
             <End Role="TimeTemplateItem" EntitySet="TimeTemplateItems" />
             <End Role="Schedule" EntitySet="Schedules" />
           </AssociationSet>
+          <AssociationSet Name="FK_Transaction_Schedule_ScheduleId" Association="IEModel.FK_Transaction_Schedule_ScheduleId">
+            <End Role="Schedule" EntitySet="Schedules" />
+            <End Role="Transaction" EntitySet="Transactions" />
+          </AssociationSet>
           <AssociationSet Name="FK_TimeTemplateItem_TimeTemplate_TimeTemplateId" Association="IEModel.FK_TimeTemplateItem_TimeTemplate_TimeTemplateId">
             <End Role="TimeTemplate" EntitySet="TimeTemplates" />
             <End Role="TimeTemplateItem" EntitySet="TimeTemplateItems" />
@@ -525,9 +547,10 @@
           <Key>
             <PropertyRef Name="Username" />
           </Key>
-          <Property Name="Username" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Password" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DeviceToken" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="RoleId" Type="Int32" Nullable="false" />
           <Property Name="Token" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Role" Relationship="IEModel.FK_Account_Role_RoleId" FromRole="Account" ToRole="Role" />
@@ -543,7 +566,7 @@
           <Property Name="Username" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="RecordDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AccountUsername" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="AccountUsername" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Account" Relationship="IEModel.FK_ActivityLog_Account_AccountUsername" FromRole="ActivityLog" ToRole="Account" />
         </EntityType>
         <EntityType Name="Good">
@@ -598,11 +621,11 @@
           <Property Name="NotificationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="NotificationType" Type="Int32" Nullable="false" />
           <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="PartnerId" Type="Int32" />
-          <Property Name="Username" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Account" Relationship="IEModel.FK_Notification_Account_Username" FromRole="Notification" ToRole="Account" />
           <NavigationProperty Name="Partner" Relationship="IEModel.FK_Notification_Partner_PartnerId" FromRole="Notification" ToRole="Partner" />
         </EntityType>
@@ -616,7 +639,7 @@
           <Property Name="PhoneNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="Address" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="PartnerStatus" Type="Int32" Nullable="false" />
-          <Property Name="Username" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="PartnerTypeId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Account" Relationship="IEModel.FK_Partner_Account_Username" FromRole="Partner" ToRole="Account" />
           <NavigationProperty Name="IdentityCards" Relationship="IEModel.FK_IdentityCard_Partner_PartnerId" FromRole="Partner" ToRole="IdentityCard" />
@@ -660,6 +683,7 @@
           <NavigationProperty Name="Good" Relationship="IEModel.FK_Schedule_Goods_GoodsId" FromRole="Schedule" ToRole="Good" />
           <NavigationProperty Name="Partner" Relationship="IEModel.FK_Schedule_Partner_PartnerId" FromRole="Schedule" ToRole="Partner" />
           <NavigationProperty Name="TimeTemplateItem" Relationship="IEModel.FK_Schedule_TimeTemplateItem_TimeTemplateItemId" FromRole="Schedule" ToRole="TimeTemplateItem" />
+          <NavigationProperty Name="Transactions" Relationship="IEModel.FK_Transaction_Schedule_ScheduleId" FromRole="Schedule" ToRole="Transaction" />
         </EntityType>
         <EntityType Name="SystemConfig">
           <Key>
@@ -685,8 +709,8 @@
           <Property Name="TimeTemplateItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Inventory" Type="Single" Nullable="false" />
           <Property Name="ScheduleTime" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="TimeTemplateId" Type="Int32" Nullable="false" />
-          <Property Name="Status" Type="Int32" />
           <NavigationProperty Name="Schedules" Relationship="IEModel.FK_Schedule_TimeTemplateItem_TimeTemplateItemId" FromRole="TimeTemplateItem" ToRole="Schedule" />
           <NavigationProperty Name="TimeTemplate" Relationship="IEModel.FK_TimeTemplateItem_TimeTemplate_TimeTemplateId" FromRole="TimeTemplateItem" ToRole="TimeTemplate" />
         </EntityType>
@@ -707,9 +731,11 @@
           <Property Name="PartnerId" Type="Int32" Nullable="false" />
           <Property Name="IdentificationCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="GoodsId" Type="Int32" Nullable="false" />
-          <Property Name="Gate" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ScheduleId" Type="Int32" />
+          <Property Name="Gate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Good" Relationship="IEModel.FK_Transaction_Goods_GoodsId" FromRole="Transaction" ToRole="Good" />
           <NavigationProperty Name="Partner" Relationship="IEModel.FK_Transaction_Partner_PartnerId" FromRole="Transaction" ToRole="Partner" />
+          <NavigationProperty Name="Schedule" Relationship="IEModel.FK_Transaction_Schedule_ScheduleId" FromRole="Transaction" ToRole="Schedule" />
         </EntityType>
         <Association Name="FK_Account_Role_RoleId">
           <End Type="IEModel.Role" Role="Role" Multiplicity="1" />
@@ -891,6 +917,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Transaction_Schedule_ScheduleId">
+          <End Type="IEModel.Schedule" Role="Schedule" Multiplicity="0..1" />
+          <End Type="IEModel.Transaction" Role="Transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Schedule">
+              <PropertyRef Name="ScheduleId" />
+            </Principal>
+            <Dependent Role="Transaction">
+              <PropertyRef Name="ScheduleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_TimeTemplateItem_TimeTemplate_TimeTemplateId">
           <End Type="IEModel.TimeTemplate" Role="TimeTemplate" Multiplicity="1" />
           <End Type="IEModel.TimeTemplateItem" Role="TimeTemplateItem" Multiplicity="*" />
@@ -903,7 +941,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -914,6 +952,7 @@
               <MappingFragment StoreEntitySet="Account">
                 <ScalarProperty Name="Token" ColumnName="Token" />
                 <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="DeviceToken" ColumnName="DeviceToken" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
@@ -975,11 +1014,11 @@
           <EntitySetMapping Name="Notifications">
             <EntityTypeMapping TypeName="IEModel.Notification">
               <MappingFragment StoreEntitySet="Notification">
-                <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="PartnerId" ColumnName="PartnerId" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="NotificationType" ColumnName="NotificationType" />
                 <ScalarProperty Name="NotificationId" ColumnName="NotificationId" />
@@ -1054,8 +1093,8 @@
           <EntitySetMapping Name="TimeTemplateItems">
             <EntityTypeMapping TypeName="IEModel.TimeTemplateItem">
               <MappingFragment StoreEntitySet="TimeTemplateItem">
-                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="TimeTemplateId" ColumnName="TimeTemplateId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="ScheduleTime" ColumnName="ScheduleTime" />
                 <ScalarProperty Name="Inventory" ColumnName="Inventory" />
                 <ScalarProperty Name="TimeTemplateItemId" ColumnName="TimeTemplateItemId" />
@@ -1066,6 +1105,7 @@
             <EntityTypeMapping TypeName="IEModel.Transaction">
               <MappingFragment StoreEntitySet="Transaction">
                 <ScalarProperty Name="Gate" ColumnName="Gate" />
+                <ScalarProperty Name="ScheduleId" ColumnName="ScheduleId" />
                 <ScalarProperty Name="GoodsId" ColumnName="GoodsId" />
                 <ScalarProperty Name="IdentificationCode" ColumnName="IdentificationCode" />
                 <ScalarProperty Name="PartnerId" ColumnName="PartnerId" />

@@ -27,11 +27,12 @@ namespace ImportExportDesktopApp
         public int PartnerId { get; set; }
         public string IdentificationCode { get; set; }
         public int GoodsId { get; set; }
+        public Nullable<int> ScheduleId { get; set; }
         public string Gate { get; set; }
 
         public virtual Good Good { get; set; }
         public virtual Partner Partner { get; set; }
-
+        public virtual Schedule Schedule { get; set; }
         public float Total
         {
             get
