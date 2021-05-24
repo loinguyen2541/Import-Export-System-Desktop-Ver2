@@ -263,6 +263,8 @@
     <Compile Include="Validations\PhoneValidationRule.cs" />
     <Compile Include="Validations\TimeValidationRule.cs" />
     <Compile Include="Validations\TimeValidationRuleRange.cs" />
+    <Compile Include="ViewModels\ChangeMaximumCanceledScheduleViewModel.cs" />
+    <Compile Include="ViewModels\ChangeMaximumSlotViewModel.cs" />
     <Compile Include="ViewModels\ChangeScheduleTimeViewModel.cs" />
     <Compile Include="ViewModels\ChangeStorageCapacityViewModel.cs" />
     <Compile Include="ViewModels\CreatePartnerViewModel.cs" />
@@ -281,6 +283,12 @@
     <Compile Include="ViewModels\TransactionListViewModel.cs" />
     <Compile Include="Windows\ChangeAutoResetTimeWindow.xaml.cs">
       <DependentUpon>ChangeAutoResetTimeWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ChangeMaximumCanceledSchedule.xaml.cs">
+      <DependentUpon>ChangeMaximumCanceledSchedule.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ChangeMaximumslotWindow.xaml.cs">
+      <DependentUpon>ChangeMaximumslotWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ChangeScheduleTimeWindow.xaml.cs">
       <DependentUpon>ChangeScheduleTimeWindow.xaml</DependentUpon>
@@ -372,6 +380,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\ChangeAutoResetTimeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ChangeMaximumCanceledSchedule.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ChangeMaximumslotWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

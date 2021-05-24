@@ -39,5 +39,13 @@ namespace ImportExportDesktopApp.Pages
             SystemSettingViewModel systemSettingViewModel = DataContext as SystemSettingViewModel;
             systemSettingViewModel.Reload();
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            ChangeMaximumCanceledSchedule changeMaximumCanceledSchedule = new ChangeMaximumCanceledSchedule();
+            changeMaximumCanceledSchedule.ShowDialog();
+            SystemSettingViewModel systemSettingViewModel = DataContext as SystemSettingViewModel;
+            systemSettingViewModel.Reload();
+        }
     }
 }

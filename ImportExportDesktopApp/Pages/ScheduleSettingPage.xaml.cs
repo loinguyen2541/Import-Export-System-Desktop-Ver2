@@ -49,5 +49,12 @@ namespace ImportExportDesktopApp.Pages
             changeAutoResetTimeWindow.ShowDialog();
             _viewModel.ResetData();
         }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            ChangeMaximumslotWindow changeMaximumslotWindow = new ChangeMaximumslotWindow();
+            changeMaximumslotWindow.ShowDialog();
+            _viewModel.ResetData();
+        }
     }
 }

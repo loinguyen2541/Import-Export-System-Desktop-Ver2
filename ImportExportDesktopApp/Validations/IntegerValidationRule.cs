@@ -18,7 +18,7 @@ namespace ImportExportDesktopApp.Validations
 
             ValidationResult result = new ValidationResult(true, null);
             int number = -1;
-            if (value != null && value.ToString().Length < 10 && !int.TryParse(value.ToString(), out number)) 
+            if (value != null && value.ToString().Length < 10 && int.TryParse(value.ToString(), out number))
             {
                 number = System.Convert.ToInt32(value);
             }

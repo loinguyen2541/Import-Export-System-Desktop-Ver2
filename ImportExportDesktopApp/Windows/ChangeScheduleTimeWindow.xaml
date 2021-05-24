@@ -43,7 +43,7 @@
                             VerticalAlignment="Center"
                             FontSize="18"
                             FontWeight="Bold"
-                            Text="Thay đổi giờ đặt lịch" />
+                            Text="Change schedule time" />
                     </Grid>
                     <Grid Grid.Row="1">
                         <Grid.RowDefinitions>
@@ -63,7 +63,7 @@
                             <TextBlock
                                 Grid.Column="0"
                                 VerticalAlignment="Center"
-                                Text="Giờ bắt đầu" />
+                                Text="Time to start working" />
                             <materialDesign:TimePicker
                                 x:Name="txtStartWork"
                                 Grid.Column="1"
@@ -96,7 +96,7 @@
                             <TextBlock
                                 Grid.Column="0"
                                 VerticalAlignment="Center"
-                                Text="Giờ kết thúc" />
+                                Text="Time to finish working" />
                             <materialDesign:TimePicker
                                 x:Name="txtFinishWork"
                                 Grid.Column="1"
@@ -129,7 +129,7 @@
                             <TextBlock
                                 Grid.Column="0"
                                 VerticalAlignment="Center"
-                                Text="Giờ bắt đầu giải lao" />
+                                Text="Time to start breaking" />
                             <materialDesign:TimePicker
                                 x:Name="txtStartBreak"
                                 Grid.Column="1"
@@ -162,7 +162,7 @@
                             <TextBlock
                                 Grid.Column="0"
                                 VerticalAlignment="Center"
-                                Text="Giờ kết thúc giải lao" />
+                                Text="Time to finish working" />
                             <materialDesign:TimePicker
                                 x:Name="txtFinishBreak"
                                 Grid.Column="1"
@@ -195,7 +195,7 @@
                             <TextBlock
                                 Grid.Column="0"
                                 VerticalAlignment="Center"
-                                Text="Thời gian giữa mỗi khung giờ" />
+                                Text="Time between schedule slots" />
                             <StackPanel Grid.Column="1" Orientation="Horizontal">
                                 <TextBox
                                     x:Name="txtTimeBet"
@@ -221,7 +221,7 @@
                                 <TextBlock
                                     Margin="8,0,0,0"
                                     VerticalAlignment="Center"
-                                    Text="Phút" />
+                                    Text="Minutes" />
                             </StackPanel>
                         </Grid>
                         <Grid Grid.Row="5">

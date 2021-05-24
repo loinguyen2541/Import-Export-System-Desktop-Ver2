@@ -12,15 +12,18 @@ namespace ImportExportDesktopApp.ViewModels
     {
         private int _storageCapacity;
         private SystemConfigDataTransfer _systemConfigDataTransfer;
+        private int _nondeliveries;
         public SystemSettingViewModel()
         {
             _systemConfigDataTransfer = new SystemConfigDataTransfer();
             StorageCapacity = _systemConfigDataTransfer.GetStorageCappacity();
+            Nondeliveries = int.Parse(_systemConfigDataTransfer.GetMaximumCanceledSchechule().AttributeValue);
         }
 
         public void Reload()
         {
             StorageCapacity = _systemConfigDataTransfer.GetStorageCappacity();
+            Nondeliveries = int.Parse(_systemConfigDataTransfer.GetMaximumCanceledSchechule().AttributeValue);
         }
         public int StorageCapacity
         {
@@ -28,6 +31,16 @@ namespace ImportExportDesktopApp.ViewModels
             set
             {
                 _storageCapacity = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public int Nondeliveries
+        {
+            get { return _nondeliveries; }
+            set
+            {
+                _nondeliveries = value;
                 NotifyPropertyChanged();
             }
         }

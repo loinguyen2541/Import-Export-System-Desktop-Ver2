@@ -20,6 +20,7 @@ namespace ImportExportDesktopApp.ViewModels
         private SystemConfig _startBreakTime;
         private SystemConfig _finishBreakTime;
         private SystemConfig _timeBetweenSlot;
+        private SystemConfig _maximumSlot;
 
         private string _resetTime;
         public ScheduleSettingViewModel()
@@ -32,6 +33,7 @@ namespace ImportExportDesktopApp.ViewModels
             FinishWorkingTime = _systemConfigDataTransfer.GetFinishWorking();
             StartBreakTime = _systemConfigDataTransfer.GetStartBreak();
             FinishBreakTime = _systemConfigDataTransfer.GetFinishBreak();
+            MaximumSlot = _systemConfigDataTransfer.GetMaximumSlot();
 
             _systemConfigApiService = new SystemConfigApiService();
             ResetTime = _systemConfigApiService.GetAutoSchedue();
@@ -45,6 +47,7 @@ namespace ImportExportDesktopApp.ViewModels
             StartBreakTime = _systemConfigDataTransfer.GetStartBreak();
             FinishBreakTime = _systemConfigDataTransfer.GetFinishBreak();
             ResetTime = _systemConfigApiService.GetAutoSchedue();
+            MaximumSlot = _systemConfigDataTransfer.GetMaximumSlot();
         }
 
         public SystemConfig StartWorkingTime
@@ -100,6 +103,16 @@ namespace ImportExportDesktopApp.ViewModels
             set
             {
                 _resetTime = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public SystemConfig MaximumSlot
+        {
+            get { return _maximumSlot; }
+            set
+            {
+                _maximumSlot = value;
                 NotifyPropertyChanged();
             }
         }

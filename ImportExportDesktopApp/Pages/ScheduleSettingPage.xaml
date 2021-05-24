@@ -45,7 +45,7 @@
                         VerticalAlignment="Center"
                         FontSize="24"
                         FontWeight="Bold"
-                        Text="Cài đặt thời gian và đặt lịch" />
+                        Text="Time and Schedule settings" />
                 </StackPanel>
                 <Grid Grid.Column="1" />
             </Grid>
@@ -67,7 +67,7 @@
                         <TextBlock
                             FontSize="18"
                             FontWeight="Bold"
-                            Text="Thời gian thiết lập lại hệ thống" />
+                            Text="System reset time" />
                     </Grid>
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
@@ -85,7 +85,7 @@
                                 Width="100"
                                 HorizontalAlignment="Left"
                                 Click="Button_Click_1"
-                                Content="Thay đổi" />
+                                Content="Change" />
                         </Grid>
                     </Grid>
                 </Grid>
@@ -101,7 +101,7 @@
                         <TextBlock
                             FontSize="18"
                             FontWeight="Bold"
-                            Text="Số chuyến tối đa trong một khung giờ" />
+                            Text="Maximum number of deliveries in a slot" />
                     </Grid>
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
@@ -112,13 +112,14 @@
                             <TextBlock
                                 VerticalAlignment="Center"
                                 FontSize="15"
-                                Text="17" />
+                                Text="{Binding MaximumSlot.AttributeValue}" />
                         </Grid>
                         <Grid Grid.Column="1">
                             <Button
                                 Width="100"
                                 HorizontalAlignment="Left"
-                                Content="Thay đổi" />
+                                Click="Button_Click_2"
+                                Content="Change" />
                         </Grid>
                     </Grid>
                 </Grid>
@@ -133,7 +134,7 @@
                         <TextBlock
                             FontSize="18"
                             FontWeight="Bold"
-                            Text="Giờ đặt lịch" />
+                            Text="Schedule time" />
                     </Grid>
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
@@ -142,7 +143,7 @@
                         </Grid.ColumnDefinitions>
                         <Grid Grid.Column="0">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock VerticalAlignment="Center" Text="Giờ làm việc từ " />
+                                <TextBlock VerticalAlignment="Center" Text="Working hours from" />
                                 <TextBlock
                                     VerticalAlignment="Center"
                                     FontSize="15"
@@ -151,7 +152,7 @@
                                 <TextBlock
                                     Padding="0,0,0,0"
                                     VerticalAlignment="Center"
-                                    Text=" đến " />
+                                    Text=" to " />
                                 <TextBlock
                                     VerticalAlignment="Center"
                                     FontSize="15"
@@ -167,13 +168,13 @@
                         </Grid.ColumnDefinitions>
                         <Grid Grid.Column="0">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock VerticalAlignment="Center" Text="Giờ nghỉ trưa từ " />
+                                <TextBlock VerticalAlignment="Center" Text="Breaking hours from " />
                                 <TextBlock
                                     VerticalAlignment="Center"
                                     FontSize="15"
                                     FontWeight="Bold"
                                     Text="{Binding StartBreakTime.AttributeValue}" />
-                                <TextBlock VerticalAlignment="Center" Text=" đến " />
+                                <TextBlock VerticalAlignment="Center" Text=" to " />
                                 <TextBlock
                                     VerticalAlignment="Center"
                                     FontSize="15"
@@ -189,7 +190,7 @@
                         </Grid.ColumnDefinitions>
                         <Grid Grid.Column="0">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock VerticalAlignment="Center" Text="Thời gian giữa mỗi khung giờ: " />
+                                <TextBlock VerticalAlignment="Center" Text="Time between schedule slots: " />
                                 <TextBlock
                                     VerticalAlignment="Center"
                                     FontSize="15"
@@ -199,7 +200,7 @@
                                     VerticalAlignment="Center"
                                     FontSize="15"
                                     FontWeight="Bold"
-                                    Text=" phút" />
+                                    Text=" minutes" />
                             </StackPanel>
                         </Grid>
                         <Grid Grid.Column="1">
@@ -207,7 +208,7 @@
                                 Width="100"
                                 HorizontalAlignment="Left"
                                 Click="Button_Click"
-                                Content="Thay đổi" />
+                                Content="Change" />
                         </Grid>
                     </Grid>
                 </Grid>

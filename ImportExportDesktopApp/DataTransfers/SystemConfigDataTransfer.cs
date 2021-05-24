@@ -62,6 +62,16 @@ namespace ImportExportDesktopApp.DataTransfers
             return ie.SystemConfigs.Where(s => s.AttributeKey == "TimeBetweenSlot").SingleOrDefault();
         }
 
+        public SystemConfig GetMaximumSlot()
+        {
+            return ie.SystemConfigs.Where(s => s.AttributeKey == "MaximumSlot").SingleOrDefault();
+        }
+
+        public SystemConfig GetMaximumCanceledSchechule()
+        {
+            return ie.SystemConfigs.Where(s => s.AttributeKey == "MaximumCanceledSchechule").SingleOrDefault();
+        }
+
         public void Update(SystemConfig systemConfig)
         {
             ie.Entry(systemConfig).State = System.Data.Entity.EntityState.Modified;
