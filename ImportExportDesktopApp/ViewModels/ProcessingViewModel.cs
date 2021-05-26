@@ -250,14 +250,16 @@ namespace ImportExportDesktopApp.ViewModels
                     }
                     else
                     {
-                        TimeSpan timeBetweenSlot = TimeSpan.Parse(_systemCongifDataTransfer.GetTimeBetweenSlot().AttributeValue);
+                        int timeBetweenSlot = int.Parse(_systemCongifDataTransfer.GetTimeBetweenSlot().AttributeValue);
                         TimeSpan now = DateTime.Now.TimeOfDay;
-                        if ((schedule.TimeTemplateItem.ScheduleTime + timeBetweenSlot) - now > TimeSpan.FromMinutes(15))
+                        TimeSpan acv = (now - schedule.TimeTemplateItem.ScheduleTime);
+                        if (now - (schedule.TimeTemplateItem.ScheduleTime + TimeSpan.FromMinutes(timeBetweenSlot)) > TimeSpan.FromMinutes(15))
                         {
                             AddException(transactionScale, partner, schedule, EScaleExceptionType.Late);
                             return false;
                         }
-                        else if ((schedule.TimeTemplateItem.ScheduleTime + timeBetweenSlot) - now < TimeSpan.FromMinutes(5))
+
+                        else if ((now - schedule.TimeTemplateItem.ScheduleTime) < TimeSpan.FromMinutes(-5))
                         {
                             AddException(transactionScale, partner, schedule, EScaleExceptionType.Soon);
                             return false;
@@ -649,6 +651,7 @@ namespace ImportExportDesktopApp.ViewModels
                 BtnHanldeContentGate2 = EBtnHandleContent.Accept.ToString();
                 DisableButtonVisibilityGate2 = EVisibility.Collapsed.ToString();
                 ImportButtonVisibilityGate2 = EVisibility.Collapsed.ToString();
+                ScheduleStatusGate2 = "";
             }
             else if (exeptionAction.Gate == EGate.Gate1)
             {
@@ -667,6 +670,7 @@ namespace ImportExportDesktopApp.ViewModels
                 BtnHanldeContentGate1 = EBtnHandleContent.Accept.ToString();
                 DisableButtonVisibilityGate1 = EVisibility.Collapsed.ToString();
                 ImportButtonVisibilityGate1 = EVisibility.Collapsed.ToString();
+                ScheduleStatusGate1 = "";
             }
             UpdateTable();
         }
@@ -786,7 +790,6 @@ namespace ImportExportDesktopApp.ViewModels
             {
                 TimeSpan timeBetweenSlot = TimeSpan.Parse(_systemCongifDataTransfer.GetTimeBetweenSlot().AttributeValue);
                 TimeSpan now = DateTime.Now.TimeOfDay;
-
                 if ((schedule.TimeTemplateItem.ScheduleTime + timeBetweenSlot) - now > TimeSpan.FromMinutes(15))
                 {
                     schedule.ScheduleStatus = 3;

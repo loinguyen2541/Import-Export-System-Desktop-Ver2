@@ -33,7 +33,10 @@ namespace ImportExportDesktopApp.DataTransfers
                     .Where(c => c.IdentityCardId.Equals(transactionScale.Indentify) && c.IdentityCardStatus == 0)
                     .Where(c => c.Partner.PartnerStatus == 0).Select(c => c.Partner)
                     .SingleOrDefault();
-                ie.Entry(partner).Reload();
+                if (partner != null)
+                {
+                    ie.Entry(partner).Reload();
+                }
                 return partner;
             }
             else if (transactionScale.Device == EDeviceType.Android)

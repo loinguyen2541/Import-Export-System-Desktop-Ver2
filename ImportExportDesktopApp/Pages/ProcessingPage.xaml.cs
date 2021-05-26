@@ -78,7 +78,7 @@ namespace ImportExportDesktopApp.Pages
             {
                 try
                 {
-                    port1.PortName = "COM14";
+                    port1.PortName = "COM8";
                     port1.BaudRate = BaudRate;
                     port1.Open();
                 }
@@ -118,6 +118,7 @@ namespace ImportExportDesktopApp.Pages
                             processingViewModel.PartnerNameGate1 = null;
                             processingViewModel.PartnerTypeNameGate1 = null;
                             processingViewModel.WeightGate1 = "...";
+                            processingViewModel.ScheduleStatusGate1 = null;
                         }
                     }
                     else
@@ -158,6 +159,7 @@ namespace ImportExportDesktopApp.Pages
                             processingViewModel.PartnerNameGate2 = null;
                             processingViewModel.PartnerTypeNameGate2 = null;
                             processingViewModel.WeightGate2 = "...";
+                            processingViewModel.ScheduleStatusGate2 = null;
                         }
                     }
                     else
