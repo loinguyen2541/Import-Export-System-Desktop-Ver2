@@ -8,6 +8,7 @@
     xmlns:local="clr-namespace:ImportExportDesktopApp.Windows"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:validation="clr-namespace:ImportExportDesktopApp.Validations"
     Title="PartnerDetailWindow"
     Width="980"
     Height="720"
@@ -15,6 +16,9 @@
     FontWeight="Regular">
 
     <Window.Resources>
+        <converter:TotalWeightConverter x:Key="TotalWeightConverter" />
+        <converter:TransactionTypeConverter x:Key="TranTypeConverter" />
+        <converter:TransactionStatusConverter x:Key="TranStatusConverter" />
         <converter:RowIndexConverter x:Key="RowIndex" />
         <Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="TextBox">
             <Style.Triggers>
@@ -325,7 +329,7 @@
                                             </DataGridTextColumn>
                                             <DataGridTextColumn
                                                 MinWidth="50"
-                                                Binding="{Binding TransactionType}"
+                                                Binding="{Binding TransactionType, Converter={StaticResource TranTypeConverter}}"
                                                 Header="Type">
                                                 <DataGridTextColumn.ElementStyle>
                                                     <Style>
@@ -335,7 +339,7 @@
                                             </DataGridTextColumn>
                                             <DataGridTextColumn
                                                 MinWidth="50"
-                                                Binding="{Binding GetWeight}"
+                                                Binding="{Binding Total}"
                                                 Header="Weight">
                                                 <DataGridTextColumn.ElementStyle>
                                                     <Style>
@@ -347,7 +351,7 @@
                                             <!--  Status  -->
                                             <DataGridTextColumn
                                                 MinWidth="100"
-                                                Binding="{Binding TransactionStatus}"
+                                                Binding="{Binding TransactionStatus, Converter={StaticResource TranStatusConverter}}"
                                                 Header="Status">
                                                 <DataGridTextColumn.ElementStyle>
                                                     <Style>

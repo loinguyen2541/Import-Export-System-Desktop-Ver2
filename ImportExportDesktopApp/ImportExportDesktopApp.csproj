@@ -126,6 +126,7 @@
     <Compile Include="Converters\StatusColor.cs" />
     <Compile Include="Converters\StatusColorConverter.cs" />
     <Compile Include="Converters\TimeConverter.cs" />
+    <Compile Include="Converters\TotalWeightConverter.cs" />
     <Compile Include="Converters\TransactionStatusColorConverter.cs" />
     <Compile Include="Converters\TransactionStatusConverter.cs" />
     <Compile Include="Converters\TransactionTypeConverter.cs" />
@@ -263,6 +264,7 @@
     <Compile Include="Validations\PhoneValidationRule.cs" />
     <Compile Include="Validations\TimeValidationRule.cs" />
     <Compile Include="Validations\TimeValidationRuleRange.cs" />
+    <Compile Include="ViewModels\AddCardViewModel.cs" />
     <Compile Include="ViewModels\ChangeMaximumCanceledScheduleViewModel.cs" />
     <Compile Include="ViewModels\ChangeMaximumSlotViewModel.cs" />
     <Compile Include="ViewModels\ChangeScheduleTimeViewModel.cs" />
@@ -281,6 +283,9 @@
     <Compile Include="ViewModels\ScheduleSettingViewModel.cs" />
     <Compile Include="ViewModels\SystemSettingViewModel.cs" />
     <Compile Include="ViewModels\TransactionListViewModel.cs" />
+    <Compile Include="Windows\AddCardWindow.xaml.cs">
+      <DependentUpon>AddCardWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ChangeAutoResetTimeWindow.xaml.cs">
       <DependentUpon>ChangeAutoResetTimeWindow.xaml</DependentUpon>
     </Compile>
@@ -376,6 +381,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\MainSource.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\AddCardWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

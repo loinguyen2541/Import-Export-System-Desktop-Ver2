@@ -21,6 +21,7 @@
     <viewmodel:ChangeStorageCapacityViewModel x:Key="ChangeStorageCapacityVM" />
     <viewmodel:ChangeMaximumSlotViewModel x:Key="ChangeMaxSlotVM" />
     <viewmodel:ChangeMaximumCanceledScheduleViewModel x:Key="ChangeMaxCanceledScheduleVM" />
+    <viewmodel:AddCardViewModel x:Key="AddCardVM" />
     <!--  Colors  -->
     <Brush x:Key="Red">#F44336</Brush>
     <Brush x:Key="Blue">#2196F3</Brush>
