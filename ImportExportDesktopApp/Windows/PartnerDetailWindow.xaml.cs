@@ -32,7 +32,21 @@ namespace ImportExportDesktopApp.Windows
 
         private void CardGrid_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-
+            IdentityCard identityCard = CardGrid.SelectedItem as IdentityCard;
+            if (identityCard != null)
+            {
+                _viewModel.SelectedCard = identityCard;
+                if (identityCard.IdentityCardStatus == 1)
+                {
+                    BlockItem.Visibility = Visibility.Collapsed;
+                    ActiveItem.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    ActiveItem.Visibility = Visibility.Collapsed;
+                    BlockItem.Visibility = Visibility.Visible;
+                }
+            }
         }
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)

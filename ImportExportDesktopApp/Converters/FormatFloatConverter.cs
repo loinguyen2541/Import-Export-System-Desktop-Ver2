@@ -8,20 +8,13 @@ using System.Windows.Data;
 
 namespace ImportExportDesktopApp.Converters
 {
-    class TotalWeightConverter : IValueConverter
+    class FormatFloatConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            Transaction transaction = value as Transaction;
-            if (transaction.TransactionStatus == 1)
-            {
-                if ((transaction.WeightIn - transaction.WeightOut) < 0)
-                {
-                    return (transaction.WeightIn - transaction.WeightOut) * -1 + " kg";
-                }
-                return (transaction.WeightIn - transaction.WeightOut) + " kg";
-            }
-            return "--";
+            double number = System.Convert.ToDouble(value);
+
+            return Math.Round(number, 2);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

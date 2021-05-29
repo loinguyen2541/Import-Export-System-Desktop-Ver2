@@ -21,18 +21,55 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
                 <RowDefinition />
+                <RowDefinition Height="50" />
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <StackPanel Orientation="Horizontal">
                     <TextBox
+                        x:Name="txtCardId"
                         Width="200"
-                        VerticalAlignment="Center"
-                        Text="Scanning" />
-                    <Button Margin="16,0,0,0" Content="Scan" />
+                        VerticalAlignment="Center">
+                        <TextBox.Text>
+                            <Binding
+                                NotifyOnValidationError="True"
+                                Path="TxtCardId"
+                                UpdateSourceTrigger="PropertyChanged"
+                                ValidatesOnExceptions="True">
+                                <Binding.ValidationRules>
+                                    <domain1:NotEmptyValidationRule
+                                        xmlns:domain1="clr-namespace:ImportExportDesktopApp.Validations"
+                                        Max="20"
+                                        Min="5"
+                                        ValidatesOnTargetUpdated="True" />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                    <Button
+                        Margin="16,0,0,0"
+                        Command="{Binding AddCommand}"
+                        Content="Add">
+                        <Button.Style>
+                            <Style BasedOn="{StaticResource MaterialDesignRaisedButton}" TargetType="Button">
+                                <Setter Property="IsEnabled" Value="False" />
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding Path=(Validation.HasError), ElementName=txtCardId}" Value="False" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="IsEnabled" Value="True" />
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
                 </StackPanel>
             </Grid>
             <Grid Grid.Row="1">
-                <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding IdentityCards}">
+                <DataGrid
+                    Margin="0,16,0,0"
+                    AutoGenerateColumns="False"
+                    ItemsSource="{Binding IdentityCards}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Width="70" Header="No." />
                         <DataGridTextColumn
@@ -42,6 +79,16 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>
+            <Grid Grid.Row="2">
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                    <Button Command="{Binding ClearCommand}" Content="Clear" />
+                    <Button
+                        Margin="8,0,0,0"
+                        Command="{Binding SaveCommand}"
+                        Content="Save" />
+                </StackPanel>
+            </Grid>
         </Grid>
+
     </Border>
 </Window>

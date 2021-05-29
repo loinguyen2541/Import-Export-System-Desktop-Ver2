@@ -49,6 +49,7 @@ namespace ImportExportDesktopApp.ViewModels
             {
                 _scanCardWindow = new ScanCardWindow();
             }
+            _scanCardWindow.ReadSerial();
             _scanCardWindow.ShowDialog();
             if (_scanCardWindow.CardId != null)
             {

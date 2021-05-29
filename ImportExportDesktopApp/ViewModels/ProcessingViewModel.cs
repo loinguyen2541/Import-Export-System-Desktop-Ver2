@@ -276,6 +276,7 @@ namespace ImportExportDesktopApp.ViewModels
                     }));
                     return true;
                 }
+                //Processing transaction != null
                 else
                 {
                     if (transaction.Gate.Contains(transactionScale.Gate.ToString()))
@@ -284,6 +285,19 @@ namespace ImportExportDesktopApp.ViewModels
                         return false;
                     }
 
+                    //Check deviation
+                    if (schedule != null)
+                    {
+                        float totalWeight = transactionScale.Weight - transaction.WeightIn;
+                        if (totalWeight < 0)
+                        {
+                            totalWeight = totalWeight * -1;
+                        }
+                        if (totalWeight - schedule.RegisteredWeight > schedule.RegisteredWeight * 0.05 || totalWeight - schedule.RegisteredWeight < schedule.RegisteredWeight * 0.05)
+                        {
+                            AddException(transactionScale, partner, schedule, EScaleExceptionType.Deviation);
+                        }
+                    }
                     Transaction newTransaction = UpdateTransaction(transaction, transactionScale, partner, schedule, true);
                     if (newTransaction == null)
                     {
@@ -429,6 +443,7 @@ namespace ImportExportDesktopApp.ViewModels
                               : exceptionType == EScaleExceptionType.NotScheduled ? "The partner hasn't scheduled yet"
                               : exceptionType == EScaleExceptionType.Late ? "The partner arrived late!!!"
                               : exceptionType == EScaleExceptionType.Soon ? "The partner arrived soon!!!"
+                              : exceptionType == EScaleExceptionType.Deviation ? "The actual weight is different from the registered weight!!!"
                               : "Normal";
                 if (exceptionType == EScaleExceptionType.WrongTransactionType)
                 {
@@ -460,6 +475,7 @@ namespace ImportExportDesktopApp.ViewModels
                               : exceptionType == EScaleExceptionType.NotScheduled ? "The partner hasn't scheduled yet!!!"
                               : exceptionType == EScaleExceptionType.Late ? "The partner arrived late!!!"
                               : exceptionType == EScaleExceptionType.Soon ? "The partner arrived soon!!!"
+                              : exceptionType == EScaleExceptionType.Deviation ? "The actual weight is different from the registered weight!!!"
                               : "Normal";
                 if (exceptionType == EScaleExceptionType.WrongTransactionType)
                 {
@@ -535,6 +551,23 @@ namespace ImportExportDesktopApp.ViewModels
                     else
                     {
                         CreateTransaction(TransactionScaleGate1, PartnerGate1, ScheduleGate1, false);
+                    }
+                }
+                else if (_exceptionTypeGate1 == EScaleExceptionType.Deviation)
+                {
+                    Transaction transaction = _transactionDataTransfer.IsProcessing(TransactionScaleGate1.Indentify);
+                    if (transaction != null)
+                    {
+                        transaction = UpdateTransaction(transaction, TransactionScaleGate1, PartnerGate1, ScheduleGate1, true);
+                        if (transaction == null)
+                        {
+                            return;
+                        }
+                        UpdateGood(PartnerGate1, transaction);
+                        Task.Run(new Action(() =>
+                        {
+                            NotifyHttpAll(TransactionScaleGate1, PartnerGate1, transaction);
+                        }));
                     }
                 }
                 else
@@ -615,6 +648,23 @@ namespace ImportExportDesktopApp.ViewModels
                     {
                         AddException(TransactionScaleGate2, PartnerGate2, ScheduleGate2, EScaleExceptionType.WrongProcess);
                         return;
+                    }
+                }
+                else if (_exceptionTypeGate2 == EScaleExceptionType.Deviation)
+                {
+                    Transaction transaction = _transactionDataTransfer.IsProcessing(TransactionScaleGate2.Indentify);
+                    if (transaction != null)
+                    {
+                        transaction = UpdateTransaction(transaction, TransactionScaleGate2, PartnerGate2, ScheduleGate2, true);
+                        if (transaction == null)
+                        {
+                            return;
+                        }
+                        UpdateGood(PartnerGate2, transaction);
+                        Task.Run(new Action(() =>
+                        {
+                            NotifyHttpAll(TransactionScaleGate2, PartnerGate2, transaction);
+                        }));
                     }
                 }
                 else

@@ -347,8 +347,7 @@
                                 Command="{Binding AddIdentityCardCommand}"
                                 CommandParameter="{Binding IdentityCardId}"
                                 Content="Add Card"
-                                FontSize="15"
-                                ToolTip="Resource name: Mater">
+                                FontSize="15">
                                 <Button.Style>
                                     <Style BasedOn="{StaticResource MaterialDesignRaisedButton}" TargetType="Button">
                                         <Setter Property="IsEnabled" Value="False" />

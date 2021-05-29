@@ -20,6 +20,11 @@ namespace ImportExportDesktopApp.DataTransfers
             return new ObservableCollection<Account>(ie.Accounts);
         }
 
+        public Account GetByUsername(string username)
+        {
+            return ie.Accounts.Where(a => a.Username == username).SingleOrDefault();
+        }
+
         public bool CheckExisted(string username)
         {
             bool check = true;
@@ -28,7 +33,7 @@ namespace ImportExportDesktopApp.DataTransfers
             {
                 foreach (var item in listAccount)
                 {
-                    if(item.Username.Equals(username))
+                    if (item.Username.Equals(username))
                     {
                         check = false;
                         break;
@@ -48,6 +53,12 @@ namespace ImportExportDesktopApp.DataTransfers
                 ie.SaveChanges();
             }
             return newAccount;
+        }
+
+        public void UpdateAccount(Account account)
+        {
+            ie.Entry(account).State = System.Data.Entity.EntityState.Modified;
+            ie.SaveChanges();
         }
     }
 }

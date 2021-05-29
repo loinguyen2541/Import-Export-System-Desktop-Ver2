@@ -69,6 +69,17 @@ namespace ImportExportDesktopApp.DataTransfers
             ie.Partners.Add(partner);
             ie.SaveChanges();
         }
+
+        public void UpdatePartner(Partner partner)
+        {
+            var local = ie.Partners.Local.Where(p => p.PartnerId == partner.PartnerId).FirstOrDefault();
+            if (local != null)
+            {
+                ie.Entry(local).State = System.Data.Entity.EntityState.Detached;
+            }
+            ie.Entry(partner).State = System.Data.Entity.EntityState.Modified;
+            ie.SaveChanges();
+        }
         public int GetMaxPage(int pageSize)
         {
             int count = ie.Partners.Count();

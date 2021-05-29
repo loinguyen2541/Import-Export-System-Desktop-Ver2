@@ -1,6 +1,8 @@
 ﻿using ImportExportDesktopApp.Commands;
 using ImportExportDesktopApp.DataTransfers;
+using ImportExportDesktopApp.Enums;
 using ImportExportDesktopApp.Utils;
+using ImportExportDesktopApp.Windows;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,11 +20,17 @@ namespace ImportExportDesktopApp.ViewModels
         private Partner partner;
         private String selectedStatus;
         private List<String> _partnerStatuses;
+        private List<String> _partnerTypes;
+        private String _selectedType;
         private bool _isReadOnly;
         private bool _isEnable;
         private string _visibilityBlockItem;
         private ObservableCollection<Transaction> _listTranHistoryByPartner;
         private ObservableCollection<IdentityCard> _listCardByPartner;
+        private String _unlockPartnerVisibility;
+        private Account _account;
+        private SystemConfig _maxSlots;
+        private String _partnerBg;
 
         public IdentityCard SelectedCard { get; set; }
         public ICommand GetNextPageCommand { get; set; }
@@ -33,6 +41,7 @@ namespace ImportExportDesktopApp.ViewModels
         public ICommand CreateCardCommand { get; set; }
         public ICommand DeleteCardCommand { get; set; }
         public ICommand ActiveCardCommand { get; set; }
+        public ICommand UnlockPartnerCommand { get; set; }
 
         private String _txtPageInfo;
         private String _cancelButtonVisibility;
@@ -42,6 +51,8 @@ namespace ImportExportDesktopApp.ViewModels
         private readonly PartnerDataTransfer _partnerDataTransfer;
         private readonly TransactionDataTransfer _transactionDataTransfer;
         private readonly CardDataTransfer _cardDataTransfer;
+        private readonly AccountDataTransfer _accountDataTransfer;
+        private readonly SystemConfigDataTransfer _systemConfigDataTransfer;
         private int _transactionCurrentPage;
         private int _transactionMaxPage;
 
@@ -50,6 +61,10 @@ namespace ImportExportDesktopApp.ViewModels
             _partnerDataTransfer = new PartnerDataTransfer();
             _transactionDataTransfer = new TransactionDataTransfer();
             _cardDataTransfer = new CardDataTransfer();
+            _accountDataTransfer = new AccountDataTransfer();
+            _systemConfigDataTransfer = new SystemConfigDataTransfer();
+            _maxSlots = _systemConfigDataTransfer.GetMaximumCanceledSchechule();
+            PartnerBg = "White";
             IsReadOnly = true;
             IsEnable = false;
             EditButtonContent = EditButtonContentValue.Edit;
@@ -60,6 +75,14 @@ namespace ImportExportDesktopApp.ViewModels
             GetBeforePageCommand = new RelayCommand<object>((p) => { return true; }, p => { GetBeforePage(); });
             DeleteCardCommand = new RelayCommand<IdentityCard>((p) => { return true; }, DeleteCard);
             ActiveCardCommand = new RelayCommand<IdentityCard>((p) => { return true; }, ActiveCard);
+            UnlockPartnerCommand = new RelayCommand<Object>((p) => { return true; }, (p) =>
+            {
+                Unlockpartner();
+            });
+            EditCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
+            {
+                UpdatePartner();
+            });
             CancelButtonVisibility = "Hidden";
 
         }
@@ -70,10 +93,28 @@ namespace ImportExportDesktopApp.ViewModels
             Partner = _partnerDataTransfer.GetByID(this.partnerId);
             ListCardByPartner = _cardDataTransfer.GetAllCardsByPartnerId(this.partnerId);
             ListTranHistoryByPartner = _transactionDataTransfer.GetAllTransactionByPartner(1, partnerId);
+            _account = _accountDataTransfer.GetByUsername(Partner.Username);
             TransactionMaxPage = _transactionDataTransfer.GetMaxPage(10);
             PartnerStatuses = new List<string>();
             PartnerStatuses.Add("Active");
             PartnerStatuses.Add("Block");
+
+            PartnerTypes = new List<string>();
+            PartnerTypes.Add("Customer");
+            PartnerTypes.Add("Provider");
+
+            if (_account.NumberCanceled >= int.Parse(_maxSlots.AttributeValue))
+            {
+                UnlockPartnerVisibility = EVisibility.Visible.ToString();
+                PartnerBg = "OrangeRed";
+            }
+            else
+            {
+                UnlockPartnerVisibility = EVisibility.Hidden.ToString();
+                PartnerBg = "White";
+            }
+
+            SelectedType = Partner.PartnerTypeId == 1 ? "Customer" : "Provider";
             SelectedStatus = Partner.PartnerStatus == 0 ? "Active" : "Block";
             TxtPageInfo = String.Format("Page {0} of {1}", TransactionCurrentPage, TransactionMaxPage);
             CheckPage();
@@ -82,9 +123,18 @@ namespace ImportExportDesktopApp.ViewModels
 
         public void OpenCardDialog()
         {
-            //CreateCard cardDialog = new CreateCard(partnerId);
-            //cardDialog.ShowDialog();
+            AddCardWindow addCardWindow = new AddCardWindow(partnerId);
+            addCardWindow.ShowDialog();
         }
+
+        private void Unlockpartner()
+        {
+            _account.NumberCanceled = 0;
+            _accountDataTransfer.UpdateAccount(_account);
+            UnlockPartnerVisibility = EVisibility.Hidden.ToString();
+            PartnerBg = "White";
+        }
+
         public void GetNextPage()
         {
             TransactionCurrentPage++;
@@ -124,15 +174,43 @@ namespace ImportExportDesktopApp.ViewModels
 
         private void UpdatePartner()
         {
-            //bool result = _partnerDataTransfer.Update(partner);
-            //if (result)
-            //{
-            //    MessageBox.Show("Update successfully!");
-            //}
-            //else
-            //{
-            //    MessageBox.Show("Fail to update!");
-            //}
+            if (SelectedType == "Customer")
+            {
+                Partner.PartnerTypeId = 1;
+            }
+            else if (SelectedType == "Provider")
+            {
+                Partner.PartnerTypeId = 2;
+            }
+            else
+            {
+                MessageBox.Show("Plesase choose partner type!");
+            }
+
+            if (SelectedStatus == "Active")
+            {
+                Partner.PartnerStatus = 0;
+            }
+            else if (SelectedStatus == "Block")
+            {
+                Partner.PartnerStatus = 1;
+            }
+            else
+            {
+                MessageBox.Show("Plesase choose partner status!");
+            }
+
+            try
+            {
+                _partnerDataTransfer.UpdatePartner(Partner);
+
+                MessageBox.Show("Update successfully!");
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Fail to update!" + e.Message);
+            }
+
         }
 
         private void CancelEditTextBox()
@@ -153,25 +231,16 @@ namespace ImportExportDesktopApp.ViewModels
             }
         }
 
-        private async void DeleteCard(IdentityCard identityCard)
+        private void DeleteCard(IdentityCard identityCard)
         {
-            //bool result = await _identityCardHttpService.DeleteCard(identityCard.IdentityCardId);
-            //if (result)
-            //{
-            //    ObservableCollection<IdentityCard> identityCards = _httpService.getCardByPartnerID(this.partnerId);
-            //    ClearCard(identityCards);
-            //}
+            _cardDataTransfer.BlockCard(SelectedCard);
+            ClearCard();
         }
 
-        private async void ActiveCard(IdentityCard identityCard)
+        private void ActiveCard(IdentityCard identityCard)
         {
-            //identityCard.IdentityCardStatus = IdentityCardStatus.Active.ToString();
-            //bool result = await _identityCardHttpService.UpdateCard(identityCard);
-            //if (result)
-            //{
-            //    ObservableCollection<IdentityCard> identityCards = _httpService.getCardByPartnerID(this.partnerId);
-            //    ClearCard(identityCards);
-            //}
+            _cardDataTransfer.ActiveCard(SelectedCard);
+            ClearCard();
         }
 
         public void CheckPage()
@@ -195,13 +264,9 @@ namespace ImportExportDesktopApp.ViewModels
             }
         }
 
-        public void ClearCard(ObservableCollection<IdentityCard> identityCards)
+        public void ClearCard()
         {
-            ListCardByPartner.Clear();
-            foreach (var item in identityCards)
-            {
-                ListCardByPartner.Add(item);
-            }
+            ListCardByPartner = _cardDataTransfer.GetAllCardsByPartnerId(partnerId);
         }
 
         public String TxtPageInfo
@@ -347,6 +412,46 @@ namespace ImportExportDesktopApp.ViewModels
             set
             {
                 _transactionMaxPage = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public List<String> PartnerTypes
+        {
+            get { return _partnerTypes; }
+            set
+            {
+                _partnerTypes = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public String SelectedType
+        {
+            get { return _selectedType; }
+            set
+            {
+                _selectedType = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public String UnlockPartnerVisibility
+        {
+            get { return _unlockPartnerVisibility; }
+            set
+            {
+                _unlockPartnerVisibility = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public String PartnerBg
+        {
+            get { return _partnerBg; }
+            set
+            {
+                _partnerBg = value;
                 NotifyPropertyChanged();
             }
         }

@@ -13,6 +13,7 @@
     DataContext="{StaticResource ManSchedule}"
     mc:Ignorable="d">
     <Page.Resources>
+        <converter:FormatFloatConverter x:Key="FormatConverter" />
         <converter:StatusColorConverter x:Key="StatusColor" />
         <converter:RowIndexConverter x:Key="RowIndex" />
         <converter:TransactionTypeConverter x:Key="TypeConverter" />
@@ -44,20 +45,7 @@
                     Height="35"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
-                    Orientation="Horizontal">
-                    <TextBlock VerticalAlignment="Center" Text="Schedule will reset at " />
-                    <TextBlock
-                        VerticalAlignment="Center"
-                        FontWeight="Bold"
-                        Text="{Binding AutoSchedule}" />
-                    <Button
-                        Height="35"
-                        Margin="16,0,0,0"
-                        Background="{DynamicResource Green}"
-                        BorderBrush="{StaticResource Green}"
-                        Click="Button_Click"
-                        Content="Edit" />
-                </StackPanel>
+                    Orientation="Horizontal" />
             </Grid>
 
             <!--  Detail  -->
@@ -232,7 +220,20 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Binding="{Binding RegisteredWeight}" Header="Weight(kg)">
+                            <DataGridTextColumn
+                                Binding="{Binding RegisteredWeight}"
+                                FontWeight="Bold"
+                                Header="Re.Weight(kg)">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style>
+                                        <Setter Property="FrameworkElement.VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn
+                                Binding="{Binding ActualWeight, Converter={StaticResource FormatConverter}}"
+                                FontWeight="Bold"
+                                Header="Ac.Weight(kg)">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style>
                                         <Setter Property="FrameworkElement.VerticalAlignment" Value="Center" />

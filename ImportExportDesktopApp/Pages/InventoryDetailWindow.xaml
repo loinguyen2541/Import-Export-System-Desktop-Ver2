@@ -1,17 +1,21 @@
-﻿<Window x:Class="ImportExportDesktopApp.Pages.InventoryDetailWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ImportExportDesktopApp.Pages"
-        xmlns:converter="clr-namespace:ImportExportDesktopApp.Converters"
-        mc:Ignorable="d"
-        DataContext="{DynamicResource InventoryDetail}"
-        FontSize="15"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        Title="InventoryDetailWindow" Height="450" Width="800">
+﻿<Window
+    x:Class="ImportExportDesktopApp.Pages.InventoryDetailWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converter="clr-namespace:ImportExportDesktopApp.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ImportExportDesktopApp.Pages"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="InventoryDetailWindow"
+    Width="950"
+    Height="650"
+    DataContext="{DynamicResource InventoryDetail}"
+    FontSize="15"
+    mc:Ignorable="d">
     <Window.Resources>
         <converter:RowIndexConverter x:Key="RowIndexConverter" />
+        <converter:TransactionTypeConverter x:Key="TransTypeConverter" />
     </Window.Resources>
     <Border Padding="16">
         <Grid>
@@ -45,8 +49,10 @@
                         FontWeight="Bold"
                         Text="Opening Stock: " />
                     <TextBlock Grid.Column="0" Text="{Binding Inventory.OpeningStock}" />
-                    <TextBlock 
-    FontSize="15" Grid.Column="0" Text=" kg" />
+                    <TextBlock
+                        Grid.Column="0"
+                        FontSize="15"
+                        Text=" kg" />
                 </StackPanel>
 
                 <StackPanel
@@ -154,29 +160,29 @@
                     BorderThickness="2"
                     CornerRadius="10">
                     <DataGrid
-                        FontSize="15"
                         Height="auto"
                         materialDesign:DataGridAssist.CellPadding="16 16 16 16"
                         materialDesign:DataGridAssist.ColumnHeaderPadding="16 16 16 16"
+                        AlternationCount="{Binding Inventory.InventoryDetails.Count}"
                         AutoGenerateColumns="false"
                         Background="GhostWhite"
                         CanUserAddRows="False"
                         CanUserSortColumns="True"
                         ColumnWidth="*"
+                        FontSize="15"
                         IsHitTestVisible="False"
                         IsReadOnly="True"
-                        AlternationCount="{Binding Inventory.InventoryDetails.Count}"
                         ItemsSource="{Binding Inventory.InventoryDetails, UpdateSourceTrigger=PropertyChanged}"
                         VerticalScrollBarVisibility="Hidden">
 
                         <DataGrid.Columns>
                             <DataGridTextColumn
-                                        Width="60"
-                                        Binding="{Binding Path=AlternationIndex, RelativeSource={RelativeSource AncestorType=DataGridRow}, Converter={StaticResource RowIndexConverter}}"
-                                        Header="No." />
+                                Width="60"
+                                Binding="{Binding Path=AlternationIndex, RelativeSource={RelativeSource AncestorType=DataGridRow}, Converter={StaticResource RowIndexConverter}}"
+                                Header="No." />
                             <DataGridTextColumn Binding="{Binding Partner.DisplayName}" Header="Partner Name" />
                             <DataGridTextColumn Binding="{Binding Goods.GoodName}" Header="Goods" />
-                            <DataGridTextColumn Binding="{Binding Type}" Header="Type" />
+                            <DataGridTextColumn Binding="{Binding Type, Converter={StaticResource TransTypeConverter}}" Header="Type" />
                             <DataGridTextColumn Binding="{Binding Weight}" Header="Weight" />
                         </DataGrid.Columns>
                     </DataGrid>
@@ -189,9 +195,7 @@
                             <ColumnDefinition />
                             <ColumnDefinition Width="50" />
                         </Grid.ColumnDefinitions>
-
                         <Grid Grid.Column="1" HorizontalAlignment="Right" />
-
                         <Grid Grid.Column="2" HorizontalAlignment="Right" />
                     </Grid>
                 </Border>

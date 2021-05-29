@@ -15,6 +15,7 @@
           <Property Name="DeviceToken" Type="nvarchar(max)" />
           <Property Name="RoleId" Type="int" Nullable="false" />
           <Property Name="Token" Type="nvarchar(max)" />
+          <Property Name="NumberCanceled" Type="int" />
         </EntityType>
         <EntityType Name="ActivityLog">
           <Key>
@@ -553,6 +554,7 @@
           <Property Name="DeviceToken" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="RoleId" Type="Int32" Nullable="false" />
           <Property Name="Token" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="NumberCanceled" Type="Int32" />
           <NavigationProperty Name="Role" Relationship="IEModel.FK_Account_Role_RoleId" FromRole="Account" ToRole="Role" />
           <NavigationProperty Name="ActivityLogs" Relationship="IEModel.FK_ActivityLog_Account_AccountUsername" FromRole="Account" ToRole="ActivityLog" />
           <NavigationProperty Name="Notifications" Relationship="IEModel.FK_Notification_Account_Username" FromRole="Account" ToRole="Notification" />
@@ -950,6 +952,7 @@
           <EntitySetMapping Name="Accounts">
             <EntityTypeMapping TypeName="IEModel.Account">
               <MappingFragment StoreEntitySet="Account">
+                <ScalarProperty Name="NumberCanceled" ColumnName="NumberCanceled" />
                 <ScalarProperty Name="Token" ColumnName="Token" />
                 <ScalarProperty Name="RoleId" ColumnName="RoleId" />
                 <ScalarProperty Name="DeviceToken" ColumnName="DeviceToken" />

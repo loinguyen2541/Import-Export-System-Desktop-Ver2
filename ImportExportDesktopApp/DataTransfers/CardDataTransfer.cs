@@ -74,9 +74,43 @@ namespace ImportExportDesktopApp.DataTransfers
             return tempList;
         }
 
+        public void InsertCards(ICollection<IdentityCard> cards)
+        {
+
+            ie.IdentityCards.AddRange(cards);
+            ie.SaveChanges();
+        }
+
+        public Boolean IsExist(string id)
+        {
+            IdentityCard identityCard = ie.IdentityCards.Where(i => i.IdentityCardId == id).SingleOrDefault();
+            if (identityCard == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         public ObservableCollection<IdentityCard> GetAllCardsByPartnerId(int partnerId)
         {
             return new ObservableCollection<IdentityCard>(ie.IdentityCards.Where(i => i.PartnerId == partnerId));
+        }
+
+        public void BlockCard(IdentityCard card)
+        {
+            card.IdentityCardStatus = 1;
+            ie.Entry(card).State = EntityState.Modified;
+            ie.SaveChanges();
+        }
+
+        public void ActiveCard(IdentityCard card)
+        {
+            card.IdentityCardStatus = 0;
+            ie.Entry(card).State = EntityState.Modified;
+            ie.SaveChanges();
         }
     }
 }

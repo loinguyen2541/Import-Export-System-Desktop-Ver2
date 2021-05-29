@@ -16,7 +16,7 @@
     FontWeight="Regular">
 
     <Window.Resources>
-        <converter:TotalWeightConverter x:Key="TotalWeightConverter" />
+        <converter:CardStatusConverter x:Key="CardStatusConverter" />
         <converter:TransactionTypeConverter x:Key="TranTypeConverter" />
         <converter:TransactionStatusConverter x:Key="TranStatusConverter" />
         <converter:RowIndexConverter x:Key="RowIndex" />
@@ -57,7 +57,7 @@
             <materialDesign:Card
                 Grid.Row="1"
                 Padding="16"
-                Background="White"
+                Background="{Binding PartnerBg}"
                 UniformCornerRadius="10">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -126,7 +126,9 @@
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="150" />
-                            <ColumnDefinition Width="6*" />
+                            <ColumnDefinition Width="4*" />
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
                         </Grid.ColumnDefinitions>
                         <Label
                             Grid.Column="0"
@@ -149,6 +151,33 @@
                                 FontSize="16"
                                 IsReadOnly="{Binding IsReadOnly, UpdateSourceTrigger=PropertyChanged}"
                                 Text="{Binding Partner.PhoneNumber}" />
+                        </Border>
+                        <Border
+                            Grid.Column="2"
+                            Background="#fafafa"
+                            BorderBrush="Silver"
+                            BorderThickness="0,1,0,0">
+                            <Label
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Content="Type"
+                                FontSize="16" />
+                        </Border>
+                        <Border
+                            Grid.Column="3"
+                            Background="#fafafa"
+                            BorderBrush="Silver"
+                            BorderThickness="1,1,1,0">
+                            <ComboBox
+                                Width="auto"
+                                Margin="10,0,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                FontSize="16"
+                                IsEnabled="{Binding IsEnable, UpdateSourceTrigger=PropertyChanged}"
+                                IsReadOnly="{Binding IsReadOnly, UpdateSourceTrigger=PropertyChanged}"
+                                ItemsSource="{Binding PartnerTypes}"
+                                SelectedItem="{Binding SelectedType}" />
                         </Border>
                     </Grid>
                     <Grid Grid.Row="2">
@@ -220,6 +249,23 @@
                     <ColumnDefinition Width="150" />
                     <ColumnDefinition Width="126" />
                 </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0">
+                    <StackPanel
+                        Margin="8,8,0,0"
+                        VerticalAlignment="Top"
+                        Orientation="Horizontal"
+                        Visibility="{Binding UnlockPartnerVisibility}">
+                        <TextBlock
+                            Margin="0,4,0,0"
+                            FontSize="15"
+                            Foreground="Red"
+                            Text="Schedule function of partner is locked!!!" />
+                        <Button
+                            Margin="16,0,0,0"
+                            Command="{Binding UnlockPartnerCommand}"
+                            Content="Unlock" />
+                    </StackPanel>
+                </Grid>
                 <Grid Grid.Column="1">
                     <Button
                         Grid.Column="3"
@@ -308,7 +354,15 @@
                                 <RowDefinition Height="35" />
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0">
-                                <materialDesign:Card Padding="16" materialDesign:ShadowAssist.ShadowDepth="Depth0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="180*" />
+                                    <RowDefinition Height="119*" />
+                                </Grid.RowDefinitions>
+                                <materialDesign:Card
+                                    Grid.RowSpan="2"
+                                    Margin="0,0,0,0.2"
+                                    Padding="16"
+                                    materialDesign:ShadowAssist.ShadowDepth="Depth0">
                                     <DataGrid
                                         Height="auto"
                                         materialDesign:DataGridAssist.CellPadding="16 16 16 16"
@@ -340,6 +394,7 @@
                                             <DataGridTextColumn
                                                 MinWidth="50"
                                                 Binding="{Binding Total}"
+                                                FontWeight="Bold"
                                                 Header="Weight">
                                                 <DataGridTextColumn.ElementStyle>
                                                     <Style>
@@ -554,7 +609,7 @@
                                             </DataGridTextColumn>
                                             <DataGridTextColumn
                                                 MinWidth="50"
-                                                Binding="{Binding IdentityCardStatus}"
+                                                Binding="{Binding IdentityCardStatus, Converter={StaticResource CardStatusConverter}}"
                                                 Header="Status">
                                                 <DataGridTextColumn.ElementStyle>
                                                     <Style>

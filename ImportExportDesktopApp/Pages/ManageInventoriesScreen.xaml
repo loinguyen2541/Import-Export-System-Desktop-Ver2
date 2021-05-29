@@ -1,15 +1,17 @@
-﻿<Page x:Class="ImportExportDesktopApp.Pages.ManageInventoriesScreen"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:ImportExportDesktopApp.Pages"
-      mc:Ignorable="d" 
-      DataContext="{StaticResource ManInventory}"
-      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-      xmlns:converter="clr-namespace:ImportExportDesktopApp.Converters"
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="ManageInventoriesScreen">
+﻿<Page
+    x:Class="ImportExportDesktopApp.Pages.ManageInventoriesScreen"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converter="clr-namespace:ImportExportDesktopApp.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ImportExportDesktopApp.Pages"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="ManageInventoriesScreen"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    DataContext="{StaticResource ManInventory}"
+    mc:Ignorable="d">
 
     <Page.Resources>
         <converter:RowIndexConverter x:Key="RowIndex" />
@@ -153,11 +155,26 @@
                                 MaxWidth="60"
                                 Binding="{Binding Path=AlternationIndex, RelativeSource={RelativeSource AncestorType=DataGridRow}, Converter={StaticResource RowIndex}}"
                                 Header="No" />
-                            <DataGridTextColumn Binding="{Binding RecordedDate}" Header="Date" />
-                            <DataGridTextColumn Binding="{Binding OpeningStock}" Header="Opening Stock(kg)" />
-                            <DataGridTextColumn Binding="{Binding TotalImport}" Header="Import(kg)" />
-                            <DataGridTextColumn Binding="{Binding TotalExport}" Header="Export(kg)" />
-                            <DataGridTextColumn Binding="{Binding ClosingStock}" Header="Closing Stock(kg)" />
+                            <DataGridTextColumn
+                                Width="190"
+                                Binding="{Binding RecordedDate}"
+                                Header="Date" />
+                            <DataGridTextColumn
+                                Binding="{Binding OpeningStock}"
+                                FontWeight="Bold"
+                                Header="Opening Stock(kg)" />
+                            <DataGridTextColumn
+                                Binding="{Binding TotalImport}"
+                                FontWeight="Bold"
+                                Header="Import(kg)" />
+                            <DataGridTextColumn
+                                Binding="{Binding TotalExport}"
+                                FontWeight="Bold"
+                                Header="Export(kg)" />
+                            <DataGridTextColumn
+                                Binding="{Binding ClosingStock}"
+                                FontWeight="Bold"
+                                Header="Closing Stock(kg)" />
                         </DataGrid.Columns>
                         <DataGrid.InputBindings>
                             <MouseBinding
@@ -177,10 +194,10 @@
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Column="0">
                         <TextBlock
-                                x:Name="TxtPageInfo"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Center"
-                                Text="{Binding PagingInfo, UpdateSourceTrigger=PropertyChanged}" />
+                            x:Name="TxtPageInfo"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Text="{Binding PagingInfo, UpdateSourceTrigger=PropertyChanged}" />
                     </Grid>
 
                     <Grid Grid.Column="1" HorizontalAlignment="Right">

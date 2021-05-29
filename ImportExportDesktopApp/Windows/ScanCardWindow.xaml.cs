@@ -24,13 +24,10 @@ namespace ImportExportDesktopApp.Windows
     {
         int BaudRate = 9600;
         SerialPort port1;
-        Thread thread1;
         public String CardId { get; set; }
         public ScanCardWindow()
         {
             InitializeComponent();
-            thread1 = new Thread(ReadSerial);
-            thread1.Start();
         }
 
         public void ReadSerial()
@@ -41,7 +38,7 @@ namespace ImportExportDesktopApp.Windows
             {
                 try
                 {
-                    port1.PortName = "COM13";
+                    port1.PortName = "COM6";
                     port1.BaudRate = BaudRate;
                     port1.Open();
                 }
@@ -54,6 +51,7 @@ namespace ImportExportDesktopApp.Windows
 
         public void DataRecive1(object obj, SerialDataReceivedEventArgs e)
         {
+            bool isTrue = false;
             Dispatcher.Invoke(new Action(() =>
             {
                 String value = port1.ReadLine();
@@ -65,22 +63,57 @@ namespace ImportExportDesktopApp.Windows
                         if (values.Length == 2)
                         {
                             CardId = values[1];
-                            this.Hide();
+                            isTrue = true;
                         }
+                        else
+                        {
+                            isTrue = false;
+                        }
+                    }
+                    else
+                    {
+                        isTrue = false;
                     }
                 }
             }));
 
+            if (isTrue)
+            {
+                Dispatcher.Invoke((new Action(() =>
+                {
+                    this.Hide();
+                })));
+
+                CloseSerialOnExit();
+            }
+
         }
 
-        protected override void OnClosed(EventArgs e)
+        private void CloseSerialOnExit()
         {
-            this.Hide();
+
+            try
+            {
+                if (port1 != null)
+                {
+                    port1.DiscardInBuffer();
+                    port1.DiscardOutBuffer();
+                    port1.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            e.Cancel = true;  // cancels the window close    
+            e.Cancel = true;  // cancels the window close
+            if (port1.IsOpen)
+            {
+                CloseSerialOnExit();
+            }
             this.Hide();
         }
     }
