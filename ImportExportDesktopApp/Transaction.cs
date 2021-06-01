@@ -33,6 +33,7 @@ namespace ImportExportDesktopApp
         public virtual Good Good { get; set; }
         public virtual Partner Partner { get; set; }
         public virtual Schedule Schedule { get; set; }
+
         public float Total
         {
             get

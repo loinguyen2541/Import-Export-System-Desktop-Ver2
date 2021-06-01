@@ -25,23 +25,7 @@ namespace ImportExportDesktopApp.DataTransfers
         {
             TimeSpan timeOut = TimeSpan.Parse(TimeOut.ToString("HH:mm"));
             List<TimeTemplateItem> timeTemplateItems = ie.TimeTemplateItems.Where(i => i.ScheduleTime > TimeOut.TimeOfDay).ToList();
-            foreach (var item in timeTemplateItems)
-            {
-                if (partnerTypeId == 1)
-                {
-                    item.Inventory -= weight;
-                }
-                else if (partnerTypeId == 2)
-                {
-                    item.Inventory += weight;
-                }
 
-                if (item.Inventory < 0)
-                {
-                    item.Inventory = 0;
-                }
-                ie.Entry(item).State = System.Data.Entity.EntityState.Modified;
-            }
         }
 
         public bool CreateListTimeTemplateItem(String startWorking, String finishWorking, String startBreaking, String finishBreaking, String timeBetweenSlot)
@@ -82,7 +66,7 @@ namespace ImportExportDesktopApp.DataTransfers
                 {
                     TimeTemplateItem timeTemplateItem = new TimeTemplateItem();
                     timeTemplateItem.TimeTemplateId = timeTemplate.TimeTemplateId;
-                    timeTemplateItem.Inventory = 0;
+                    //timeTemplateItem.Inventory = 0;
                     timeTemplateItem.Status = 1;
                     timeTemplateItem.ScheduleTime = i;
                     ie.TimeTemplateItems.Add(timeTemplateItem);

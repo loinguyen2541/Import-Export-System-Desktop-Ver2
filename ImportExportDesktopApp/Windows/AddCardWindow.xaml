@@ -7,7 +7,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:validation="clr-namespace:ImportExportDesktopApp.Validations"
-    Title="AddCardWindow"
+    Title="Add Card"
     Width="450"
     Height="450"
     DataContext="{DynamicResource AddCardVM}"

@@ -11,7 +11,7 @@ namespace ImportExportDesktopApp
 {
     using System;
     using System.Collections.Generic;
-    
+
     public partial class TimeTemplateItem
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -19,13 +19,12 @@ namespace ImportExportDesktopApp
         {
             this.Schedules = new HashSet<Schedule>();
         }
-    
+
         public int TimeTemplateItemId { get; set; }
-        public float Inventory { get; set; }
         public System.TimeSpan ScheduleTime { get; set; }
         public int Status { get; set; }
         public int TimeTemplateId { get; set; }
-    
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Schedule> Schedules { get; set; }
         public virtual TimeTemplate TimeTemplate { get; set; }

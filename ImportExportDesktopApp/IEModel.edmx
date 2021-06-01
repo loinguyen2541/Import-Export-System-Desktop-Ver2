@@ -141,7 +141,6 @@
             <PropertyRef Name="TimeTemplateItemId" />
           </Key>
           <Property Name="TimeTemplateItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Inventory" Type="real" Nullable="false" />
           <Property Name="ScheduleTime" Type="time" Precision="7" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="TimeTemplateId" Type="int" Nullable="false" />
@@ -709,7 +708,6 @@
             <PropertyRef Name="TimeTemplateItemId" />
           </Key>
           <Property Name="TimeTemplateItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Inventory" Type="Single" Nullable="false" />
           <Property Name="ScheduleTime" Type="Time" Nullable="false" Precision="7" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="TimeTemplateId" Type="Int32" Nullable="false" />
@@ -1099,7 +1097,6 @@
                 <ScalarProperty Name="TimeTemplateId" ColumnName="TimeTemplateId" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="ScheduleTime" ColumnName="ScheduleTime" />
-                <ScalarProperty Name="Inventory" ColumnName="Inventory" />
                 <ScalarProperty Name="TimeTemplateItemId" ColumnName="TimeTemplateItemId" />
               </MappingFragment>
             </EntityTypeMapping>

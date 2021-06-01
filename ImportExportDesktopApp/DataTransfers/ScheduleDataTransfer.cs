@@ -34,7 +34,7 @@ namespace ImportExportDesktopApp.DataTransfers
         }
         public ObservableCollection<Schedule> GetAllSchedule(int page)
         {
-            return new ObservableCollection<Schedule>(ie.Schedules.OrderByDescending(s => s.CreatedDate).Skip((page - 1) * 10).Take(10));
+            return new ObservableCollection<Schedule>(ie.Schedules.OrderByDescending(s => s.ScheduleDate).Skip((page - 1) * 10).Take(10));
         }
         public ObservableCollection<Schedule> SearchSchedule(String searchDate, string searchName, int type)
         {

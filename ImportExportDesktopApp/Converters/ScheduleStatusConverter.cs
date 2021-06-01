@@ -27,6 +27,14 @@ namespace ImportExportDesktopApp.Converters
                 {
                     return "Cancel";
                 }
+                else if (status == 3)
+                {
+                    return "Late";
+                }
+                else if (status == 4)
+                {
+                    return "Early";
+                }
             }
             return "N/A";
         }

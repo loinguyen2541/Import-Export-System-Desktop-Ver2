@@ -42,7 +42,10 @@ namespace ImportExportDesktopApp.DataTransfers
             else if (transactionScale.Device == EDeviceType.Android)
             {
                 Partner partner = ie.Partners.Include(p => p.PartnerType).Where(c => c.PartnerId == transactionScale.PartnerId && c.PartnerStatus == 0).SingleOrDefault();
-                ie.Entry(partner).Reload();
+                if (partner != null)
+                {
+                    ie.Entry(partner).Reload();
+                }
                 return partner;
             }
             return null;

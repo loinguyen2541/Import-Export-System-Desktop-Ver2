@@ -252,7 +252,6 @@ namespace ImportExportDesktopApp.ViewModels
                     {
                         int timeBetweenSlot = int.Parse(_systemCongifDataTransfer.GetTimeBetweenSlot().AttributeValue);
                         TimeSpan now = DateTime.Now.TimeOfDay;
-                        TimeSpan acv = (now - schedule.TimeTemplateItem.ScheduleTime);
                         if (now - (schedule.TimeTemplateItem.ScheduleTime + TimeSpan.FromMinutes(timeBetweenSlot)) > TimeSpan.FromMinutes(15))
                         {
                             AddException(transactionScale, partner, schedule, EScaleExceptionType.Late);
@@ -293,10 +292,34 @@ namespace ImportExportDesktopApp.ViewModels
                         {
                             totalWeight = totalWeight * -1;
                         }
-                        if (totalWeight - schedule.RegisteredWeight > schedule.RegisteredWeight * 0.05 || totalWeight - schedule.RegisteredWeight < schedule.RegisteredWeight * 0.05)
+
+                        if (totalWeight - schedule.RegisteredWeight > schedule.RegisteredWeight * 0.1)
                         {
                             AddException(transactionScale, partner, schedule, EScaleExceptionType.Deviation);
+                            return false;
                         }
+                        else if (totalWeight - schedule.RegisteredWeight < 0)
+                        {
+                            if ((totalWeight - schedule.RegisteredWeight) * -1 > schedule.RegisteredWeight * 0.1)
+                            {
+                                AddException(transactionScale, partner, schedule, EScaleExceptionType.Deviation);
+                                return false;
+                            }
+                        }
+
+                        //int timeBetweenSlot = int.Parse(_systemCongifDataTransfer.GetTimeBetweenSlot().AttributeValue);
+                        //TimeSpan now = DateTime.Now.TimeOfDay;
+                        //if (now - (schedule.TimeTemplateItem.ScheduleTime + TimeSpan.FromMinutes(timeBetweenSlot)) > TimeSpan.FromMinutes(15))
+                        //{
+                        //    AddException(transactionScale, partner, schedule, EScaleExceptionType.Late);
+                        //    return false;
+                        //}
+
+                        //else if ((now - schedule.TimeTemplateItem.ScheduleTime) < TimeSpan.FromMinutes(-5))
+                        //{
+                        //    AddException(transactionScale, partner, schedule, EScaleExceptionType.Soon);
+                        //    return false;
+                        //}
                     }
                     Transaction newTransaction = UpdateTransaction(transaction, transactionScale, partner, schedule, true);
                     if (newTransaction == null)
@@ -836,15 +859,18 @@ namespace ImportExportDesktopApp.ViewModels
                 inventory = _inventoryDataTransfer.CreateInventoryToday(goodInventory);
             }
 
+            transaction = _transactionDataTransfer.UpdateTransactionNotSaveChanges(transaction);
+            float totalWeight = getTotalWeight(partner.PartnerTypeId, transaction.WeightIn, transaction.WeightOut);
+            _inventoryDetailDataTransfer.InsertInventoryDetailNotSaveChanges(1, partner.PartnerId, partner.PartnerTypeId, totalWeight, inventory.InventoryId);
             if (schedule != null)
             {
-                TimeSpan timeBetweenSlot = TimeSpan.Parse(_systemCongifDataTransfer.GetTimeBetweenSlot().AttributeValue);
+                int timeBetweenSlot = int.Parse(_systemCongifDataTransfer.GetTimeBetweenSlot().AttributeValue);
                 TimeSpan now = DateTime.Now.TimeOfDay;
-                if ((schedule.TimeTemplateItem.ScheduleTime + timeBetweenSlot) - now > TimeSpan.FromMinutes(15))
+                if (now - (schedule.TimeTemplateItem.ScheduleTime + TimeSpan.FromMinutes(timeBetweenSlot)) > TimeSpan.FromMinutes(5))
                 {
                     schedule.ScheduleStatus = 3;
                 }
-                else if ((schedule.TimeTemplateItem.ScheduleTime + timeBetweenSlot) - now < TimeSpan.FromMinutes(5))
+                else if ((now - schedule.TimeTemplateItem.ScheduleTime) < TimeSpan.FromMinutes(-5))
                 {
                     schedule.ScheduleStatus = 4;
                 }
@@ -852,20 +878,8 @@ namespace ImportExportDesktopApp.ViewModels
                 {
                     schedule.ScheduleStatus = 1;
                 }
-            }
-
-            transaction = _transactionDataTransfer.UpdateTransactionNotSaveChanges(transaction);
-            float totalWeight = getTotalWeight(partner.PartnerTypeId, transaction.WeightIn, transaction.WeightOut);
-            _inventoryDetailDataTransfer.InsertInventoryDetailNotSaveChanges(1, partner.PartnerId, partner.PartnerTypeId, totalWeight, inventory.InventoryId);
-            if (schedule != null)
-            {
                 schedule.ActualWeight = totalWeight;
-                schedule.ScheduleStatus = 1;
                 _scheduleDataTransfer.UpdateSchedule(schedule);
-            }
-            else
-            {
-                _timeTemplateItemDataTransfer.updateTimetemplateItemWeight(transaction.TimeOut, totalWeight, partner.PartnerTypeId);
             }
             _transactionDataTransfer.Save();
             return transaction;
