@@ -223,6 +223,13 @@ namespace ImportExportDesktopApp.ViewModels
 
             if (partner != null)
             {
+                //Check canceled
+                if (partner.Account.NumberCanceled >= 5)
+                {
+                    AddNoActionException("Partner was locked!!", transactionScale.Gate);
+                    return false;
+                }
+
                 Transaction transaction = _transactionDataTransfer.IsProcessing(transactionScale.Indentify);
 
                 Schedule schedule = transaction == null ? _scheduleDataTransfer.CheckSchedule(partner.PartnerId) : transaction.Schedule;
@@ -517,6 +524,19 @@ namespace ImportExportDesktopApp.ViewModels
             }
         }
 
+        public void AddNoActionException(String message, EGate gate)
+        {
+            if (gate == EGate.Gate1)
+            {
+                MessageGate1 = message;
+                Gate1Bg = YELLOW_BG;
+            }
+            else if (gate == EGate.Gate2)
+            {
+                MessageGate2 = message;
+                Gate2Bg = YELLOW_BG;
+            }
+        }
         public void CreateTransactionGate1()
         {
             if (_exceptionTypeGate1 == EScaleExceptionType.WrongTransactionType)

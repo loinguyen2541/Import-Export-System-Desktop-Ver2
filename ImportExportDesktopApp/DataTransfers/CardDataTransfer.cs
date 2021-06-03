@@ -29,7 +29,7 @@ namespace ImportExportDesktopApp.DataTransfers
         {
             if (transactionScale.Device == EDeviceType.Card)
             {
-                Partner partner = ie.IdentityCards.Include(i => i.Partner.PartnerType)
+                Partner partner = ie.IdentityCards.Include(i => i.Partner.PartnerType).Include(i => i.Partner.Account)
                     .Where(c => c.IdentityCardId.Equals(transactionScale.Indentify) && c.IdentityCardStatus == 0)
                     .Where(c => c.Partner.PartnerStatus == 0).Select(c => c.Partner)
                     .SingleOrDefault();
