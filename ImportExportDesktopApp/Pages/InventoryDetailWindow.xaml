@@ -21,130 +21,121 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
-                <RowDefinition Height="30" />
+                <RowDefinition Height="120" />
                 <RowDefinition Height="7*" />
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
-                <TextBlock
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    FontSize="24"
-                    FontWeight="Bold"
-                    Foreground="#647094"
-                    Text="Inventory Detail" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        FontSize="24"
+                        FontWeight="Bold"
+                        Text="Inventory Detail" />
+                    <TextBlock
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        FontSize="24"
+                        FontWeight="Bold"
+                        Text="{Binding Date}" />
+                </StackPanel>
             </Grid>
-            <Grid Grid.Row="1" Margin="16,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*" />
-                    <ColumnDefinition Width="3*" />
-                    <ColumnDefinition Width="3*" />
-                    <ColumnDefinition Width="4*" />
-                </Grid.ColumnDefinitions>
-                <StackPanel
-                    Grid.Column="0"
-                    VerticalAlignment="Top"
-                    Orientation="Horizontal">
-                    <TextBlock
-                        Grid.Column="0"
-                        FontWeight="Bold"
-                        Text="Opening Stock: " />
-                    <TextBlock Grid.Column="0" Text="{Binding Inventory.OpeningStock}" />
-                    <TextBlock
-                        Grid.Column="0"
-                        FontSize="15"
-                        Text=" kg" />
-                </StackPanel>
+            <Grid Grid.Row="1">
+                <materialDesign:Card
+                    Height="100"
+                    Padding="16"
+                    UniformCornerRadius="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            Orientation="Vertical">
+                            <TextBlock
+                                Grid.Column="0"
+                                FontWeight="Bold"
+                                Foreground="#696969"
+                                Text="Opening Stock " />
+                            <StackPanel Margin="0,16,0,0" Orientation="Horizontal">
+                                <TextBlock
+                                    Grid.Column="0"
+                                    FontWeight="Bold"
+                                    Text="{Binding Inventory.OpeningStock}" />
+                                <TextBlock
+                                    Grid.Column="0"
+                                    FontSize="15"
+                                    FontWeight="Bold"
+                                    Text=" kg" />
+                            </StackPanel>
+                        </StackPanel>
 
-                <StackPanel
-                    Grid.Column="1"
-                    VerticalAlignment="Top"
-                    Orientation="Horizontal">
-                    <TextBlock
-                        Grid.Column="0"
-                        FontWeight="Bold"
-                        Text="Total import: " />
-                    <TextBlock Grid.Column="0" Text="{Binding InventoryDisplay.TotalImport}" />
-                    <TextBlock Grid.Column="0" Text=" kg" />
-                </StackPanel>
-                <StackPanel
-                    Grid.Column="2"
-                    VerticalAlignment="Top"
-                    Orientation="Horizontal">
-                    <TextBlock
-                        Grid.Column="0"
-                        FontWeight="Bold"
-                        Text="Total export: " />
-                    <TextBlock Grid.Column="0" Text="{Binding InventoryDisplay.TotalExport}" />
-                    <TextBlock Grid.Column="0" Text=" kg" />
-                </StackPanel>
-                <StackPanel
-                    Grid.Column="3"
-                    VerticalAlignment="Top"
-                    Orientation="Horizontal">
-                    <TextBlock
-                        Grid.Column="0"
-                        FontWeight="Bold"
-                        Text="Opening Stock: " />
-                    <TextBlock Grid.Column="0" Text="{Binding InventoryDisplay.ClosingStock}" />
-                    <TextBlock Grid.Column="0" Text=" kg" />
-                </StackPanel>
-                <!--<Grid Grid.Column="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*" />
-                        <ColumnDefinition Width="8*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="0">
-                        <TextBlock
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        FontWeight="Bold"
-                        Foreground="#647094"
-                        Text="Date" />
+                        <StackPanel
+                            Grid.Column="1"
+                            VerticalAlignment="Center"
+                            Orientation="Vertical">
+                            <TextBlock
+                                Grid.Column="0"
+                                FontWeight="Bold"
+                                Foreground="#696969"
+                                Text="Total Import " />
+                            <StackPanel Margin="0,16,0,0" Orientation="Horizontal">
+                                <TextBlock
+                                    Grid.Column="0"
+                                    FontWeight="Bold"
+                                    Text="{Binding InventoryDisplay.TotalImport}" />
+                                <TextBlock
+                                    Grid.Column="0"
+                                    FontWeight="Bold"
+                                    Text=" kg" />
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Column="2"
+                            VerticalAlignment="Center"
+                            Orientation="Vertical">
+                            <TextBlock
+                                Grid.Column="0"
+                                FontWeight="Bold"
+                                Foreground="#696969"
+                                Text="Total Export " />
+                            <StackPanel Margin="0,16,0,0" Orientation="Horizontal">
+                                <TextBlock
+                                    Grid.Column="0"
+                                    FontWeight="Bold"
+                                    Text="{Binding InventoryDisplay.TotalExport}" />
+                                <TextBlock
+                                    Grid.Column="0"
+                                    FontWeight="Bold"
+                                    Text=" kg" />
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Column="3"
+                            VerticalAlignment="Center"
+                            Orientation="Vertical">
+                            <TextBlock
+                                Grid.Column="0"
+                                FontWeight="Bold"
+                                Foreground="#696969"
+                                Text="Closing Stock " />
+                            <StackPanel Margin="0,16,0,0" Orientation="Horizontal">
+                                <TextBlock
+                                    Grid.Column="0"
+                                    FontWeight="Bold"
+                                    Text="{Binding InventoryDisplay.ClosingStock}" />
+                                <TextBlock
+                                    Grid.Column="0"
+                                    FontWeight="Bold"
+                                    Text=" kg" />
+                            </StackPanel>
+                        </StackPanel>
                     </Grid>
-                    <Grid
-                    Grid.Column="1"
-                    Margin="10"
-                    VerticalAlignment="Center">
-                        <Label
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        Content="{Binding Inventory.RecordedDate}" />
-                    </Grid>
-                </Grid>
-                <Grid Grid.Column="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="3*" />
-                        <ColumnDefinition Width="7*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="0">
-                        <TextBlock
-                        Margin="16,0"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        FontWeight="Bold"
-                        Foreground="#647094"
-                        Text="Parner Name" />
-                    </Grid>
-                    <Grid Grid.Column="1">
-                        <TextBox
-                        Margin="16,0"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        materialDesign:HintAssist.Hint="Partner Name"
-                        Text="{Binding PartnerName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                    </Grid>
-                </Grid>
-                <Grid Grid.Column="3" Margin="0.333,0">
-                    <Button
-                    Width="100"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    Command="{Binding SearchCommand}"
-                    Style="{StaticResource MaterialDesignRaisedDarkButton}"
-                    ToolTip="Search Inventory Detail">
-                        Search
-                    </Button>
-                </Grid>-->
+                </materialDesign:Card>
             </Grid>
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
@@ -181,8 +172,8 @@
                                 Binding="{Binding Path=AlternationIndex, RelativeSource={RelativeSource AncestorType=DataGridRow}, Converter={StaticResource RowIndexConverter}}"
                                 Header="No." />
                             <DataGridTextColumn Binding="{Binding Partner.DisplayName}" Header="Partner Name" />
-                            <DataGridTextColumn Binding="{Binding Goods.GoodName}" Header="Goods" />
                             <DataGridTextColumn Binding="{Binding Type, Converter={StaticResource TransTypeConverter}}" Header="Type" />
+                            <DataGridTextColumn Binding="{Binding Partner.Transactions.Count}" Header="No. transactions" />
                             <DataGridTextColumn Binding="{Binding Weight}" Header="Weight" />
                         </DataGrid.Columns>
                     </DataGrid>

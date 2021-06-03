@@ -252,7 +252,7 @@ namespace ImportExportDesktopApp.ViewModels
                     {
                         int timeBetweenSlot = int.Parse(_systemCongifDataTransfer.GetTimeBetweenSlot().AttributeValue);
                         TimeSpan now = DateTime.Now.TimeOfDay;
-                        if (now - (schedule.TimeTemplateItem.ScheduleTime + TimeSpan.FromMinutes(timeBetweenSlot)) > TimeSpan.FromMinutes(15))
+                        if (now - (schedule.TimeTemplateItem.ScheduleTime + TimeSpan.FromMinutes(timeBetweenSlot)) > TimeSpan.FromMinutes(5))
                         {
                             AddException(transactionScale, partner, schedule, EScaleExceptionType.Late);
                             return false;
@@ -293,14 +293,14 @@ namespace ImportExportDesktopApp.ViewModels
                             totalWeight = totalWeight * -1;
                         }
 
-                        if (totalWeight - schedule.RegisteredWeight > schedule.RegisteredWeight * 0.1)
+                        if (totalWeight - schedule.RegisteredWeight > schedule.RegisteredWeight * 0.05)
                         {
                             AddException(transactionScale, partner, schedule, EScaleExceptionType.Deviation);
                             return false;
                         }
                         else if (totalWeight - schedule.RegisteredWeight < 0)
                         {
-                            if ((totalWeight - schedule.RegisteredWeight) * -1 > schedule.RegisteredWeight * 0.1)
+                            if ((totalWeight - schedule.RegisteredWeight) * -1 > schedule.RegisteredWeight * 0.05)
                             {
                                 AddException(transactionScale, partner, schedule, EScaleExceptionType.Deviation);
                                 return false;
@@ -321,6 +321,8 @@ namespace ImportExportDesktopApp.ViewModels
                         //    return false;
                         //}
                     }
+
+
                     Transaction newTransaction = UpdateTransaction(transaction, transactionScale, partner, schedule, true);
                     if (newTransaction == null)
                     {

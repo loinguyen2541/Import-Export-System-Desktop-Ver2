@@ -2,6 +2,7 @@
 using ImportExportDesktopApp.Utils;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,8 @@ namespace ImportExportDesktopApp.ViewModels
         private Inventory _inventory;
         private InventoryDisplay _display;
         private readonly IEEntities ie;
+
+        public String _date { get; set; }
         //public QueryParams Paging { get; set; }
         public ICommand SearchCommand { get; set; }
         //InventoryDetailHttpService detailService;
@@ -41,6 +44,7 @@ namespace ImportExportDesktopApp.ViewModels
         {
             Inventory = ie.Inventories.Find(dispay.InventoryId);
             InventoryDisplay = dispay;
+            Date = "(" + Inventory.RecordedDate.Day + "/" + Inventory.RecordedDate.Month + "/" + Inventory.RecordedDate.Year + ")";
             GetPartnerAndGood();
         }
 
@@ -52,6 +56,8 @@ namespace ImportExportDesktopApp.ViewModels
                 foreach (var item in Inventory.InventoryDetails)
                 {
                     Partner partner = ie.Partners.Where(p => p.PartnerId == item.PartnerId).SingleOrDefault();
+                    partner.Transactions.Clear();
+                    partner.Transactions = ie.Transactions.Where(t => t.PartnerId == partner.PartnerId).Where(t => DbFunctions.TruncateTime(t.CreatedDate) == Inventory.RecordedDate.Date && t.TransactionStatus == 1).ToList();
                     item.Partner = partner;
                     item.Good = goods[0];
                 }
@@ -175,6 +181,16 @@ namespace ImportExportDesktopApp.ViewModels
             set
             {
                 _partnerName = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public String Date
+        {
+            get { return _date; }
+            set
+            {
+                _date = value;
                 NotifyPropertyChanged();
             }
         }
