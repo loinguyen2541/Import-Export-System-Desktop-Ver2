@@ -136,8 +136,8 @@
                         Search
                     </Button>
                     <Button
-                        Width="30"
-                        Height="30"
+                        Width="35"
+                        Height="35"
                         Margin="0,16"
                         VerticalAlignment="Bottom"
                         Command="{Binding CancelSearchCommand}"
@@ -149,7 +149,19 @@
                             Height="20"
                             Kind="Close" />
                     </Button>
+
                 </StackPanel>
+                <Button
+                    Grid.Column="5"
+                    Width="35"
+                    Height="35"
+                    Margin="0,16"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Command="{Binding RefreshCommand}"
+                    Content="{materialDesign:PackIcon Sync}"
+                    Style="{StaticResource MaterialDesignFloatingActionButton}" />
+
 
             </Grid>
             <Grid Grid.Row="2">

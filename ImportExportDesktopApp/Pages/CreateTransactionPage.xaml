@@ -118,6 +118,32 @@
                         VerticalAlignment="Center">
                         <StackPanel Width="560" Margin="10,0,10,0">
                             <ComboBox
+                                Name="cbxPartnerType"
+                                ItemsSource="{Binding Types}"
+                                SelectedValue="{Binding TransactionType}"
+                                SelectionChanged="cbxPartnerType_SelectionChanged" />
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+                <Grid Grid.Row="2" Margin="15,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="6*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="15"
+                            FontWeight="Bold"
+                            Foreground="#647094"
+                            Text="Partner name" />
+                    </Grid>
+                    <Grid
+                        Grid.Column="1"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center">
+                        <StackPanel Width="560" Margin="10,0,10,0">
+                            <ComboBox
                                 Name="cbxPartnerId"
                                 ItemsSource="{Binding Partners}"
                                 SelectedValue="{Binding Transaction.PartnerId}"
@@ -180,7 +206,7 @@
                             VerticalAlignment="Center" />
                     </Grid>
                 </Grid>
-                <Grid Grid.Row="2" Margin="15,0">
+                <Grid Grid.Row="3" Margin="15,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="237*" />
                         <ColumnDefinition Width="497*" />
@@ -211,7 +237,7 @@
                             Text="{Binding Weight}" />
                     </Grid>
                 </Grid>
-                <Grid Grid.Row="3" Margin="15,0">
+                <Grid Grid.Row="4" Margin="15,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="5*" />
                         <ColumnDefinition Width="5*" />
@@ -279,7 +305,7 @@
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid Grid.Row="4" Margin="15,0">
+                <Grid Grid.Row="5" Margin="15,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="2*" />
                         <ColumnDefinition Width="6*" />

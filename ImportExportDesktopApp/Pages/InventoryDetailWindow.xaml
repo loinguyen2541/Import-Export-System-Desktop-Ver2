@@ -14,6 +14,7 @@
     FontSize="15"
     mc:Ignorable="d">
     <Window.Resources>
+        <converter:FormatFloatConverter x:Key="FloatConverter" />
         <converter:RowIndexConverter x:Key="RowIndexConverter" />
         <converter:TransactionTypeConverter x:Key="TransTypeConverter" />
     </Window.Resources>
@@ -65,7 +66,7 @@
                                 <TextBlock
                                     Grid.Column="0"
                                     FontWeight="Bold"
-                                    Text="{Binding Inventory.OpeningStock}" />
+                                    Text="{Binding Inventory.OpeningStock, Converter={StaticResource FloatConverter}}" />
                                 <TextBlock
                                     Grid.Column="0"
                                     FontSize="15"
@@ -87,7 +88,7 @@
                                 <TextBlock
                                     Grid.Column="0"
                                     FontWeight="Bold"
-                                    Text="{Binding InventoryDisplay.TotalImport}" />
+                                    Text="{Binding InventoryDisplay.TotalImport, Converter={StaticResource FloatConverter}}" />
                                 <TextBlock
                                     Grid.Column="0"
                                     FontWeight="Bold"
@@ -107,7 +108,7 @@
                                 <TextBlock
                                     Grid.Column="0"
                                     FontWeight="Bold"
-                                    Text="{Binding InventoryDisplay.TotalExport}" />
+                                    Text="{Binding InventoryDisplay.TotalExport, Converter={StaticResource FloatConverter}}" />
                                 <TextBlock
                                     Grid.Column="0"
                                     FontWeight="Bold"
@@ -127,7 +128,7 @@
                                 <TextBlock
                                     Grid.Column="0"
                                     FontWeight="Bold"
-                                    Text="{Binding InventoryDisplay.ClosingStock}" />
+                                    Text="{Binding InventoryDisplay.ClosingStock, Converter={StaticResource FloatConverter}}" />
                                 <TextBlock
                                     Grid.Column="0"
                                     FontWeight="Bold"

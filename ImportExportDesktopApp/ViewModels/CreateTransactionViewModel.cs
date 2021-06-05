@@ -21,6 +21,7 @@ namespace ImportExportDesktopApp.ViewModels
         private Transaction _transaction;
         private ObservableCollection<Partner> _partners;
         private String _weight;
+        public ObservableCollection<String> Types { get; set; }
         public float ExpectedWeight { get; set; }
 
         private PartnerDataTransfer _partnerDataTransfer;
@@ -30,6 +31,7 @@ namespace ImportExportDesktopApp.ViewModels
         private InventoryDataTransfer _inventoryDataTransfer;
         private InventoryDetailDataTransfer _inventoryDetailDataTransfer;
         private TimeTemplateItemDataTransfer _timeTemplateItemDataTransfer;
+        private String _transactionType;
 
         public ICommand InsertTransactionCommnad { get; set; }
 
@@ -47,6 +49,10 @@ namespace ImportExportDesktopApp.ViewModels
             _inventoryDataTransfer = new InventoryDataTransfer();
             _inventoryDetailDataTransfer = new InventoryDetailDataTransfer();
             _timeTemplateItemDataTransfer = new TimeTemplateItemDataTransfer();
+
+            Types = new ObservableCollection<string>();
+            Types.Add("Import");
+            Types.Add("Export");
 
             GetPartner(false);
 
@@ -67,7 +73,16 @@ namespace ImportExportDesktopApp.ViewModels
             }
             else
             {
-                Partners = _partnerDataTransfer.GetAll();
+                int partnertypeId = 0;
+                if (TransactionType == "Export")
+                {
+                    partnertypeId = 1;
+                }
+                else if (TransactionType == "Import")
+                {
+                    partnertypeId = 2;
+                }
+                Partners = _partnerDataTransfer.GetAllByType(partnertypeId);
             }
         }
 
@@ -166,6 +181,12 @@ namespace ImportExportDesktopApp.ViewModels
                 _weight = value;
                 NotifyPropertyChanged();
             }
+        }
+
+        public String TransactionType
+        {
+            get { return _transactionType; }
+            set { _transactionType = value; NotifyPropertyChanged(); }
         }
 
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImportExportDesktopApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,6 +35,12 @@ namespace ImportExportDesktopApp.Pages
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
             this.NavigationService.GoBack();
+        }
+
+        private void cbxPartnerType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            CreateTransactionViewModel createTransactionViewModel = DataContext as CreateTransactionViewModel;
+            createTransactionViewModel.GetPartner(false);
         }
     }
 }

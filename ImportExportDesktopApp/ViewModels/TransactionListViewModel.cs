@@ -38,6 +38,9 @@ namespace ImportExportDesktopApp.ViewModels
         public ICommand BeforePageCommand { get; set; }
         public ICommand SearchCommand { get; set; }
         public ICommand CancelSearchCommand { get; set; }
+
+        public ICommand RefreshCommand { get; set; }
+
         public TransactionListViewModel()
         {
 
@@ -81,7 +84,24 @@ namespace ImportExportDesktopApp.ViewModels
             {
                 CancelSearch();
             });
+            RefreshCommand = new RelayCommand<object>((p) => { return true; }, p =>
+            {
+                Refresh();
+            });
         }
+
+        public void Refresh()
+        {
+            CurrentPage = 1;
+            ObservableCollection<Transaction> transactions = _transactionDataTransfer.GetTransactions(CurrentPage, -1);
+            Transactions.Clear();
+            foreach (var item in transactions)
+            {
+                Transactions.Add(item);
+            }
+            SetPagingInfo();
+        }
+
         public void SearchTransaction()
         {
             BtnSearchVisibility = EVisibility.Visible.ToString();
@@ -100,7 +120,16 @@ namespace ImportExportDesktopApp.ViewModels
             }
 
             Transactions = _transactionDataTransfer.SearchTransaction(type, SearchPartner, SearchDate);
+            DisablePagingInfo();
 
+        }
+
+        private void DisablePagingInfo()
+        {
+            CurrentPage = 1;
+            MaxPage = 1;
+            PagingInfo = String.Format("Page {0} of {1}", 1, 1);
+            IsMaxPage = true;
         }
         private void CancelSearch()
         {
@@ -109,7 +138,10 @@ namespace ImportExportDesktopApp.ViewModels
             SearchDate = "";
             SearchPartner = "";
             SearchType = "";
+            MaxPage = _transactionDataTransfer.GetMaxPage(10);
+            IsMaxPage = false;
             BtnSearchVisibility = EVisibility.Hidden.ToString();
+            SetPagingInfo();
         }
         public void NextPage()
         {

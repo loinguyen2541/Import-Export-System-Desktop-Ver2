@@ -91,7 +91,7 @@ namespace ImportExportDesktopApp.DataTransfers
         {
             if (type == -1)
             {
-                List<Transaction> transactions = ie.Transactions.OrderByDescending(t => t.CreatedDate).Skip((page - 1) * 20).Take(20).ToList();
+                List<Transaction> transactions = ie.Transactions.OrderByDescending(t => t.CreatedDate).Skip((page - 1) * 10).Take(10).ToList();
                 return new ObservableCollection<Transaction>(transactions);
             }
             else
@@ -114,6 +114,13 @@ namespace ImportExportDesktopApp.DataTransfers
         public int GetMaxPage(int pageSize)
         {
             int count = ie.Transactions.Count();
+            double totalPage = count * (1.0) / pageSize * (1.0);
+            return (int)Math.Ceiling(totalPage);
+        }
+
+        public int GetMaxPageByPartner(int pageSize, int id)
+        {
+            int count = ie.Transactions.Where(t => t.PartnerId == id).Count();
             double totalPage = count * (1.0) / pageSize * (1.0);
             return (int)Math.Ceiling(totalPage);
         }

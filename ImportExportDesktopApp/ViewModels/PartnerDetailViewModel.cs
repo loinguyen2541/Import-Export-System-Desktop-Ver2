@@ -94,7 +94,7 @@ namespace ImportExportDesktopApp.ViewModels
             ListCardByPartner = _cardDataTransfer.GetAllCardsByPartnerId(this.partnerId);
             ListTranHistoryByPartner = _transactionDataTransfer.GetAllTransactionByPartner(1, partnerId);
             _account = _accountDataTransfer.GetByUsername(Partner.Username);
-            TransactionMaxPage = _transactionDataTransfer.GetMaxPage(10);
+            TransactionMaxPage = _transactionDataTransfer.GetMaxPageByPartner(10, id);
             PartnerStatuses = new List<string>();
             PartnerStatuses.Add("Active");
             PartnerStatuses.Add("Block");
@@ -140,7 +140,7 @@ namespace ImportExportDesktopApp.ViewModels
             TransactionCurrentPage++;
             ListTranHistoryByPartner = _transactionDataTransfer.GetAllTransactionByPartner(TransactionCurrentPage, partnerId);
 
-            TxtPageInfo = String.Format("Page {0} of {1}", TransactionCurrentPage, 10);
+            TxtPageInfo = String.Format("Page {0} of {1}", TransactionCurrentPage, TransactionMaxPage);
             CheckPage();
         }
 
@@ -149,7 +149,7 @@ namespace ImportExportDesktopApp.ViewModels
             TransactionCurrentPage--;
             ListTranHistoryByPartner = _transactionDataTransfer.GetAllTransactionByPartner(TransactionCurrentPage, partnerId);
 
-            TxtPageInfo = String.Format("Page {0} of {1}", TransactionCurrentPage, 10);
+            TxtPageInfo = String.Format("Page {0} of {1}", TransactionCurrentPage, TransactionMaxPage);
             CheckPage();
         }
 

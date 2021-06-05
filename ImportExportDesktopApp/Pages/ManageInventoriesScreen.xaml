@@ -15,6 +15,7 @@
 
     <Page.Resources>
         <converter:RowIndexConverter x:Key="RowIndex" />
+        <converter:FormatFloatConverter x:Key="FloatConverter" />
     </Page.Resources>
     <Border Padding="16">
         <Grid>
@@ -160,19 +161,19 @@
                                 Binding="{Binding RecordedDate}"
                                 Header="Date" />
                             <DataGridTextColumn
-                                Binding="{Binding OpeningStock}"
+                                Binding="{Binding OpeningStock, Converter={StaticResource FloatConverter}}"
                                 FontWeight="Bold"
                                 Header="Opening Stock(kg)" />
                             <DataGridTextColumn
-                                Binding="{Binding TotalImport}"
+                                Binding="{Binding TotalImport, Converter={StaticResource FloatConverter}}"
                                 FontWeight="Bold"
                                 Header="Import(kg)" />
                             <DataGridTextColumn
-                                Binding="{Binding TotalExport}"
+                                Binding="{Binding TotalExport, Converter={StaticResource FloatConverter}}"
                                 FontWeight="Bold"
                                 Header="Export(kg)" />
                             <DataGridTextColumn
-                                Binding="{Binding ClosingStock}"
+                                Binding="{Binding ClosingStock, Converter={StaticResource FloatConverter}}"
                                 FontWeight="Bold"
                                 Header="Closing Stock(kg)" />
                         </DataGrid.Columns>
