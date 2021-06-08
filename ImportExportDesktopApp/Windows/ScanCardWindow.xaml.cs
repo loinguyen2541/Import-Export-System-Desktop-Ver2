@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImportExportDesktopApp.DataTransfers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO.Ports;
@@ -24,10 +25,14 @@ namespace ImportExportDesktopApp.Windows
     {
         int BaudRate = 9600;
         SerialPort port1;
+
+        CardDataTransfer _cardDataTransfer;
+
         public String CardId { get; set; }
         public ScanCardWindow()
         {
             InitializeComponent();
+            _cardDataTransfer = new CardDataTransfer();
         }
 
         public void ReadSerial()
@@ -38,7 +43,7 @@ namespace ImportExportDesktopApp.Windows
             {
                 try
                 {
-                    port1.PortName = "COM6";
+                    port1.PortName = "COM14";
                     port1.BaudRate = BaudRate;
                     port1.Open();
                 }
@@ -62,7 +67,7 @@ namespace ImportExportDesktopApp.Windows
                         String[] values = value.Split(':');
                         if (values.Length == 2)
                         {
-                            CardId = values[1];
+                            CardId = values[1].Trim();
                             isTrue = true;
                         }
                         else
@@ -79,12 +84,16 @@ namespace ImportExportDesktopApp.Windows
 
             if (isTrue)
             {
+                if (_cardDataTransfer.IsExist(CardId.Trim()))
+                {
+                    CardId = "";
+                    MessageBox.Show("Card is already exist!!");
+                }
+                CloseSerialOnExit();
                 Dispatcher.Invoke((new Action(() =>
                 {
                     this.Hide();
                 })));
-
-                CloseSerialOnExit();
             }
 
         }

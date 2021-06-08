@@ -28,13 +28,15 @@ namespace ImportExportDesktopApp.DataTransfers
 
         public ObservableCollection<Transaction> GetProcessingTransaction()
         {
-            return new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == 0).OrderByDescending(t => t.TimeIn).Take(10));
+            ObservableCollection<Transaction> transactions = new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == 0).OrderByDescending(t => t.TimeIn).Take(10));
+            return transactions;
         }
 
         public ObservableCollection<Transaction> GetSuccessTransaction()
         {
             DateTime dateTime = DateTime.Now;
-            return new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == 1 && DbFunctions.TruncateTime(t.TimeOut) == dateTime.Date).OrderByDescending(t => t.TimeOut).Take(10));
+            ObservableCollection<Transaction> transactions = new ObservableCollection<Transaction>(ie.Transactions.Include(t => t.Partner).Where(t => t.TransactionStatus == 1 && DbFunctions.TruncateTime(t.TimeOut) == dateTime.Date).OrderByDescending(t => t.TimeOut).Take(10));
+            return transactions;
         }
 
         public ObservableCollection<Transaction> GetProcessingTransactionByPartnerToday(int partnerId)

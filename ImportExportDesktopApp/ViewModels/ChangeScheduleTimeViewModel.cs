@@ -70,7 +70,7 @@ namespace ImportExportDesktopApp.ViewModels
                 _systemConfigDataTransfer.Update(FinishBreakTime);
                 _systemConfigDataTransfer.Update(TimeBetweenSlot);
                 _systemConfigDataTransfer.Save();
-                MessageBox.Show("Thành công! Thay đổi của bạn sẽ được áp dụng vào ngày làm việc kế tiếp.");
+                MessageBox.Show("Success! Your changes will be applied at next day.");
                 window.Close();
             }
             catch (Exception e)

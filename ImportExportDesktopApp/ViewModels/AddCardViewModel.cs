@@ -92,7 +92,7 @@ namespace ImportExportDesktopApp.ViewModels
             {
                 try
                 {
-                    port1.PortName = "COM6";
+                    port1.PortName = "COM14";
                     port1.BaudRate = BaudRate;
                     port1.Open();
                 }
